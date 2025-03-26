@@ -18,4 +18,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
+    - assets/widgets/backgrounds/
     - assets/widgets/buttons/
+    - assets/widgets/icons/
+

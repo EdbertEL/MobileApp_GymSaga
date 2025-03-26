@@ -13,6 +13,19 @@ class UserProfile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pics/', null=True, blank=True)
     bio = models.TextField(blank=True)
 
+    GENDER_CHOICES = [
+        ('male', 'Male'),
+        ('female', 'Female'),
+    ]
+    
+    gender = models.CharField(max_length=10, choices=GENDER_CHOICES, default='Male')
+    profile_picture = models.ImageField(upload_to="profile_icon/", null=True, blank=True)
+
+    def get_profile_picture_url(self):
+        if self.profile_picture:
+            return self.profile_picture.url
+        return f"/media/profile_icon/default/{self.gender}_default.png"  # Use default profile icons
+    
     def __str__(self):
         return f"{self.user.username}'s Profile"
     

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/login.dart';
+import 'package:gymsaga/profile.dart';
+import 'package:gymsaga/register.dart';
 import 'homepage.dart';
 
 void main() {
@@ -11,7 +14,10 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: HomePage(),
+      theme: ThemeData(
+        fontFamily: 'Jersey25',
+      ),
+      home: LoginPage(),
     );
   }
 }

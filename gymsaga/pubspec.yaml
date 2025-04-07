@@ -22,3 +22,7 @@ flutter:
     - assets/widgets/buttons/
     - assets/widgets/icons/
     - assets/widgets/images/
+  fonts:
+    - family: Jersey25
+      fonts:
+        - asset: assets/fonts/Jersey25.ttf

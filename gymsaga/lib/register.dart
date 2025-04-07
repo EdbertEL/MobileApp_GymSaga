@@ -27,9 +27,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 const Text(
                   'Welcome !',
                   style: TextStyle(
-                    fontFamily: 'Jersey',
+                    fontFamily: 'Jersey25',
                     fontSize: 42,
-                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                     shadows: [
                       Shadow(
@@ -203,7 +202,6 @@ class _RegisterPageState extends State<RegisterPage> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -247,7 +245,6 @@ class _RegisterPageState extends State<RegisterPage> {
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.black87,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
@@ -284,7 +281,6 @@ class _RegisterPageState extends State<RegisterPage> {
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.blue,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

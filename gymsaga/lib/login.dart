@@ -37,9 +37,8 @@ class _LoginPageState extends State<LoginPage> {
                 const Text(
                   'Welcome !',
                   style: TextStyle(
-                    fontFamily: 'Jersey',
+                    fontFamily: 'Jersey25',
                     fontSize: 42,
-                    fontWeight: FontWeight.bold,
                     color: Colors.white,
                     shadows: [
                       Shadow(
@@ -228,7 +227,6 @@ class _LoginPageState extends State<LoginPage> {
                           style: TextStyle(
                             color: Colors.white,
                             fontSize: 13,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
@@ -270,7 +268,6 @@ class _LoginPageState extends State<LoginPage> {
                               style: TextStyle(
                                 fontSize: 13,
                                 color: Colors.black87,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
@@ -306,7 +303,6 @@ class _LoginPageState extends State<LoginPage> {
                         style: TextStyle(
                           fontSize: 14,
                           color: Colors.blue,
-                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),

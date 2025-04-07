@@ -18,22 +18,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-<<<<<<< HEAD
     - assets/widgets/background/
     - assets/widgets/buttons/
     - assets/widgets/icons/
     - assets/widgets/images/
-fonts:
-    - family: Jersey
-      fonts:
-        - asset: assets/fonts/Jersey.ttf
-    - family: Inter
-      fonts:
-        - asset: assets/fonts/Inter-Regular.ttf
-        - asset: assets/fonts/Inter-Bold.ttf
-          weight: 700
-=======
-    - assets/widgets/backgrounds/
-    - assets/widgets/buttons/
-    - assets/widgets/icons/
-

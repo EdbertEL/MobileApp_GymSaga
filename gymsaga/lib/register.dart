@@ -237,7 +237,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Image.asset(
-                              'assets/widgets/images/google.png',
+                              'assets/widgets/images/google_logo.png',
                               height: 24,
                               width: 24,
                             ),

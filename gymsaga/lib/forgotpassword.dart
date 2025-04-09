@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'checkemailforcode.dart'; // Import the CheckEmailForCodePage
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({super.key});
@@ -35,93 +36,93 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       backgroundColor: const Color(0xFFF9DEAF),
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+          child: Container(
+            padding: const EdgeInsets.fromLTRB(16, 100, 16, 24),
+            width: double.infinity,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 40),
-                // Forgot Password Text with styling matching Register page
-                const Text(
-                  'Forgot Password',
-                  style: TextStyle(
-                    fontFamily: 'Jersey25',
-                    fontSize: 42,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(2, 4),
-                        blurRadius: 15.0,
-                        color: Color.fromARGB(100, 0, 0, 0),
-                      ),
-                    ],
+                // Title and subtitle aligned to the left
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Forgot password',
+                    style: TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 38,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          offset:
+                              Offset(1.5, 1.5), // lebih kecil dari sebelumnya
+                          blurRadius: 1.5, // tambahin blur dikit
+                          color:
+                              Colors.black.withOpacity(0.4), // transparan dikit
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 8),
-                // Subtitle with Inter font
-                const Text(
-                  'Enter your email to reset password',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 10,
-                    color: Color(0xFF555555),
+                Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Please enter your email to reset the password',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 12,
+                      color: Color(0xFF555555),
+                    ),
                   ),
                 ),
                 const SizedBox(height: 50),
-                // White Form Container
+
+                // Form container
                 Container(
                   width: 400,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 237, 239, 220),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(25),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(16),
+                  // HAPUS background putih & boxShadow
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Email Label
                       const Text(
-                        'Email',
+                        'Your Email',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Color.fromRGBO(26, 21, 21, 1),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
                         ),
                       ),
-                      const SizedBox(height: 2),
-                      // Email TextField
-                      SizedBox(
-                        height: 35,
-                        child: TextField(
-                          controller: _emailController,
-                          style: const TextStyle(fontSize: 13),
-                          decoration: InputDecoration(
-                            isDense: true,
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(6),
-                              borderSide: BorderSide.none,
+                      const SizedBox(height: 8),
+                      TextField(
+                        controller: _emailController,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          filled: true,
+                          fillColor:
+                              const Color(0xFFFFFBE6), // warna dalam input
+                          hintText: 'Enter your email',
+                          hintStyle: TextStyle(
+                            color: Colors.grey.shade500,
+                            fontSize: 13,
+                          ),
+                          contentPadding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 12,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9CFE3),
+                              width: 1.5,
                             ),
-                            contentPadding: const EdgeInsets.symmetric(
-                              horizontal: 0,
-                              vertical: 6,
-                            ),
-                            enabledBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black54),
-                            ),
-                            hintText: 'Enter your email',
-                            hintStyle: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 13,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12),
+                            borderSide: const BorderSide(
+                              color: Color(0xFFD9CFE3),
+                              width: 1.5,
                             ),
                           ),
                         ),
@@ -129,20 +130,29 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 70),
+
+                const SizedBox(height: 50),
+
                 // Reset Password Button
                 Center(
                   child: InkWell(
                     onTap: _isEmailFilled
                         ? () {
-                            // Handle password reset logic
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CheckEmailForCodePage(
+                                  email: _emailController.text,
+                                ),
+                              ),
+                            );
                           }
                         : null,
                     child: Opacity(
                       opacity: _isEmailFilled ? 1.0 : 0.5,
                       child: Container(
-                        height: 50,
-                        width: 240,
+                        height: 74,
+                        width: 332,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
                             image: AssetImage(
@@ -156,8 +166,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                           child: const Text(
                             'Reset Password',
                             style: TextStyle(
+                              fontFamily: 'Jersey25',
                               color: Colors.white,
-                              fontSize: 13,
+                              fontSize: 30,
                             ),
                           ),
                         ),
@@ -165,7 +176,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 30),
+
                 // Back to Login
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -179,7 +192,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Handle navigation back to login
                         Navigator.pop(context);
                       },
                       style: TextButton.styleFrom(
@@ -197,14 +209,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 30),
-                // Dumbbell Image (same as Register page)
-                Image.asset(
-                  'assets/widgets/images/dumbell_image.png',
-                  height: 300,
-                  width: 300,
-                ),
-                const SizedBox(height: 20),
               ],
             ),
           ),

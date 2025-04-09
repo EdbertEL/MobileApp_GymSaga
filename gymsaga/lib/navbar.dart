@@ -40,15 +40,20 @@ class _CustomNavBarState extends State<CustomNavBar> {
         // Background Navbar
         Positioned(
           bottom: 0,
-          child: Image.asset(
-            'assets/widgets/background/navbar_bg.png',
+          child: Container(
             width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
+            child: Image.asset(
+              'assets/widgets/background/navbar_bg2.png',
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.fitWidth,
+              filterQuality: FilterQuality.none,
+              alignment: Alignment.bottomCenter,
+            ),
           ),
         ),
         // Row dengan 4 Button
         Positioned(
-          bottom: 10,
+          bottom: 8, // Sedikit naik ke atas agar posisi sesuai dengan background
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: List.generate(_navButtons.length, (index) {
@@ -71,11 +76,12 @@ class _CustomNavBarState extends State<CustomNavBar> {
       },
       child: Container(
         width: MediaQuery.of(context).size.width / _navButtons.length,
-        padding: EdgeInsets.symmetric(horizontal: 10),
+        padding: EdgeInsets.symmetric(horizontal: 1), // Mengurangi padding horizontal
         child: Image.asset(
           isSelected ? _navButtons[index]['pressed']! : _navButtons[index]['normal']!,
-          width: 60,
-          height: 60,
+          width: 85, // Memperbesar ukuran tombol
+          height: 85, // Memperbesar ukuran tombol
+          filterQuality: FilterQuality.none, // Mempertahankan tampilan pixel art
         ),
       ),
     );

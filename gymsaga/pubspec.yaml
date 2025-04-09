@@ -24,6 +24,9 @@ flutter:
     - assets/widgets/buttons/
     - assets/widgets/icons/
     - assets/widgets/images/
+    - assets/widgets/buttons/profile.png
+    - assets/widgets/buttons/homepage_pressed.png
+
   fonts:
     - family: Jersey25
       fonts:

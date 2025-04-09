@@ -6,7 +6,31 @@ class CustomNavBar extends StatefulWidget {
 }
 
 class _CustomNavBarState extends State<CustomNavBar> {
-  int _selectedIndex = -1;
+  int _selectedIndex = 0; // Set default selected index to 0 (home)
+
+  // Define list of button paths for normal and pressed states
+  final List<Map<String, String>> _navButtons = [
+    {
+      'normal': 'assets/widgets/buttons/homepage.png',
+      'pressed': 'assets/widgets/buttons/homepage_pressed.png',
+      'label': 'Home'
+    },
+    {
+      'normal': 'assets/widgets/buttons/steps.png',
+      'pressed': 'assets/widgets/buttons/steps_pressed.png',
+      'label': 'Steps'
+    },
+    {
+      'normal': 'assets/widgets/buttons/workout.png',
+      'pressed': 'assets/widgets/buttons/workout_pressed.png',
+      'label': 'Workout'
+    },
+    {
+      'normal': 'assets/widgets/buttons/profile.png',
+      'pressed': 'assets/widgets/buttons/profile_pressed.png',
+      'label': 'Profile'
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -27,42 +51,32 @@ class _CustomNavBarState extends State<CustomNavBar> {
           bottom: 10,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(0, 'assets/widgets/icons/home_icon.png'),
-              _buildNavItem(1, 'assets/widgets/icons/steps_icon.png'),
-              // _buildNavItem(2, 'assets/widgets/icons/dumbell.svg'),
-              _buildNavItem(3, 'assets/widgets/icons/profile_navbar_icon.png'),
-            ],
+            children: List.generate(_navButtons.length, (index) {
+              return _buildNavItem(index);
+            }),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildNavItem(int index, String iconPath) {
+  Widget _buildNavItem(int index) {
+    bool isSelected = _selectedIndex == index;
+    
     return GestureDetector(
       onTap: () {
         setState(() {
           _selectedIndex = index;
         });
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              Image.asset(
-                _selectedIndex == index
-                    ? 'assets/widgets/buttons/buttonn_pressed.png'
-                    : 'assets/widgets/buttons/navbar_button.png',
-                width: 50,
-                height: 50,
-              ),
-              Image.asset(iconPath, width: 30, height: 30),
-            ],
-          ),
-        ],
+      child: Container(
+        width: MediaQuery.of(context).size.width / _navButtons.length,
+        padding: EdgeInsets.symmetric(horizontal: 10),
+        child: Image.asset(
+          isSelected ? _navButtons[index]['pressed']! : _navButtons[index]['normal']!,
+          width: 60,
+          height: 60,
+        ),
       ),
     );
   }

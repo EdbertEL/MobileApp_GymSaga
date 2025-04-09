@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Jersey25',
       ),
-      home: ProfilePage(),
+      home: HomePage(),
     );
   }
 }

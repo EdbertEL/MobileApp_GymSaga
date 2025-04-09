@@ -1,39 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for InputFormatters
-import 'login.dart'; // Import the login page for navigation
+import 'package:flutter/services.dart';
+import 'login.dart';
+import 'passwordreset.dart';
 
 class CheckEmailForCodePage extends StatefulWidget {
-  final String email; // Email passed from Forgot Password page
-
-  const CheckEmailForCodePage({
-    super.key,
-    required this.email,
-  });
+  final String email;
+  const CheckEmailForCodePage({super.key, required this.email});
 
   @override
   CheckEmailForCodeState createState() => CheckEmailForCodeState();
 }
 
 class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
-  // List of text editing controllers for 4 code input fields
-  final List<TextEditingController> _codeControllers = List.generate(
-    4,
-    (_) => TextEditingController(),
-  );
-
-  // List of focus nodes to manage input focus between code fields
-  final List<FocusNode> _focusNodes = List.generate(
-    4,
-    (_) => FocusNode(),
-  );
-
+  final List<TextEditingController> _codeControllers =
+      List.generate(4, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
   bool _isCodeComplete = false;
 
   @override
   void initState() {
     super.initState();
-
-    // Add listeners to check if all code fields are filled
     for (var controller in _codeControllers) {
       controller.addListener(_checkCodeCompletion);
     }
@@ -41,7 +27,6 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
 
   @override
   void dispose() {
-    // Dispose controllers and focus nodes
     for (var controller in _codeControllers) {
       controller.dispose();
     }
@@ -53,21 +38,21 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
 
   void _checkCodeCompletion() {
     setState(() {
-      // Check if all 4 code fields are non-empty
       _isCodeComplete =
           _codeControllers.every((controller) => controller.text.isNotEmpty);
     });
   }
 
   void _handleVerification() {
-    // Collect the entered code from controllers
     String enteredCode =
         _codeControllers.map((controller) => controller.text).join();
 
-    // TODO: Implement actual verification logic
-    // For now, just log to console or show a snackbar
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Verification code entered: $enteredCode')),
+    // Navigasi ke halaman PasswordResetPage
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PasswordResetPage(),
+      ),
     );
   }
 
@@ -80,72 +65,85 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                // Check Email Text with styling
-                const Text(
-                  'Check Email',
-                  style: TextStyle(
-                    fontFamily: 'Jersey25',
-                    fontSize: 42,
-                    color: Colors.white,
-                    shadows: [
-                      Shadow(
-                        offset: Offset(2, 4),
-                        blurRadius: 15.0,
-                        color: Color.fromARGB(100, 0, 0, 0),
-                      ),
-                    ],
-                  ),
+                Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.arrow_back),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 8),
-                // Subtitle with Inter font
-                Text(
-                  'Enter 4-digit code sent to ${widget.email}',
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 10,
-                    color: Color(0xFF555555),
-                  ),
-                ),
-                const SizedBox(height: 50),
-                // White Form Container
-                Container(
-                  width: 400,
-                  decoration: BoxDecoration(
-                    color: const Color.fromARGB(255, 237, 239, 220),
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withAlpha(25),
-                        blurRadius: 10,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
-                  ),
-                  padding: const EdgeInsets.all(16),
+                const SizedBox(height: 10),
+                Align(
+                  alignment: Alignment.centerLeft,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Email Display
-                      Text(
-                        widget.email,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color.fromRGBO(26, 21, 21, 1),
+                      const Text(
+                        'Check your email',
+                        style: TextStyle(
+                          fontFamily: 'Jersey25',
+                          fontSize: 30,
+                          color: Colors.white,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(2, 2),
+                              blurRadius: 0,
+                              color: Colors.black,
+                            ),
+                          ],
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      // Code Input Fields
+                      const SizedBox(height: 8),
+                      RichText(
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 12,
+                            color: Colors.black,
+                          ),
+                          children: [
+                            const TextSpan(text: 'We sent a reset link to '),
+                            TextSpan(
+                              text: widget.email,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            const TextSpan(
+                              text:
+                                  '\nenter 4 digit code that mentioned in the email',
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: List.generate(4, (index) {
                           return Container(
-                            width: 50,
-                            height: 50,
+                            width: 55,
+                            height: 55,
                             margin: const EdgeInsets.symmetric(horizontal: 5),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFEC9F59),
+                                width: 2,
+                              ),
+                              color: const Color(0xFFFFF6DC),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Color(0xFFFFBD59),
+                                  offset: Offset(2, 4),
+                                  blurRadius: 0,
+                                ),
+                              ],
+                            ),
+                            alignment: Alignment.center,
                             child: TextField(
                               controller: _codeControllers[index],
                               focusNode: _focusNodes[index],
@@ -156,17 +154,10 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                                 FilteringTextInputFormatter.digitsOnly,
                               ],
                               style: const TextStyle(fontSize: 24),
-                              decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10),
-                                  borderSide: BorderSide.none,
-                                ),
-                                contentPadding: EdgeInsets.zero,
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
                               ),
                               onChanged: (value) {
-                                // Auto move focus to next field when a digit is entered
                                 if (value.length == 1 && index < 3) {
                                   FocusScope.of(context)
                                       .requestFocus(_focusNodes[index + 1]);
@@ -176,91 +167,77 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                           );
                         }),
                       ),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 70),
-                // Verify Button
-                Center(
-                  child: InkWell(
-                    onTap: _isCodeComplete ? _handleVerification : null,
-                    child: Opacity(
-                      opacity: _isCodeComplete ? 1.0 : 0.5,
-                      child: Container(
-                        height: 50,
-                        width: 240,
-                        decoration: const BoxDecoration(
-                          image: DecorationImage(
-                            image: AssetImage(
-                                'assets/widgets/buttons/golden_button.png'),
-                            fit: BoxFit.fill,
-                          ),
-                        ),
-                        alignment: Alignment.center,
-                        child: Transform.translate(
-                          offset: const Offset(0, -8),
-                          child: const Text(
-                            'Verify',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
+                      const SizedBox(height: 50),
+
+                      // Verify Button (unchanged)
+
+                      Center(
+                        child: InkWell(
+                          onTap: _isCodeComplete ? _handleVerification : null,
+                          child: Opacity(
+                            opacity: _isCodeComplete ? 1.0 : 0.5,
+                            child: Container(
+                              height: 50,
+                              width: 240,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'assets/widgets/buttons/golden_button.png'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Transform.translate(
+                                offset: const Offset(0, -8),
+                                child: const Text(
+                                  'Verify',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
-                // Resend Code and Back to Login options
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    TextButton(
-                      onPressed: () {
-                        // Handle resend code logic
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Code Resent')),
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text(
-                        'Resend Code',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 20),
-                    TextButton(
-                      onPressed: () {
-                        // Navigate back to login page
-                        Navigator.of(context).pushAndRemoveUntil(
-                          MaterialPageRoute(
-                            builder: (context) => const LoginPage(),
+
+                      const SizedBox(height: 30),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(content: Text('Code Resent')),
+                              );
+                            },
+                            child: const Text(
+                              'Resend Code',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.blue),
+                            ),
                           ),
-                          (Route<dynamic> route) => false,
-                        );
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                          const SizedBox(width: 20),
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                  builder: (context) => const LoginPage(),
+                                ),
+                                (route) => false,
+                              );
+                            },
+                            child: const Text(
+                              'Back to Login',
+                              style:
+                                  TextStyle(fontSize: 14, color: Colors.blue),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: const Text(
-                        'Back to Login',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),

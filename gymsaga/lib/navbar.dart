@@ -10,7 +10,31 @@ class CustomNavBar extends StatefulWidget {
 }
 
 class _CustomNavBarState extends State<CustomNavBar> {
-  int _selectedIndex = -1;
+  int _selectedIndex = 0; // Set default selected index to 0 (home)
+
+  // Define list of button paths for normal and pressed states
+  final List<Map<String, String>> _navButtons = [
+    {
+      'normal': 'assets/widgets/buttons/homepage.png',
+      'pressed': 'assets/widgets/buttons/homepage_pressed.png',
+      'label': 'Home'
+    },
+    {
+      'normal': 'assets/widgets/buttons/steps.png',
+      'pressed': 'assets/widgets/buttons/steps_pressed.png',
+      'label': 'Steps'
+    },
+    {
+      'normal': 'assets/widgets/buttons/workout.png',
+      'pressed': 'assets/widgets/buttons/workout_pressed.png',
+      'label': 'Workout'
+    },
+    {
+      'normal': 'assets/widgets/buttons/profile.png',
+      'pressed': 'assets/widgets/buttons/profile_pressed.png',
+      'label': 'Profile'
+    },
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -20,37 +44,33 @@ class _CustomNavBarState extends State<CustomNavBar> {
         // Background image with error handling
         Positioned(
           bottom: 0,
-          child: Image.asset(
-            'assets/widgets/background/navbar_bg.png',
+          child: Container(
             width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-            errorBuilder: (context, error, stackTrace) {
-              return Container(
-                color: Colors.grey,
-                height: 60,
-                width: MediaQuery.of(context).size.width,
-                child: Text('Navbar background not found'),
-              );
-            },
+            child: Image.asset(
+              'assets/widgets/background/navbar_bg2.png',
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.fitWidth,
+              filterQuality: FilterQuality.none,
+              alignment: Alignment.bottomCenter,
+            ),
           ),
         ),
         Positioned(
-          bottom: 10,
+          bottom: 8, // Sedikit naik ke atas agar posisi sesuai dengan background
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildNavItem(0, 'assets/widgets/icons/home_icon.png'),
-              _buildNavItem(1, 'assets/widgets/icons/steps_icon.png'),
-              // _buildNavItem(2, 'assets/widgets/icons/dumbell.svg'),
-              _buildNavItem(3, 'assets/widgets/icons/profile_navbar_icon.png'),
-            ],
+            children: List.generate(_navButtons.length, (index) {
+              return _buildNavItem(index);
+            }),
           ),
         ),
       ],
     );
   }
 
-  Widget _buildNavItem(int index, String iconPath) {
+  Widget _buildNavItem(int index) {
+    bool isSelected = _selectedIndex == index;
+    
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -62,44 +82,15 @@ class _CustomNavBarState extends State<CustomNavBar> {
           widget.onTap!(index);
         }
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Stack(
-            alignment: Alignment.center,
-            children: [
-              // Button background with error handling
-              Image.asset(
-                _selectedIndex == index
-                    ? 'assets/widgets/buttons/buttonn_pressed.png'
-                    : 'assets/widgets/buttons/navbar_button.png',
-                width: 50,
-                height: 50,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    width: 50,
-                    height: 50,
-                    color: _selectedIndex == index ? Colors.blue : Colors.grey,
-                    child: Text('Button image not found'),
-                  );
-                },
-              ),
-              // Icon with error handling
-              Image.asset(
-                iconPath,
-                width: 30,
-                height: 30,
-                errorBuilder: (context, error, stackTrace) {
-                  return Icon(
-                    Icons.error,
-                    color: Colors.red,
-                    size: 30,
-                  );
-                },
-              ),
-            ],
-          ),
-        ],
+      child: Container(
+        width: MediaQuery.of(context).size.width / _navButtons.length,
+        padding: EdgeInsets.symmetric(horizontal: 1), // Mengurangi padding horizontal
+        child: Image.asset(
+          isSelected ? _navButtons[index]['pressed']! : _navButtons[index]['normal']!,
+          width: 85, // Memperbesar ukuran tombol
+          height: 85, // Memperbesar ukuran tombol
+          filterQuality: FilterQuality.none, // Mempertahankan tampilan pixel art
+        ),
       ),
     );
   }

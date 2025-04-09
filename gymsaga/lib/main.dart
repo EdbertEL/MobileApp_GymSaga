@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gymsaga/login.dart';
 import 'package:gymsaga/profile.dart';
 import 'package:gymsaga/register.dart';
-import 'register.dart';
+import 'homepage.dart';
 
 void main() {
   runApp(const MainApp());
@@ -17,7 +17,7 @@ class MainApp extends StatelessWidget {
       theme: ThemeData(
         fontFamily: 'Jersey25',
       ),
-      home: RegisterPage(),
+      home: LoginPage(),
     );
   }
 }

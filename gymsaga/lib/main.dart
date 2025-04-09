@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/homepage.dart';
 import 'package:gymsaga/login.dart';
 import 'package:gymsaga/profile.dart';
 import 'package:gymsaga/register.dart';
-import 'homepage.dart';
+import 'register.dart';
 
 void main() {
   runApp(const MainApp());

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class CustomNavBar extends StatefulWidget {
+  final Function(int)? onTap;
+
+  const CustomNavBar({Key? key, this.onTap}) : super(key: key);
+
   @override
   _CustomNavBarState createState() => _CustomNavBarState();
 }
@@ -37,7 +41,7 @@ class _CustomNavBarState extends State<CustomNavBar> {
     return Stack(
       alignment: Alignment.bottomCenter,
       children: [
-        // Background Navbar
+        // Background image with error handling
         Positioned(
           bottom: 0,
           child: Container(
@@ -51,7 +55,6 @@ class _CustomNavBarState extends State<CustomNavBar> {
             ),
           ),
         ),
-        // Row dengan 4 Button
         Positioned(
           bottom: 8, // Sedikit naik ke atas agar posisi sesuai dengan background
           child: Row(
@@ -73,6 +76,11 @@ class _CustomNavBarState extends State<CustomNavBar> {
         setState(() {
           _selectedIndex = index;
         });
+
+        // Call onTap if provided
+        if (widget.onTap != null) {
+          widget.onTap!(index);
+        }
       },
       child: Container(
         width: MediaQuery.of(context).size.width / _navButtons.length,

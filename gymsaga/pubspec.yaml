@@ -10,6 +10,8 @@ dependencies:
   flutter:
     sdk: flutter
   google_fonts: ^6.2.1
+  loading_indicator: ^3.1.0
+
 
 dev_dependencies:
   flutter_test:
@@ -24,6 +26,9 @@ flutter:
     - assets/widgets/buttons/
     - assets/widgets/icons/
     - assets/widgets/images/
+    - assets/widgets/buttons/profile.png
+    - assets/widgets/buttons/homepage_pressed.png
+
   fonts:
     - family: Jersey25
       fonts:

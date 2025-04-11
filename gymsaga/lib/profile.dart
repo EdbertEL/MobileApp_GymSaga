@@ -17,6 +17,7 @@ class ProfilePage extends StatelessWidget {
               right: 0,
               child: Image.asset(
                 'assets/widgets/background/decor_atas.png',
+                width: double.infinity,
                 fit: BoxFit.cover,
               ),
             ),

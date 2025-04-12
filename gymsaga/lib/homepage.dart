@@ -3,6 +3,7 @@ import 'navbar.dart';
 import 'steps.dart';
 import 'profile.dart';
 import 'workout.dart';
+import 'create_workout.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -10,11 +11,11 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFEDFB6),
+      backgroundColor: const Color(0xFFF7E4C3), // Diubah agar sama dengan halaman profile
       body: SafeArea(
         child: Stack(
           children: [
-            // Decor overlay right under header
+            // Decor overlay right under header (dipindahkan ke belakang header)
             Positioned(
               top: 80, // adjust based on height of header.png
               left: 0,
@@ -82,11 +83,11 @@ class HomePage extends StatelessWidget {
             SingleChildScrollView(
               child: Column(
                 children: [
-                  const SizedBox(height: 160), // make space for background
+                  const SizedBox(height: 100), // mempertahankan spasi konten utama seperti kode awal
                   
                   // Daily Quest section with frame
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -99,9 +100,9 @@ class HomePage extends StatelessWidget {
                           child: Text(
                             'Daily Quest:',
                             style: TextStyle(
-                              fontSize: 22,
+                              fontSize: 24,
                               fontWeight: FontWeight.bold,
-                              color: Colors.purple,
+                              color: Color(0xFF9C27B0),
                               fontFamily: 'Jersey25',
                             ),
                           ),
@@ -130,25 +131,30 @@ class HomePage extends StatelessWidget {
                   // Reminder box
                   Container(
                     margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                    padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFF3D5),
-                      borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: Colors.black, width: 2),
+                      image: DecorationImage(
+                        image: AssetImage('assets/widgets/background/frame.png'),
+                        fit: BoxFit.fill,
+                      ),
                     ),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     child: Row(
-                      children: const [
-                        Icon(Icons.scale, color: Colors.black),
-                        SizedBox(width: 10),
-                        Text(
+                      children: [
+                        Image.asset(
+                          'assets/widgets/icons/weight.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                        const SizedBox(width: 10),
+                        const Text(
                           "Don't forget to do your daily weigh in",
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
-                            fontFamily: 'Inter',
+                            fontFamily: 'Jersey25',
                           ),
                         ),
-                        Spacer(),
-                        Icon(Icons.close, color: Colors.black),
+                        const Spacer(),
+                        const Icon(Icons.close, color: Colors.black),
                       ],
                     ),
                   ),
@@ -164,6 +170,14 @@ class HomePage extends StatelessWidget {
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
                           fontFamily: 'Jersey25',
+                          color: Colors.black,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1, 1),
+                              blurRadius: 1,
+                              color: Colors.white,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -171,19 +185,39 @@ class HomePage extends StatelessWidget {
                   
                   // Workout cards
                   _buildWorkoutCard(
+                    context: context,
                     title: "Push Day",
                     xp: "+120 XP",
                     exercises: "Pushups | Pike Pushups | Dips",
                   ),
                   _buildWorkoutCard(
+                    context: context,
                     title: "Legs",
                     xp: "+120 XP",
                     exercises: "Squats | Lunges | Glute Bridges | Calf Rises",
-                    showAddButton: true,
                   ),
                   
                   const SizedBox(height: 80), // Extra space for navbar
                 ],
+              ),
+            ),
+            
+            // Button create_workout di posisi fix kanan bawah (di atas navbar)
+            Positioned(
+              right: 20,
+              bottom: 20, // posisi di atas navbar
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateWorkout()),
+                  );
+                },
+                child: Image.asset(
+                  'assets/widgets/buttons/create_workout.png',
+                  width: 50,
+                  height: 50,
+                ),
               ),
             ),
           ],
@@ -195,29 +229,40 @@ class HomePage extends StatelessWidget {
 
   Widget _buildDayBox(String day, String number, bool isSelected) {
     return Container(
-      width: 35,
-      height: 50,
+      width: 45,
+      height: 55,
       decoration: BoxDecoration(
-        color: isSelected ? const Color(0xFFFF5252) : const Color(0xFFFFD54F),
-        border: Border.all(color: Colors.black, width: 1),
+        image: DecorationImage(
+          image: AssetImage('assets/widgets/icons/date.png'),
+          fit: BoxFit.fill,
+        ),
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
-            day, 
+            day.toUpperCase(), 
             style: const TextStyle(
               fontSize: 10, 
               fontWeight: FontWeight.bold,
-              fontFamily: 'Inter',
+              fontFamily: 'Jersey25',
+              color: Colors.black,
             )
           ),
           Text(
             number, 
-            style: const TextStyle(
-              fontSize: 16, 
+            style: TextStyle(
+              fontSize: 18, 
               fontWeight: FontWeight.bold,
-              fontFamily: 'Inter',
+              fontFamily: 'Jersey25',
+              color: isSelected ? const Color(0xFFE32020) : Colors.black,
+              shadows: isSelected ? [
+                Shadow(
+                  offset: Offset(1, 1),
+                  blurRadius: 2,
+                  color: Colors.grey.withOpacity(0.7),
+                ),
+              ] : [],
             )
           ),
         ],
@@ -226,6 +271,7 @@ class HomePage extends StatelessWidget {
   }
 
   Widget _buildWorkoutCard({
+    required BuildContext context,
     required String title,
     required String xp,
     required String exercises,
@@ -233,65 +279,97 @@ class HomePage extends StatelessWidget {
   }) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFF3D5),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black, width: 2),
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage('assets/widgets/background/frame.png'),
+          fit: BoxFit.fill,
+        ),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: Row(
-          children: [
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Stack(
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        style: const TextStyle(
-                          fontSize: 16, 
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Jersey25',
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            title,
+                            style: const TextStyle(
+                              fontSize: 16, 
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Jersey25',
+                            ),
+                          ),
+                          // XP text with white outline
+                          Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              // White outline for XP text
+                              Text(
+                                xp,
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  fontFamily: 'Jersey25',
+                                  fontWeight: FontWeight.bold,
+                                  foreground: Paint()
+                                    ..style = PaintingStyle.stroke
+                                    ..strokeWidth = 2
+                                    ..color = Colors.white,
+                                ),
+                              ),
+                              // Blue fill for XP text
+                              Text(
+                                xp,
+                                style: const TextStyle(
+                                  color: Color(0xFF00BFFF),
+                                  fontWeight: FontWeight.bold,
+                                  fontFamily: 'Jersey25',
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
+                      const SizedBox(height: 5),
                       Text(
-                        xp,
-                        style: const TextStyle(
-                          color: Colors.blue, 
-                          fontWeight: FontWeight.bold,
-                          fontFamily: 'Inter',
+                        exercises,
+                        style: TextStyle(
+                          fontSize: 12, 
+                          color: Colors.grey[700],
+                          fontFamily: 'Jersey25',
                         ),
                       ),
                     ],
                   ),
-                  const SizedBox(height: 5),
-                  Text(
-                    exercises,
-                    style: TextStyle(
-                      fontSize: 12, 
-                      color: Colors.grey[700],
-                      fontFamily: 'Inter',
-                    ),
-                  ),
-                ],
+                ),
+              ],
+            ),
+          ),
+          if (showAddButton)
+            Positioned(
+              right: 15,
+              bottom: 15,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CreateWorkout()),
+                  );
+                },
+                child: Image.asset(
+                  'assets/widgets/buttons/create_workout.png',
+                  width: 30,
+                  height: 30,
+                ),
               ),
             ),
-            if (showAddButton)
-              Container(
-                width: 30,
-                height: 30,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF9800),
-                  borderRadius: BorderRadius.circular(5),
-                  border: Border.all(color: Colors.black),
-                ),
-                child: const Icon(Icons.add, color: Colors.white),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

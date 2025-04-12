@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -33,7 +34,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-// Centered "PROFILE" Text
+            // Centered "PROFILE" Text
             Positioned(
               top: 24, // adjust vertically as needed
               left: 0,
@@ -74,7 +75,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-// Gear Icon on the right
+            // Gear Icon on the right
             Positioned(
               top: 32, // same vertical as text for alignment
               right: 16,
@@ -152,13 +153,14 @@ class ProfilePage extends StatelessWidget {
                       label: 'Statistics', icon: Icons.show_chart),
                   const ProfileButton(
                       label: 'Achievements', icon: Icons.emoji_events),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 80), // Extra space for navbar
                 ],
               ),
             ),
           ],
         ),
       ),
+      bottomNavigationBar: const CustomNavBar(currentIndex: 3),
     );
   }
 }

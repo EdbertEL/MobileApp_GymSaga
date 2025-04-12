@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'forgotpassword.dart'; // Import the ForgotPasswordPage
+import 'register.dart'; // Import the RegisterPage
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
-
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -185,14 +186,20 @@ class _LoginPageState extends State<LoginPage> {
                           // Forgot Password
                           TextButton(
                             onPressed: () {
-                              // Handle forgot password
+                              // Navigate to Forgot Password Page
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      const ForgotPasswordPage(),
+                                ),
+                              );
                             },
                             child: const Text(
                               'Forgot password?',
                               style: TextStyle(
                                 fontSize: 12,
                                 color: Colors.blue,
-                                
                               ),
                             ),
                           ),
@@ -291,8 +298,13 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // Handle navigation to sign up
-                        print('Navigate to Sign Up');
+                        // Navigate to Register Page
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const RegisterPage(),
+                          ),
+                        );
                       },
                       style: TextButton.styleFrom(
                         padding: EdgeInsets.zero,

@@ -15,9 +15,18 @@ class PasswordResetPage extends StatelessWidget {
               const SizedBox(height: 16),
               Row(
                 children: [
-                  IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () => Navigator.pop(context),
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: IconButton(
+                      padding: EdgeInsets.zero,
+                      icon: const Icon(Icons.chevron_left, size: 24),
+                      onPressed: () => Navigator.pop(context),
+                    ),
                   ),
                 ],
               ),

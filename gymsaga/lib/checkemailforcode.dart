@@ -13,9 +13,10 @@ class CheckEmailForCodePage extends StatefulWidget {
 
 class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
   final List<TextEditingController> _codeControllers =
-      List.generate(4, (_) => TextEditingController());
-  final List<FocusNode> _focusNodes = List.generate(4, (_) => FocusNode());
+      List.generate(5, (_) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
   bool _isCodeComplete = false;
+  List<bool> _isFieldFilled = List.generate(5, (_) => false);
 
   @override
   void initState() {
@@ -38,6 +39,9 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
 
   void _checkCodeCompletion() {
     setState(() {
+      _isFieldFilled = _codeControllers
+          .map((controller) => controller.text.isNotEmpty)
+          .toList();
       _isCodeComplete =
           _codeControllers.every((controller) => controller.text.isNotEmpty);
     });
@@ -70,9 +74,18 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                 const SizedBox(height: 40),
                 Row(
                   children: [
-                    IconButton(
-                      icon: const Icon(Icons.arrow_back),
-                      onPressed: () => Navigator.pop(context),
+                    Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                      child: IconButton(
+                        padding: EdgeInsets.zero,
+                        icon: Icon(Icons.chevron_left, size: 24),
+                        onPressed: () => Navigator.pop(context),
+                      ),
                     ),
                   ],
                 ),
@@ -107,15 +120,25 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                             color: Colors.black,
                           ),
                           children: [
-                            const TextSpan(text: 'We sent a reset link to '),
+                            TextSpan(
+                              text: 'We sent a reset link to ',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                              ),
+                            ),
                             TextSpan(
                               text: widget.email,
                               style:
                                   const TextStyle(fontWeight: FontWeight.bold),
                             ),
-                            const TextSpan(
+                            TextSpan(
                               text:
-                                  '\nenter 4 digit code that mentioned in the email',
+                                  '\nEnter 5 digit code that mentioned in the email',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey[700],
+                              ),
                             ),
                           ],
                         ),
@@ -123,7 +146,7 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                       const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(4, (index) {
+                        children: List.generate(5, (index) {
                           return Container(
                             width: 55,
                             height: 55,
@@ -134,7 +157,9 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                                 color: const Color(0xFFEC9F59),
                                 width: 2,
                               ),
-                              color: const Color(0xFFFFF6DC),
+                              color: _isFieldFilled[index]
+                                  ? Colors.white
+                                  : const Color(0xFFFFF6DC),
                               boxShadow: const [
                                 BoxShadow(
                                   color: Color(0xFFFFBD59),
@@ -158,10 +183,11 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                                 border: InputBorder.none,
                               ),
                               onChanged: (value) {
-                                if (value.length == 1 && index < 3) {
+                                if (value.length == 1 && index < 4) {
                                   FocusScope.of(context)
                                       .requestFocus(_focusNodes[index + 1]);
                                 }
+                                _checkCodeCompletion();
                               },
                             ),
                           );
@@ -169,8 +195,7 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                       ),
                       const SizedBox(height: 50),
 
-                      // Verify Button (unchanged)
-
+                      // Verify Button
                       Center(
                         child: InkWell(
                           onTap: _isCodeComplete ? _handleVerification : null,
@@ -182,7 +207,7 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                               decoration: const BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage(
-                                      'assets/widgets/buttons/golden_button.png'),
+                                      'assets/widgets/buttons/silver_button.png'),
                                   fit: BoxFit.fill,
                                 ),
                               ),
@@ -190,9 +215,9 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                               child: Transform.translate(
                                 offset: const Offset(0, -8),
                                 child: const Text(
-                                  'Verify',
+                                  'VERIFY CODE',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: Color.fromARGB(255, 0, 0, 0),
                                     fontSize: 13,
                                   ),
                                 ),
@@ -206,32 +231,24 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          Text(
+                            'Haven\'t got the email yet?',
+                            style: TextStyle(
+                                fontSize: 14, color: Colors.grey[600]),
+                          ),
                           TextButton(
                             onPressed: () {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Code Resent')),
+                                const SnackBar(content: Text('Email Resent')),
                               );
                             },
-                            child: const Text(
-                              'Resend Code',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.blue),
-                            ),
-                          ),
-                          const SizedBox(width: 20),
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pushAndRemoveUntil(
-                                MaterialPageRoute(
-                                  builder: (context) => const LoginPage(),
-                                ),
-                                (route) => false,
-                              );
-                            },
-                            child: const Text(
-                              'Back to Login',
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.blue),
+                            child: Text(
+                              'Resend Email',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.blue,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
                         ],

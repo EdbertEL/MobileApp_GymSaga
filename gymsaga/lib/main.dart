@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymsaga/homepage.dart';
+import 'package:gymsaga/loadingpage.dart';
 import 'package:gymsaga/login.dart';
 import 'package:gymsaga/profile.dart';
 import 'package:gymsaga/register.dart';
@@ -33,7 +34,7 @@ class MainApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(),
+        '/': (context) => const LoginPage(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(),
@@ -41,8 +42,7 @@ class MainApp extends StatelessWidget {
         '/workout': (context) => const WorkoutPage(),
       },
       onGenerateRoute: (settings) {
-        // Periksa apakah route harus tanpa animasi
-        if (settings.arguments is Map && 
+        if (settings.arguments is Map &&
             (settings.arguments as Map).containsKey('noAnimation') &&
             (settings.arguments as Map)['noAnimation'] == true) {
           

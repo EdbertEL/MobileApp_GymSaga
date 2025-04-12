@@ -46,7 +46,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    'Forgot password',
+                    'FORGOT PASSWORD',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 38,
@@ -164,7 +164,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                         child: Transform.translate(
                           offset: const Offset(0, -8),
                           child: const Text(
-                            'Reset Password',
+                            'RESET PASSWORD',
                             style: TextStyle(
                               fontFamily: 'Jersey25',
                               color: Colors.white,
@@ -179,36 +179,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
                 const SizedBox(height: 30),
 
-                // Back to Login
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Text(
-                      'Remember your password? ',
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xFF555555),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      style: TextButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        minimumSize: Size.zero,
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      ),
-                      child: const Text(
-                        'Login',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                
               ],
             ),
           ),

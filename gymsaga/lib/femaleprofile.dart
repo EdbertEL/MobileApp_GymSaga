@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'weightgoal.dart';
 
 class FemaleProfile extends StatelessWidget {
   @override
@@ -6,45 +7,52 @@ class FemaleProfile extends StatelessWidget {
     return Scaffold(
       backgroundColor: const Color(0xFFF9DEAF),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'What\'s your goal?',
-                style: TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 20),
+                const Text(
+                  'What\'s your goal?',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              Image.asset(
-                'assets/widgets/images/female_lose_weight.png',
-                width: 200,
-                height: 200,
-              ),
-              const SizedBox(height: 20),
-              _buildButton('LOSE WEIGHT'),
-              const SizedBox(height: 20),
-              Image.asset(
-                'assets/widgets/images/female_build_muscle.png',
-                width: 200,
-                height: 200,
-              ),
-              const SizedBox(height: 20),
-              _buildButton('BUILD MUSCLE'),
-            ],
+                const SizedBox(height: 20),
+                Image.asset(
+                  'assets/widgets/images/female_lose_weight.png',
+                  width: 200,
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                _buildButton('LOSE WEIGHT', context),
+                const SizedBox(height: 20),
+                Image.asset(
+                  'assets/widgets/images/female_build_muscle.png',
+                  width: 200,
+                  height: 200,
+                ),
+                const SizedBox(height: 20),
+                _buildButton('BUILD MUSCLE', context),
+                const SizedBox(height: 20),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  Widget _buildButton(String text) {
+  Widget _buildButton(String text, BuildContext context) {
     return InkWell(
       onTap: () {
-        // Handle button press
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WeightGoal()),
+        );
       },
       child: Container(
         height: 50,

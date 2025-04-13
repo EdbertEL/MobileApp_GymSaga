@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 
+import 'femaleprofile.dart';
+import 'maleprofile.dart';
+
 class CompleteYourProfile extends StatefulWidget {
   const CompleteYourProfile({super.key});
+
   @override
   CompleteYourProfileState createState() => CompleteYourProfileState();
 }
@@ -379,34 +383,6 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class MaleProfile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Male Profile'),
-      ),
-      body: Center(
-        child: Text('This is the Male Profile page'),
-      ),
-    );
-  }
-}
-
-class FemaleProfile extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Female Profile'),
-      ),
-      body: Center(
-        child: Text('This is the Female Profile page'),
-      ),
     );
   }
 }

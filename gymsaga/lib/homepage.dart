@@ -3,6 +3,7 @@ import 'navbar.dart';
 import 'steps.dart';
 import 'profile.dart';
 import 'workout.dart';
+import 'finishsettingup.dart';
 import 'create_workout.dart';
 
 class HomePage extends StatelessWidget {

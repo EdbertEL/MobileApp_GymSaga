@@ -31,7 +31,6 @@ class MainApp extends StatelessWidget {
           },
         ),
       ),
-      home: const HomePage(),
       initialRoute: '/',
       routes: {
         '/': (context) => const HomePage(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'workout_history.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -147,8 +148,18 @@ class ProfilePage extends StatelessWidget {
                   const SizedBox(height: 20),
                   const ProfileButton(
                       label: 'My Weight', icon: Icons.monitor_weight),
-                  const ProfileButton(
-                      label: 'Workout History', icon: Icons.fitness_center),
+                  ProfileButton(
+                    label: 'Workout History', 
+                    icon: Icons.fitness_center,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const WorkoutHistoryPage(),
+                        ),
+                      );
+                    },
+                  ),
                   const ProfileButton(
                       label: 'Statistics', icon: Icons.show_chart),
                   const ProfileButton(
@@ -212,44 +223,53 @@ class ProfileStat extends StatelessWidget {
 class ProfileButton extends StatelessWidget {
   final String label;
   final IconData icon;
+  final VoidCallback? onTap;
 
-  const ProfileButton({super.key, required this.label, required this.icon});
+  const ProfileButton({
+    super.key, 
+    required this.label, 
+    required this.icon, 
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        width: 300,
-        height: 100,
-        decoration: BoxDecoration(
-          image: const DecorationImage(
-            image: AssetImage('assets/widgets/background/frame.png'),
-            fit: BoxFit.contain,
-          ),
-          borderRadius: BorderRadius.circular(8),
-        ),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        child: Row(
-          children: [
-            Icon(icon, color: Colors.black, size: 24),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Text(
-                label,
-                style: const TextStyle(
-                  fontSize: 18,
-                  color: Colors.black,
-                  fontFamily: 'Jersey25',
-                ),
-              ),
-            ),
-            Image.asset(
-              'assets/widgets/buttons/right_chevron.png',
-              width: 20,
-              height: 20,
+    return GestureDetector(
+      onTap: onTap,
+      child: Center(
+        child: Container(
+          width: 300,
+          height: 100,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('assets/widgets/background/frame.png'),
               fit: BoxFit.contain,
             ),
-          ],
+            borderRadius: BorderRadius.circular(8),
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          child: Row(
+            children: [
+              Icon(icon, color: Colors.black, size: 24),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Text(
+                  label,
+                  style: const TextStyle(
+                    fontSize: 18,
+                    color: Colors.black,
+                    fontFamily: 'Jersey25',
+                  ),
+                ),
+              ),
+              Image.asset(
+                'assets/widgets/buttons/right_chevron.png',
+                width: 20,
+                height: 20,
+                fit: BoxFit.contain,
+              ),
+            ],
+          ),
         ),
       ),
     );

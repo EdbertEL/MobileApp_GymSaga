@@ -53,42 +53,43 @@ class ActivityPersonalization extends StatelessWidget {
     String imagePath,
     String text,
   ) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FinishSettingUp()),
-        );
-      },
-      child: Container(
-        height: 50,
-        width: double.infinity,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          image: DecorationImage(
-            image: AssetImage('assets/widgets/buttons/golden_button.png'),
-            fit: BoxFit.fill,
-          ),
+    return Column(
+      children: [
+        Image.asset(
+          imagePath,
+          width: 50,
+          height: 50,
         ),
-        child: Row(
-          children: [
-            const SizedBox(width: 10),
-            Image.asset(
-              imagePath,
-              width: 30,
-              height: 30,
-            ),
-            const SizedBox(width: 10),
-            Text(
-              text,
-              style: const TextStyle(
-                color: Colors.black,
-                fontSize: 16,
+        const SizedBox(height: 10),
+        InkWell(
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => FinishSettingUp()),
+            );
+          },
+          child: Container(
+            height: 50,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              image: DecorationImage(
+                image: AssetImage('assets/widgets/buttons/golden_button.png'),
+                fit: BoxFit.fill,
               ),
             ),
-          ],
+            child: Center(
+              child: Text(
+                text,
+                style: const TextStyle(
+                  color: Colors.black,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }

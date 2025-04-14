@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'activitypersonalization.dart'; // Impor file ActivityPersonalization
 
 class WeightGoal extends StatefulWidget {
   const WeightGoal({super.key});
-
   @override
   WeightGoalState createState() => WeightGoalState();
 }
@@ -11,10 +11,15 @@ class WeightGoalState extends State<WeightGoal> {
   final TextEditingController _weightController = TextEditingController();
 
   void _navigateToActivityPersonalization() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ActivityPersonalization()),
-    );
+    // Pastikan ada validasi untuk berat
+    if (_weightController.text.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ActivityPersonalization()), // Gunakan kelas dari activitypersonalization.dart
+      );
+    }
   }
 
   @override
@@ -119,6 +124,8 @@ class WeightGoalState extends State<WeightGoal> {
                   Expanded(
                     child: TextField(
                       controller: controller,
+                      keyboardType: TextInputType
+                          .number, // Tambahkan ini untuk input numerik
                       onChanged: (value) {
                         setState(() {});
                       },
@@ -155,20 +162,6 @@ class WeightGoalState extends State<WeightGoal> {
           ),
         ),
       ],
-    );
-  }
-}
-
-class ActivityPersonalization extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Activity Personalization'),
-      ),
-      body: Center(
-        child: Text('This is the Activity Personalization page'),
-      ),
     );
   }
 }

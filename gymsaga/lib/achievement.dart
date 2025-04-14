@@ -8,86 +8,94 @@ class AchievementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        color: const Color(0xFFF9D48B), // Background color matching the image
-        child: SafeArea(
-          child: Column(
-            children: [
-              _buildHeader(context),
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
-                    child: _buildAchievementGrid(),
-                  ),
-                ),
+      backgroundColor: const Color(0xFFF9D48B),
+      body: SafeArea(
+        child: Column(
+          children: [
+            _buildHeader(context),
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildAchievementGrid(),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
   }
 
   Widget _buildHeader(BuildContext context) {
-    return Container(
+    return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Column(
         children: [
           Row(
             children: [
-              Container(
-                padding: const EdgeInsets.all(4),
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.7),
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(color: Colors.black, width: 1),
-                ),
-                child: const Icon(
-                  Icons.arrow_back,
-                  color: Colors.orange,
-                  size: 20,
-                ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.of(context).pop(),
+                    child: Image.asset(
+                      'assets/widgets/buttons/back_button.png',
+                      width: 40,
+                      height: 40,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  const Text(
+                    'My Achievement',
+                    style: TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 40,
+                      color: Colors.white,
+                      shadows: [
+                        Shadow(
+                          offset: Offset(2, 4),
+                          blurRadius: 15.0,
+                          color: Color.fromARGB(100, 0, 0, 0),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 10, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF4A3D2B),
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFFF9D48B),
+                          size: 18,
+                        ),
+                        const SizedBox(width: 4),
+                        const Text(
+                          'Achievement 0/10',
+                          style: TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 15,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
               const Spacer(),
               Image.asset(
                 'assets/widgets/images/bronze_trophy.png',
-                height: 60,
-                width: 60,
+                height: 110,
+                width: 110,
               ),
             ],
-          ),
-          const SizedBox(height: 8),
-          const Text(
-            'My Achievement',
-            style: TextStyle(
-              fontFamily: 'Jersey',
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-            decoration: BoxDecoration(
-              color: Colors.grey.withOpacity(0.3),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(Icons.star, color: Colors.amber, size: 16),
-                SizedBox(width: 4),
-                Text(
-                  'Achievement 0/10',
-                  style: TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 14,
-                    color: Colors.white,
-                  ),
-                ),
-              ],
-            ),
           ),
           const SizedBox(height: 12),
           _buildCategoryTabs(context),
@@ -145,141 +153,163 @@ class AchievementScreen extends StatelessWidget {
   }
 
   Widget _buildAchievementGrid() {
-    return Padding(
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        children: [
-          _buildAchievementRow(
-            'Step Master',
-            'Walked 25,000 steps in a single day.',
-            0,
-          ),
-          const SizedBox(height: 12),
-          _buildAchievementRow(
-            'Calories Crusher',
-            'Burned 300 calories in a single workout.',
-            0,
-          ),
-          const SizedBox(height: 12),
-          _buildAchievementRow(
-            'Workout Warrior',
-            'Completed 5 workouts in a week.',
-            0,
-          ),
-          const SizedBox(height: 12),
-          _buildAchievementRow(
-            'Consistency Champion',
-            'Logged workouts for 7 consecutive days.',
-            0,
-          ),
-          const SizedBox(height: 12),
-          _buildAchievementRow(
-            'Distance Dominator',
-            'Walked/Ran a total of 10 kilometers.',
-            0,
-          ),
-          const SizedBox(height: 12),
-          _buildAchievementRow(
-            'Personal Best Breaker',
-            'Achieved a new personal best in one workout metric.',
-            0,
-          ),
-        ],
-      ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return GridView.count(
+          crossAxisCount: 2,
+          childAspectRatio: 0.75,
+          mainAxisSpacing: 12,
+          crossAxisSpacing: 12,
+          children: [
+            _buildAchievementRow(
+              'Step Master',
+              'Walked 10,000 steps in a single day.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Calories Crusher',
+              'Burned 300 calories in a single workout.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Workout Warrior',
+              'Completed 5 workouts in a week.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Consistency Champion',
+              'Logged workouts for 7 consecutive days.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Distance Dominator',
+              'Walked/Ran a total of 10 kilometers.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Personal Best Breaker',
+              'Achieved a new personal best.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Levels Dominator',
+              'Reach Levels 10.',
+              0,
+            ),
+            _buildAchievementRow(
+              'Achievement Name',
+              'Achievement Description',
+              0,
+            ),
+            _buildAchievementRow(
+              'Achievement Name',
+              'Achievement Description',
+              0,
+            ),
+            _buildAchievementRow(
+              'Achievement Name',
+              'Achievement Description',
+              0,
+            ),
+          ],
+        );
+      },
     );
   }
 
   Widget _buildAchievementRow(
       String title, String description, int progressPercent) {
     return Container(
-      padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: const Color(0xFFF9D48B).withOpacity(0.7),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.orange.withOpacity(0.5), width: 1),
+        color: Colors.white.withOpacity(0.7),
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Column(
-            children: [
-              Image.asset(
-                'assets/widgets/images/bronze_medal.png',
-                height: 60,
-                width: 40,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+            child: Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Jersey25',
+                fontSize: 20,
+                color: Colors.black,
               ),
-            ],
+              textAlign: TextAlign.center,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
           ),
-          const SizedBox(width: 16),
           Expanded(
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  title,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                Image.asset(
+                  'assets/widgets/images/bronze_medal.png',
+                  height: 110,
+                  width: 100,
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  description,
-                  style: const TextStyle(
-                    fontFamily: 'Inter',
-                    fontSize: 12,
-                    color: Colors.black87,
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    description,
+                    style: const TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 10,
+                      color: Colors.black54,
+                    ),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
                 ),
                 const SizedBox(height: 8),
-                Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
-                      decoration: BoxDecoration(
-                        color: Colors.black.withOpacity(0.7),
-                        borderRadius: BorderRadius.circular(4),
-                      ),
-                      child: const Text(
-                        'Incompleted',
-                        style: TextStyle(
-                          fontFamily: 'Inter',
-                          fontSize: 12,
-                          color: Colors.white,
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.7),
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: const Text(
+                    'Incompleted',
+                    style: TextStyle(
+                      fontFamily: 'Inter',
+                      fontSize: 10,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  child: Stack(
+                    children: [
+                      Container(
+                        height: 6,
+                        width: double.infinity,
+                        decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.3),
+                          borderRadius: BorderRadius.circular(4),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 8),
-                    Text(
-                      '$progressPercent%',
-                      style: const TextStyle(
-                        fontFamily: 'Inter',
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
+                      Positioned(
+                        left: 8,
+                        child: Text(
+                          '$progressPercent%',
+                          style: const TextStyle(
+                            fontFamily: 'Inter',
+                            fontSize: 10,
+                            color: Colors.black,
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Container(
-                  height: 6,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    color: Colors.grey.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: FractionallySizedBox(
-                    alignment: Alignment.centerLeft,
-                    widthFactor: progressPercent / 100,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.green,
-                        borderRadius: BorderRadius.circular(3),
-                      ),
-                    ),
+                    ],
                   ),
                 ),
+                const SizedBox(height: 8),
               ],
             ),
           ),

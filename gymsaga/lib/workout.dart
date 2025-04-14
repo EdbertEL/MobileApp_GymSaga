@@ -20,8 +20,6 @@ class WorkoutPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-
-            // Background Header Image (fixed at the top)
             Positioned(
               top: 0,
               left: 0,
@@ -31,8 +29,6 @@ class WorkoutPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-
-            // Centered "WORKOUT" Text
             Positioned(
               top: 24,
               left: 0,
@@ -40,7 +36,6 @@ class WorkoutPage extends StatelessWidget {
               child: Center(
                 child: Stack(
                   children: [
-                    // Text outline
                     Text(
                       'WORKOUT',
                       style: TextStyle(
@@ -52,7 +47,6 @@ class WorkoutPage extends StatelessWidget {
                           ..color = Colors.black,
                       ),
                     ),
-                    // Text fill with shadow
                     Text(
                       'WORKOUT',
                       style: TextStyle(
@@ -72,8 +66,6 @@ class WorkoutPage extends StatelessWidget {
                 ),
               ),
             ),
-
-            // Workout Content
             Positioned.fill(
               top: 120,
               child: SingleChildScrollView(
@@ -162,58 +154,20 @@ class WorkoutPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Container(
-                            child: Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: [
-                                Image.asset(
-                                  'assets/widgets/images/corewomen.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Core',
-                                    style: TextStyle(
-                                      fontFamily: 'Jersey25',
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Container(
-                            child: Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: [
-                                Image.asset(
-                                  'assets/widgets/images/legsman.png',
-                                  fit: BoxFit.cover,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    'Legs',
-                                    style: TextStyle(
-                                      fontFamily: 'Jersey25',
-                                      fontSize: 18,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Row(
+                        children: [
+                          workoutCard(
+                              'assets/widgets/images/corewomen.png', 'Core'),
+                          workoutCard(
+                              'assets/widgets/images/legsman.png', 'Legs'),
+                          workoutCard(
+                              'assets/widgets/images/armman.png', 'Arm'),
+                          workoutCard(
+                              'assets/widgets/images/pullman.png', 'Pull'),
+                        ],
+                      ),
                     ),
                     const SizedBox(height: 60),
                   ],
@@ -226,4 +180,41 @@ class WorkoutPage extends StatelessWidget {
       bottomNavigationBar: const CustomNavBar(currentIndex: 2),
     );
   }
+}
+
+// Fungsi untuk bikin card workout horizontal
+Widget workoutCard(String imagePath, String title) {
+  return Container(
+    margin: const EdgeInsets.only(right: 16),
+    width: 150,
+    height: 230,
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(12),
+      image: DecorationImage(
+        image: AssetImage(imagePath),
+        fit: BoxFit.cover,
+      ),
+    ),
+    child: Align(
+      alignment: Alignment.bottomLeft,
+      child: Padding(
+        padding: const EdgeInsets.all(14.0),
+        child: Text(
+          title,
+          style: const TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 28,
+            color: Colors.white,
+            shadows: [
+              Shadow(
+                offset: Offset(0, 2),
+                blurRadius: 4,
+                color: Colors.black45,
+              ),
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
 }

@@ -12,10 +12,20 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3), // Diubah agar sama dengan halaman profile
+      backgroundColor: const Color(0xFFF7E4C3), // Background color
       body: SafeArea(
         child: Stack(
           children: [
+            // Checkerboard pattern background
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage('assets/widgets/background/checkerboard.png'),
+                  repeat: ImageRepeat.repeat,
+                ),
+              ),
+            ),
+            
             // Decor overlay right under header (dipindahkan ke belakang header)
             Positioned(
               top: 80, // adjust based on height of header.png
@@ -211,7 +221,7 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreateWorkout()),
+                    MaterialPageRoute(builder: (context) => CreateWorkoutPage()),
                   );
                 },
                 child: Image.asset(
@@ -360,7 +370,7 @@ class HomePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreateWorkout()),
+                    MaterialPageRoute(builder: (context) => CreateWorkoutPage()),
                   );
                 },
                 child: Image.asset(

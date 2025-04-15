@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'workout_history.dart';
+import 'stat_calories.dart'; // Import added for StatCaloriesPage
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -160,8 +161,18 @@ class ProfilePage extends StatelessWidget {
                       );
                     },
                   ),
-                  const ProfileButton(
-                      label: 'Statistics', icon: Icons.show_chart),
+                  ProfileButton(
+                    label: 'Statistics', 
+                    icon: Icons.show_chart,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const StatCaloriesPage(),
+                        ),
+                      );
+                    },
+                  ),
                   const ProfileButton(
                       label: 'Achievements', icon: Icons.emoji_events),
                   const SizedBox(height: 80), // Extra space for navbar

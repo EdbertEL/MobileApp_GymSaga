@@ -1,326 +1,412 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
-class CreateWorkout extends StatefulWidget {
-  const CreateWorkout({Key? key}) : super(key: key);
+class CreateWorkoutPage extends StatefulWidget {
+  const CreateWorkoutPage({Key? key}) : super(key: key);
 
   @override
-  State<CreateWorkout> createState() => _CreateWorkoutState();
+  State<CreateWorkoutPage> createState() => _CreateWorkoutPageState();
 }
 
-class _CreateWorkoutState extends State<CreateWorkout> {
-  final _formKey = GlobalKey<FormState>();
+class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
   final TextEditingController _workoutNameController = TextEditingController();
-  final List<String> _exercises = [];
-  final TextEditingController _exerciseController = TextEditingController();
+  final TextEditingController _exerciseNameController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+  
+  int sets = 4;
+  int reps = 20;
+  String activityTime = "none";
+  String restTime = "00:30";
 
   @override
   void dispose() {
     _workoutNameController.dispose();
-    _exerciseController.dispose();
+    _exerciseNameController.dispose();
+    _dateController.dispose();
     super.dispose();
   }
 
-  void _addExercise() {
-    if (_exerciseController.text.isNotEmpty) {
-      setState(() {
-        _exercises.add(_exerciseController.text);
-        _exerciseController.clear();
-      });
-    }
+  @override
+  void initState() {
+    super.initState();
+    _exerciseNameController.text = "Jumping-Jacks";
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFEDFB6),
-      appBar: AppBar(
-        title: Stack(
+      body: Container(
+        // Use checkerboard pattern background
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/widgets/background/checkerboard.png'),
+            repeat: ImageRepeat.repeat,
+          ),
+        ),
+        child: Column(
           children: [
-            // Text outline
-            Text(
-              'CREATE WORKOUT',
-              style: TextStyle(
-                fontSize: 24,
-                fontFamily: 'Jersey25',
-                foreground: Paint()
-                  ..style = PaintingStyle.stroke
-                  ..strokeWidth = 3
-                  ..color = Colors.black,
+            // Header with orange background (similar to workout_history.dart)
+            Container(
+              color: const Color.fromARGB(
+                  255, 228, 205, 167), // Light orange/beige background color
+              padding: const EdgeInsets.only(
+                top: 40.0,
+                left: 16.0,
+                right: 16.0,
+                bottom: 16.0,
               ),
-            ),
-            // Text fill with shadow
-            Text(
-              'CREATE WORKOUT',
-              style: TextStyle(
-                fontSize: 24,
-                fontFamily: 'Jersey25',
-                color: Colors.white,
+              child: Column(
+                children: [
+                  // Back button and title with settings icon
+                  Row(
+                    children: [
+                      // Back button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Image.asset(
+                          'assets/widgets/buttons/back_button.png',
+                          width: 30.0,
+                          height: 30.0,
+                        ),
+                      ),
+                      
+                      const SizedBox(width: 10.0),
+                      // CREATE A WORKOUT text
+                      const Expanded(
+                        child: Text(
+                          'Create a Workout',
+                          style: TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                            color: Color.fromARGB(
+                                255, 32, 32, 32), // Dark text color
+                            letterSpacing: 1.0,
+                          ),
+                        ),
+                      ),
+                      
+                      // Settings gear icon
+                      Positioned(
+              top: 32, // same vertical as text for alignment
+              right: 16,
+              child: Icon(
+                Icons.settings,
+                color: Colors.black,
+                size: 28,
                 shadows: [
                   Shadow(
-                    offset: Offset(0, 5),
+                    offset: Offset(0, 3),
                     blurRadius: 0,
-                    color: Colors.black.withOpacity(0.4),
+                    color: Colors.white,
                   ),
                 ],
               ),
             ),
-          ],
-        ),
-        centerTitle: true,
-        backgroundColor: const Color(0xFF5C9CE0), // Blue header background
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ),
-      body: Stack(
-        children: [
-          // Red dots pattern overlay under header
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: Image.asset(
-              'assets/widgets/background/decor_atas.png',
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-          
-          SingleChildScrollView(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 20),
-                  
-                  // Workout Name Section
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/widgets/background/frame.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Workout Name",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Jersey25',
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        TextFormField(
-                          controller: _workoutNameController,
-                          decoration: InputDecoration(
-                            hintText: "Enter workout name",
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white,
-                          ),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter a name for your workout';
-                            }
-                            return null;
-                          },
-                        ),
-                      ],
-                    ),
+                    ],
                   ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // Exercises Section
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/widgets/background/frame.png'),
-                        fit: BoxFit.fill,
+                  const SizedBox(height: 8.0),
+                  // Underline image
+                  Image.asset(
+                    'assets/widgets/background/garis.png',
+                    width: double.infinity,
+                    height: 8.0,
+                    fit: BoxFit.fitWidth,
+                  ),
+                ],
+              ),
+            ),
+
+            // Content
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        'Workout Name:',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Exercises",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Jersey25',
+                      const SizedBox(height: 8.0),
+                      
+                      // Workout name input field with border
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFD580), // Light orange
+                          border: Border.all(
+                            color: Colors.brown,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: const EdgeInsets.all(12.0),
+                        child: TextField(
+                          controller: _workoutNameController,
+                          decoration: const InputDecoration(
+                            hintText: '....',
+                            border: OutlineInputBorder(),
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
                           ),
                         ),
-                        const SizedBox(height: 10),
-                        Row(
+                      ),
+                      
+                      const SizedBox(height: 24.0),
+                      const Text(
+                        'Create an exercise:',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      
+                      // Exercise details box
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFD580), // Light orange
+                          border: Border.all(
+                            color: Colors.brown,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: const EdgeInsets.all(12.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Expanded(
-                              child: TextFormField(
-                                controller: _exerciseController,
-                                decoration: InputDecoration(
-                                  hintText: "Add exercise",
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  filled: true,
-                                  fillColor: Colors.white,
-                                ),
+                            Text(
+                              _exerciseNameController.text,
+                              style: const TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const SizedBox(width: 10),
-                            GestureDetector(
-                              onTap: _addExercise,
-                              child: Image.asset(
-                                'assets/widgets/buttons/add_button.png',
-                                width: 40,
-                                height: 40,
-                              ),
+                            const SizedBox(height: 12.0),
+                            
+                            // Sets and reps row
+                            Row(
+                              children: [
+                                const Text(
+                                  'Sets: 4',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                                const Spacer(),
+                                
+                                // Activity time and rest time display
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: const [
+                                    Text(
+                                      'Activity Time: none',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    Text(
+                                      'Rest Time: 00:30',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            
+                            const Row(
+                              children: [
+                                Text(
+                                  'Reps: 20',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                        const SizedBox(height: 15),
-                        
-                        // List of exercises
-                        if (_exercises.isNotEmpty) ...[
-                          const Text(
-                            "Exercise List:",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              fontFamily: 'Jersey25',
-                            ),
-                          ),
-                          const SizedBox(height: 5),
-                          ...List.generate(_exercises.length, (index) {
-                            return Container(
-                              margin: const EdgeInsets.only(bottom: 5),
-                              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: Colors.grey),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      ),
+                      
+                      const SizedBox(height: 16.0),
+                      
+                      // START NOW button with golden_button_large.png
+                      Row(
+                        children: [
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                // Handle start now action
+                              },
+                              child: Stack(
+                                alignment: Alignment.center,
                                 children: [
-                                  Text(
-                                    "${index + 1}. ${_exercises[index]}",
-                                    style: const TextStyle(
-                                      fontFamily: 'Jersey25',
-                                    ),
+                                  Image.asset(
+                                    'assets/widgets/buttons/golden_button_large.png',
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
                                   ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      setState(() {
-                                        _exercises.removeAt(index);
-                                      });
-                                    },
-                                    child: const Icon(
-                                      Icons.delete,
-                                      color: Colors.red,
-                                      size: 20,
+                                  const Text(
+                                    'START NOW',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                      shadows: [
+                                        Shadow(
+                                          offset: Offset(1, 1),
+                                          blurRadius: 1,
+                                          color: Colors.black,
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ],
                               ),
-                            );
-                          }),
-                        ],
-                      ],
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 20),
-                  
-                  // XP Points Section
-                  Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/widgets/background/frame.png'),
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "XP Points",
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Jersey25',
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        // Example XP slider
-                        Slider(
-                          value: 120,
-                          min: 0,
-                          max: 200,
-                          divisions: 20,
-                          label: "120 XP",
-                          activeColor: const Color(0xFF00BFFF),
-                          onChanged: (value) {
-                            // In a real app, you would update a state variable here
-                          },
-                        ),
-                        const Center(
-                          child: Text(
-                            "120 XP",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF00BFFF),
-                              fontFamily: 'Jersey25',
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  
-                  const SizedBox(height: 30),
-                  
-                  // Save Button
-                  Center(
-                    child: GestureDetector(
-                      onTap: () {
-                        if (_formKey.currentState!.validate() && _exercises.isNotEmpty) {
-                          // In a real app, you would save the workout here
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Workout created successfully!')),
-                          );
-                          Navigator.pop(context);
-                        } else if (_exercises.isEmpty) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(content: Text('Please add at least one exercise')),
-                          );
-                        }
-                      },
-                      child: Image.asset(
-                        'assets/widgets/buttons/save_button.png',
-                        width: 150,
-                        height: 50,
+                          const SizedBox(width: 12.0),
+                          
+                          // Plus button
+                          Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFFFA500), // Orange
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(color: Colors.brown, width: 2),
+                            ),
+                            width: 50.0,
+                            height: 50.0,
+                            child: const Center(
+                              child: Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 30.0,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                      
+                      const SizedBox(height: 12.0),
+                      const Center(
+                        child: Text(
+                          'or',
+                          style: TextStyle(
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12.0),
+                      
+                      // Schedule Workout section
+                      const Text(
+                        'Schedule Workout:',
+                        style: TextStyle(
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8.0),
+                      
+                      // Date picker field
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFD580), // Light orange
+                          border: Border.all(
+                            color: Colors.brown,
+                            width: 2.0,
+                          ),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        padding: const EdgeInsets.all(12.0),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextField(
+                                controller: _dateController,
+                                decoration: const InputDecoration(
+                                  hintText: '....',
+                                  border: OutlineInputBorder(),
+                                  fillColor: Colors.white,
+                                  filled: true,
+                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                ),
+                                readOnly: true,
+                              ),
+                            ),
+                            const SizedBox(width: 12.0),
+                            
+                            // Calendar button
+                            Container(
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFFFA500), // Orange
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(color: Colors.brown, width: 2),
+                              ),
+                              width: 50.0,
+                              height: 46.0,
+                              child: const Center(
+                                child: Icon(
+                                  Icons.calendar_today,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      
+                      const SizedBox(height: 16.0),
+                      
+                      // SCHEDULE button using golden_button_large.png
+                      GestureDetector(
+                        onTap: () {
+                          // Handle schedule action
+                        },
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/widgets/buttons/golden_button_large.png',
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                            ),
+                            const Text(
+                              'SCHEDULE',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                                shadows: [
+                                  Shadow(
+                                    offset: Offset(1, 1),
+                                    blurRadius: 1,
+                                    color: Colors.black,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                  
-                  const SizedBox(height: 30),
-                ],
+                ),
               ),
             ),
-          ),
-        ],
+            
+         ],
+        ),
       ),
     );
   }

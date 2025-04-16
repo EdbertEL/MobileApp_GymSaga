@@ -307,17 +307,17 @@ class _MyWeightPageState extends State<MyWeightPage> {
                     // Button background image
                     Image.asset(
                       'assets/widgets/buttons/golden_button_large.png',
-                      width: 280,
+                      width: 300,
                       height: 80,
                       fit: BoxFit.contain,
+                      filterQuality: FilterQuality.none,
                     ),
                     Positioned(
-                      top: 8, // Moves the text up
+                      top: 6, // Moves the text up
                       child: Text(
                         'DONE',
                         style: TextStyle(
-                          fontSize: 28,
-                          fontWeight: FontWeight.bold,
+                          fontSize: 32,
                           color: Colors.white,
                           shadows: [
                             Shadow(

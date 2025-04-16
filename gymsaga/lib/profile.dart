@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'editprofile.dart';
 import 'workout_history.dart';
-<<<<<<< HEAD
 import 'myweight.dart';
-=======
-import 'stat_calories.dart'; // Import added for StatCaloriesPage
->>>>>>> f486bbc34b879012d6f482130ee0e1e91a630c1a
+import 'stat_calories.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -135,7 +133,7 @@ class ProfilePage extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => const MyWeightPage(),
+                                builder: (context) => const EditProfilePage(),
                               ),
                             );
                           },
@@ -161,8 +159,18 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const ProfileButton(
-                      label: 'My Weight', icon: Icons.monitor_weight),
+                  ProfileButton(
+                    label: 'My Weight',
+                    icon: Icons.monitor_weight,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyWeightPage(),
+                        ),
+                      );
+                    },
+                  ),
                   ProfileButton(
                     label: 'Workout History',
                     icon: Icons.fitness_center,
@@ -176,7 +184,7 @@ class ProfilePage extends StatelessWidget {
                     },
                   ),
                   ProfileButton(
-                    label: 'Statistics', 
+                    label: 'Statistics',
                     icon: Icons.show_chart,
                     onTap: () {
                       Navigator.push(

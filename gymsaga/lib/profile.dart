@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'workout_history.dart';
+import 'myweight.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -125,10 +126,20 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Image.asset(
-                          'assets/widgets/buttons/edit_button.png',
-                          width: 28,
-                          height: 28,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MyWeightPage(),
+                              ),
+                            );
+                          },
+                          child: Image.asset(
+                            'assets/widgets/buttons/edit_button.png',
+                            width: 28,
+                            height: 28,
+                          ),
                         ),
                       ],
                     ),
@@ -149,7 +160,7 @@ class ProfilePage extends StatelessWidget {
                   const ProfileButton(
                       label: 'My Weight', icon: Icons.monitor_weight),
                   ProfileButton(
-                    label: 'Workout History', 
+                    label: 'Workout History',
                     icon: Icons.fitness_center,
                     onTap: () {
                       Navigator.push(
@@ -226,9 +237,9 @@ class ProfileButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   const ProfileButton({
-    super.key, 
-    required this.label, 
-    required this.icon, 
+    super.key,
+    required this.label,
+    required this.icon,
     this.onTap,
   });
 

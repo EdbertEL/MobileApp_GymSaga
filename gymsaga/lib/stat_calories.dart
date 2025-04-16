@@ -107,7 +107,7 @@ class StatCaloriesPage extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, '/stat_weight');
+                                Navigator.pushReplacementNamed(context, '/stat_weight.dart');
                               },
                               child: Container(
                                 decoration: BoxDecoration(
@@ -145,10 +145,7 @@ class StatCaloriesPage extends StatelessWidget {
                                   image: DecorationImage(
                                     image: AssetImage('assets/widgets/background/stat_navbar.png'),
                                     fit: BoxFit.fill,
-                                    colorFilter: ColorFilter.mode(
-                                      Colors.grey.withOpacity(0.7), 
-                                      BlendMode.modulate,
-                                    ),
+                                    // S,
                                   ),
                                 ),
                                 child: Center(
@@ -200,13 +197,15 @@ class StatCaloriesPage extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 8.0),
-                    // Underline image
-                    Image.asset(
+                  Container(
+                    width: double.infinity,
+                    height: 20.0,
+                    child: Image.asset(
                       'assets/widgets/background/garis.png',
-                      width: double.infinity,
-                      height: 8.0,
-                      fit: BoxFit.fitWidth,
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none, // atau BoxFit.cover, tergantung efek yang kamu mau
                     ),
+                  ),
                     
                   ],
                 ),

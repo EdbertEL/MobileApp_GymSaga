@@ -89,30 +89,32 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       
                       // Settings gear icon
                       Positioned(
-              top: 32, // same vertical as text for alignment
-              right: 16,
-              child: Icon(
-                Icons.settings,
-                color: Colors.black,
-                size: 28,
-                shadows: [
-                  Shadow(
-                    offset: Offset(0, 3),
-                    blurRadius: 0,
-                    color: Colors.white,
-                  ),
-                ],
-              ),
-            ),
+                        top: 32, // same vertical as text for alignment
+                        right: 16,
+                        child: Icon(
+                          Icons.settings,
+                          color: Colors.black,
+                          size: 28,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(0, 3),
+                              blurRadius: 0,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 8.0),
-                  // Underline image
-                  Image.asset(
-                    'assets/widgets/background/garis.png',
+                  Container(
                     width: double.infinity,
-                    height: 8.0,
-                    fit: BoxFit.fitWidth,
+                    height: 20.0,
+                    child: Image.asset(
+                      'assets/widgets/background/garis.png',
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none,
+                    ),
                   ),
                 ],
               ),
@@ -135,27 +137,30 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       ),
                       const SizedBox(height: 8.0),
                       
-                      // Workout name input field with border
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFD580), // Light orange
-                          border: Border.all(
-                            color: Colors.brown,
-                            width: 2.0,
+                      // Workout name input field with frame.png background
+                      Stack(
+                        children: [
+                          // Background frame image
+                          Image.asset(
+                            'assets/widgets/background/frame.png',
+                            width: double.infinity,
+                            fit: BoxFit.fill,
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.all(12.0),
-                        child: TextField(
-                          controller: _workoutNameController,
-                          decoration: const InputDecoration(
-                            hintText: '....',
-                            border: OutlineInputBorder(),
-                            fillColor: Colors.white,
-                            filled: true,
-                            contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                          // Input field on top of the frame
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: TextField(
+                              controller: _workoutNameController,
+                              decoration: const InputDecoration(
+                                hintText: '....',
+                                border: OutlineInputBorder(),
+                                fillColor: Colors.white,
+                                filled: true,
+                                contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                              ),
+                            ),
                           ),
-                        ),
+                        ],
                       ),
                       
                       const SizedBox(height: 24.0),
@@ -168,52 +173,67 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       ),
                       const SizedBox(height: 8.0),
                       
-                      // Exercise details box
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFD580), // Light orange
-                          border: Border.all(
-                            color: Colors.brown,
-                            width: 2.0,
+                      // Exercise details box with frame.png background
+                      Stack(
+                        children: [
+                          // Background frame image
+                          Image.asset(
+                            'assets/widgets/background/frame.png',
+                            width: double.infinity,
+                            height: 120,
+                            fit: BoxFit.fill,
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.all(12.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              _exerciseNameController.text,
-                              style: const TextStyle(
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: 12.0),
-                            
-                            // Sets and reps row
-                            Row(
+                          // Exercise details content
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  'Sets: 4',
-                                  style: TextStyle(
-                                    color: Colors.grey,
+                                Text(
+                                  _exerciseNameController.text,
+                                  style: const TextStyle(
+                                    fontSize: 18.0,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const Spacer(),
+                                const SizedBox(height: 12.0),
                                 
-                                // Activity time and rest time display
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: const [
-                                    Text(
-                                      'Activity Time: none',
+                                // Sets and reps row
+                                Row(
+                                  children: [
+                                    const Text(
+                                      'Sets: 4',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
                                     ),
+                                    const Spacer(),
+                                    
+                                    // Activity time and rest time display
+                                    Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: const [
+                                        Text(
+                                          'Activity Time: none',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Rest Time: 00:30',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                
+                                const Row(
+                                  children: [
                                     Text(
-                                      'Rest Time: 00:30',
+                                      'Reps: 20',
                                       style: TextStyle(
                                         color: Colors.grey,
                                       ),
@@ -222,19 +242,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                                 ),
                               ],
                             ),
-                            
-                            const Row(
-                              children: [
-                                Text(
-                                  'Reps: 20',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       
                       const SizedBox(height: 16.0),
@@ -251,24 +260,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                                 alignment: Alignment.center,
                                 children: [
                                   Image.asset(
-                                    'assets/widgets/buttons/golden_button_large.png',
+                                    'assets/widgets/buttons/startnow.png',
                                     fit: BoxFit.fill,
                                     width: double.infinity,
-                                  ),
-                                  const Text(
-                                    'START NOW',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18.0,
-                                      fontWeight: FontWeight.bold,
-                                      shadows: [
-                                        Shadow(
-                                          offset: Offset(1, 1),
-                                          blurRadius: 1,
-                                          color: Colors.black,
-                                        ),
-                                      ],
-                                    ),
+                                    filterQuality: FilterQuality.none,
                                   ),
                                 ],
                               ),
@@ -276,21 +271,15 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                           const SizedBox(width: 12.0),
                           
-                          // Plus button
-                          Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFFFA500), // Orange
-                              borderRadius: BorderRadius.circular(8.0),
-                              border: Border.all(color: Colors.brown, width: 2),
-                            ),
-                            width: 50.0,
-                            height: 50.0,
-                            child: const Center(
-                              child: Icon(
-                                Icons.add,
-                                color: Colors.white,
-                                size: 30.0,
-                              ),
+                          // Plus button using create_exercise.png
+                          GestureDetector(
+                            onTap: () {
+                              // Handle add exercise action
+                            },
+                            child: Image.asset(
+                              'assets/widgets/buttons/create_workout.png',
+                              width: 50.0,
+                              height: 50.0,
                             ),
                           ),
                         ],
@@ -318,52 +307,55 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       ),
                       const SizedBox(height: 8.0),
                       
-                      // Date picker field
-                      Container(
-                        decoration: BoxDecoration(
-                          color: const Color(0xFFFFD580), // Light orange
-                          border: Border.all(
-                            color: Colors.brown,
-                            width: 2.0,
+                      // Date picker field with frame.png background
+                      Stack(
+                        children: [
+                          // Background frame image
+                          Image.asset(
+                            'assets/widgets/background/frame.png',
+                            width: double.infinity,
+                            fit: BoxFit.fill,
                           ),
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: TextField(
-                                controller: _dateController,
-                                decoration: const InputDecoration(
-                                  hintText: '....',
-                                  border: OutlineInputBorder(),
-                                  fillColor: Colors.white,
-                                  filled: true,
-                                  contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                          // Date picker content
+                          Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: TextField(
+                                    controller: _dateController,
+                                    decoration: const InputDecoration(
+                                      hintText: '....',
+                                      border: OutlineInputBorder(),
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                    ),
+                                    readOnly: true,
+                                  ),
                                 ),
-                                readOnly: true,
-                              ),
-                            ),
-                            const SizedBox(width: 12.0),
-                            
-                            // Calendar button
-                            Container(
-                              decoration: BoxDecoration(
-                                color: const Color(0xFFFFA500), // Orange
-                                borderRadius: BorderRadius.circular(8.0),
-                                border: Border.all(color: Colors.brown, width: 2),
-                              ),
-                              width: 50.0,
-                              height: 46.0,
-                              child: const Center(
-                                child: Icon(
-                                  Icons.calendar_today,
-                                  color: Colors.white,
+                                const SizedBox(width: 12.0),
+                                
+                                // Calendar button
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFFFA500), // Orange
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    border: Border.all(color: Colors.brown, width: 2),
+                                  ),
+                                  width: 50.0,
+                                  height: 46.0,
+                                  child: const Center(
+                                    child: Icon(
+                                      Icons.calendar_today,
+                                      color: Colors.white,
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                       
                       const SizedBox(height: 16.0),
@@ -374,38 +366,23 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           // Handle schedule action
                         },
                         child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/widgets/buttons/golden_button_large.png',
-                              fit: BoxFit.fill,
-                              width: double.infinity,
-                            ),
-                            const Text(
-                              'SCHEDULE',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                                shadows: [
-                                  Shadow(
-                                    offset: Offset(1, 1),
-                                    blurRadius: 1,
-                                    color: Colors.black,
+                                alignment: Alignment.center,
+                                children: [
+                                  Image.asset(
+                                    'assets/widgets/buttons/schedule.png',
+                                    fit: BoxFit.fill,
+                                    width: double.infinity,
+                                    filterQuality: FilterQuality.none,
                                   ),
                                 ],
                               ),
-                            ),
-                          ],
-                        ),
                       ),
                     ],
                   ),
                 ),
               ),
             ),
-            
-         ],
+          ],
         ),
       ),
     );

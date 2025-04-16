@@ -6,7 +6,8 @@ BackEnd Tutorial
         II. djangorestframework 
         III. django-cors-headers 
         IV. djangorestframework-simplejwt
-    note : shortcut "pip install django djangorestframework django-cors-headers djangorestframework-simplejwt"
+	V. Pillow
+    note : shortcut "pip install django djangorestframework django-cors-headers djangorestframework-simplejwt Pillow"
     c. Kemudian, buka path backend/ untuk melakukan inisialisasi projek dengan menjalankan "python manage.py runserver"
 2. Kategorisasi App BackEnd
     a. App api adalah keseluruhan

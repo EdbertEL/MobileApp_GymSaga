@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-
 import 'femaleprofile.dart';
 import 'maleprofile.dart';
 
 class CompleteYourProfile extends StatefulWidget {
-  const CompleteYourProfile({super.key});
+  final String token;
+
+  const CompleteYourProfile({super.key, required this.token});
 
   @override
   CompleteYourProfileState createState() => CompleteYourProfileState();
@@ -33,14 +34,16 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
 
   void _navigateToProfile() {
     if (_selectedGender == 'Male') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => MaleProfile()),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => MaleProfile(),
+        ),
       );
     } else if (_selectedGender == 'Female') {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => FemaleProfile()),
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => FemaleProfile(),
+        ),
       );
     }
   }
@@ -65,7 +68,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
                   child: IconButton(
                     icon: const Icon(Icons.arrow_back_ios_new, size: 18),
                     onPressed: () {
-                      // Handle back navigation
+                      Navigator.of(context).pop();
                     },
                   ),
                 ),
@@ -218,7 +221,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
             color: Colors.grey.withOpacity(0.2),
             spreadRadius: 1,
             blurRadius: 3,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
@@ -227,7 +230,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
         child: Row(
           children: [
             Icon(icon, color: Colors.grey),
-            SizedBox(width: 10),
+            const SizedBox(width: 10),
             Expanded(
               child: TextField(
                 controller: controller,
@@ -285,7 +288,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
               color: Colors.grey.withOpacity(0.2),
               spreadRadius: 1,
               blurRadius: 3,
-              offset: Offset(0, 2),
+              offset: const Offset(0, 2),
             ),
           ],
         ),
@@ -293,8 +296,8 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Row(
             children: [
-              Icon(Icons.people_outline, color: Colors.grey),
-              SizedBox(width: 10),
+              const Icon(Icons.people_outline, color: Colors.grey),
+              const SizedBox(width: 10),
               Text(
                 _selectedGender.isEmpty ? 'Choose Gender' : _selectedGender,
                 style: TextStyle(
@@ -303,8 +306,8 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
                       : Colors.black,
                 ),
               ),
-              Spacer(),
-              Icon(Icons.keyboard_arrow_down, color: Colors.grey),
+              const Spacer(),
+              const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
             ],
           ),
         ),
@@ -332,7 +335,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
                   color: Colors.grey.withOpacity(0.2),
                   spreadRadius: 1,
                   blurRadius: 3,
-                  offset: Offset(0, 2),
+                  offset: const Offset(0, 2),
                 ),
               ],
             ),
@@ -341,7 +344,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
               child: Row(
                 children: [
                   Icon(icon, color: Colors.grey),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   Expanded(
                     child: TextField(
                       controller: controller,

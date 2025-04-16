@@ -1,268 +1,142 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class WorkoutHistoryPage extends StatefulWidget {
-  const WorkoutHistoryPage({super.key});
+  const WorkoutHistoryPage({Key? key}) : super(key: key);
 
   @override
   State<WorkoutHistoryPage> createState() => _WorkoutHistoryPageState();
 }
 
 class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
-  String currentMonth = 'May 2023';
-  
+  DateTime _selectedMonth = DateTime.now(); // Menggunakan bulan saat ini sebagai default
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFE8D0A9),
-      body: SafeArea(
+      body: Container(
+        // Use checkerboard pattern background
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/widgets/background/checkerboard.png'),
+            repeat: ImageRepeat.repeat,
+          ),
+        ),
         child: Column(
           children: [
-            // Title area with back button
-            Padding(
-              padding: const EdgeInsets.only(top: 16.0, left: 16.0, right: 16.0),
-              child: Row(
+            // Header with orange background
+            Container(
+              color: const Color.fromARGB(
+                  255, 228, 205, 167), // Light orange/beige background color
+              padding: const EdgeInsets.only(
+                top: 40.0,
+                left: 16.0,
+                right: 16.0,
+                bottom: 16.0,
+              ),
+              child: Column(
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF7D1A),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        'assets/back_button.png',
-                        width: 24,
-                        height: 24,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: Text(
-                      'WORKOUT HISTORY',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Jersey25',
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFF173F5F),
-                        shadows: [
-                          Shadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 0,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            
-            // Progress bar
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
-              child: Image.asset(
-                'assets/garis.png',
-                width: double.infinity,
-                height: 12,
-              ),
-            ),
-            
-            // Calendar container
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  // Back button and title
+                  Row(
                     children: [
-                      // Month title with navigation
-                      Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              currentMonth,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.chevron_left),
-                                  onPressed: () {
-                                    // Handle previous month
-                                  },
-                                  color: Colors.grey,
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.chevron_right),
-                                  onPressed: () {
-                                    // Handle next month
-                                  },
-                                  color: Colors.grey,
-                                ),
-                              ],
-                            ),
-                          ],
+                      // Back button
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacementNamed(context, '/profile');
+                        },
+                        child: Image.asset(
+                          'assets/widgets/buttons/back_button.png',
+                          width: 30.0,
+                          height: 30.0,
                         ),
                       ),
-                      
-                      // Calendar header
-                      Container(
-                        color: const Color(0xFFFF5252),
-                        padding: const EdgeInsets.symmetric(vertical: 8.0),
-                        child: const Row(
-                          children: [
-                            Expanded(
-                              child: Text(
-                                'Mo',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Tu',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'We',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Th',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Fr',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Sa',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                'Su',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      
-                      // Calendar grid
-                      Expanded(
-                        child: GridView.builder(
-                          padding: EdgeInsets.zero,
-                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 7,
-                            childAspectRatio: 1.0,
-                          ),
-                          itemCount: 35, // 5 weeks * 7 days
-                          itemBuilder: (context, index) {
-                            // Get day number and adjust for May 2023 (Monday as first day)
-                            int day = index + 1;
-                            bool isCurrentMonth = day <= 31;
-                            bool isMarked = day == 23; // The day marked with X in the image
-                            
-                            // For next month days (in gray)
-                            String displayDay = isCurrentMonth ? day.toString() : (day - 31).toString();
-                            
-                            return GestureDetector(
-                              onTap: () {
-                                if (isMarked) {
-                                  _showWorkoutDetails(context);
-                                }
-                              },
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Colors.black26),
-                                  color: isCurrentMonth ? const Color(0xFFF5E1B9) : const Color(0xFFD3D3D3),
-                                ),
-                                child: Center(
-                                  child: isMarked
-                                      ? Stack(
-                                          alignment: Alignment.center,
-                                          children: [
-                                            Text(
-                                              displayDay,
-                                              style: const TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const Text(
-                                              'X',
-                                              style: TextStyle(
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                              ),
-                                            ),
-                                          ],
-                                        )
-                                      : Text(
-                                          displayDay,
-                                          style: TextStyle(
-                                            color: isCurrentMonth ? Colors.black : Colors.grey,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                ),
-                              ),
-                            );
-                          },
+
+                      const SizedBox(width: 10.0),
+                      // WORKOUT HISTORY text
+                      const Text(
+                        'WORKOUT HISTORY',
+                        style: TextStyle(
+                          fontSize: 24.0,
+                          fontWeight: FontWeight.bold,
+                          color: Color.fromARGB(
+                              255, 32, 32, 32), // Dark text color
+                          letterSpacing: 1.0,
                         ),
                       ),
                     ],
                   ),
+                  const SizedBox(height: 8.0),
+                  Container(
+                    width: double.infinity,
+                    height: 20.0,
+                    child: Image.asset(
+                      'assets/widgets/background/garis.png',
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none, // atau BoxFit.cover, tergantung efek yang kamu mau
+                    ),
+                  ),
+
+                ],
+              ),
+            ),
+
+            // Calendar Section
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16.0),
+                ),
+                padding: const EdgeInsets.all(16.0),
+                width: double.infinity,
+                child: Column(
+                  children: [
+                    // Month title with navigation arrows
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          DateFormat('MMMM yyyy').format(_selectedMonth),
+                          style: const TextStyle(
+                            fontSize: 24.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedMonth = DateTime(
+                                    _selectedMonth.year,
+                                    _selectedMonth.month - 1,
+                                  );
+                                });
+                              },
+                              child: const Icon(Icons.chevron_left),
+                            ),
+                            const SizedBox(width: 20),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  _selectedMonth = DateTime(
+                                    _selectedMonth.year,
+                                    _selectedMonth.month + 1,
+                                  );
+                                });
+                              },
+                              child: const Icon(Icons.chevron_right),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 16),
+
+                    // Calendar grid
+                    _buildCalendar(),
+                  ],
                 ),
               ),
             ),
@@ -272,155 +146,221 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
     );
   }
 
-  void _showWorkoutDetails(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.zero,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF9F45),
-                  border: Border.all(color: Colors.deepOrange, width: 2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.all(12.0),
-                margin: const EdgeInsets.only(bottom: 8.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Leg Day',
-                      style: TextStyle(
-                        fontFamily: 'Jersey25',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      'Exercises:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const WorkoutExerciseItem(
-                      name: 'Pushups',
-                      sets: 3,
-                      reps: 12,
-                      activeTime: 'none',
-                      restTime: '02:00',
-                    ),
-                    const SizedBox(height: 8),
-                    const WorkoutExerciseItem(
-                      name: 'Pike Pushups',
-                      sets: 3,
-                      reps: 12,
-                      activeTime: 'none',
-                      restTime: '02:00',
-                    ),
-                    const SizedBox(height: 8),
-                    const WorkoutExerciseItem(
-                      name: 'Dips',
-                      sets: 2,
-                      reps: 12,
-                      activeTime: 'none',
-                      restTime: '02:00',
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.9,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF9F45),
-                  border: Border.all(color: Colors.deepOrange, width: 2),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Monday workout (Custom)',
-                      style: TextStyle(
-                        fontFamily: 'Jersey25',
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      'Exercises:',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const WorkoutExerciseItem(
-                      name: 'Plank',
-                      sets: 5,
-                      reps: 0,
-                      activeTime: '00:20',
-                      restTime: '02:00',
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-}
+  Widget _buildCalendar() {
+    // Days of the week header
+    List<String> daysOfWeek = ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'];
 
-class WorkoutExerciseItem extends StatelessWidget {
-  final String name;
-  final int sets;
-  final int reps;
-  final String activeTime;
-  final String restTime;
+    // Get the first day of the month
+    final firstDayOfMonth =
+        DateTime(_selectedMonth.year, _selectedMonth.month, 1);
 
-  const WorkoutExerciseItem({
-    super.key,
-    required this.name,
-    required this.sets,
-    required this.reps,
-    required this.activeTime,
-    required this.restTime,
-  });
+    // Calculate what day of the week the month starts on (0 = Monday in our case)
+    int firstWeekdayOfMonth = firstDayOfMonth.weekday;
+    if (firstWeekdayOfMonth == 7)
+      firstWeekdayOfMonth = 0; // Convert Sunday (7) to 0
 
-  @override
-  Widget build(BuildContext context) {
+    // Get the number of days in the month
+    final daysInMonth =
+        DateTime(_selectedMonth.year, _selectedMonth.month + 1, 0).day;
+
+    // Calculate days from previous month to display
+    final daysFromPreviousMonth =
+        firstWeekdayOfMonth == 0 ? 6 : firstWeekdayOfMonth - 1;
+
+    // Get the number of days in previous month
+    final daysInPreviousMonth =
+        DateTime(_selectedMonth.year, _selectedMonth.month, 0).day;
+
+    // Calculate how many rows we need (including days from previous/next months)
+    final totalDays = daysFromPreviousMonth + daysInMonth;
+    final rowCount = (totalDays / 7).ceil();
+
+    // Contoh data latihan (di dunia nyata, ini akan diambil dari database)
+    // Format: {tanggal: 'nama workout'}
+    final Map<int, String> workoutData = {
+      23: 'Leg Day', // Hari ke-23 ada workout
+    };
+
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          name,
-          style: const TextStyle(
-            fontSize: 16,
-            color: Colors.grey,
+        // Calendar header with days of week
+        Container(
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(
+                255, 241, 59, 18), // Red/orange background for header row
+          ),
+          child: Row(
+            children: daysOfWeek.map((day) {
+              return Expanded(
+                child: Container(
+                  height: 40,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.black, width: 0.5),
+                  ),
+                  child: Text(
+                    day,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
           ),
         ),
-        Row(
-          children: [
-            Text(
-              'Sets $sets | Reps $reps',
-              style: const TextStyle(fontSize: 14),
-            ),
-          ],
-        ),
-        Text(
-          'Active Time $activeTime | Rest Time $restTime',
-          style: const TextStyle(fontSize: 14),
-        ),
+
+        // Calendar days
+        for (int i = 0; i < rowCount; i++)
+          Row(
+            children: List.generate(7, (dayIndex) {
+              final dayNumber = i * 7 + dayIndex + 1 - daysFromPreviousMonth;
+
+              // Determine if this day is from current month, previous month or next month
+              bool isCurrentMonth = dayNumber > 0 && dayNumber <= daysInMonth;
+
+              // Calculate the actual day to display
+              int displayDay;
+              Color textColor;
+              Color cellColor;
+
+              if (!isCurrentMonth) {
+                if (dayNumber <= 0) {
+                  // Previous month
+                  displayDay = daysInPreviousMonth + dayNumber;
+                  textColor = Colors.grey;
+                  cellColor = const Color(
+                      0xFFDCD6F7); // Light blue/gray for days not in current month
+                } else {
+                  // Next month
+                  displayDay = dayNumber - daysInMonth;
+                  textColor = Colors.grey;
+                  cellColor = const Color(
+                      0xFFDCD6F7); // Light blue/gray for days not in current month
+                }
+              } else {
+                // Current month
+                displayDay = dayNumber;
+                textColor = Colors.black;
+                cellColor = const Color(
+                    0xFFFFF1D0); // Light beige for current month days
+              }
+
+              // Check if this day should have an X marker
+              bool hasWorkout = isCurrentMonth && workoutData.containsKey(displayDay);
+              String workoutTitle = hasWorkout ? workoutData[displayDay]! : '';
+
+              return Expanded(
+                child: Container(
+                  height: 60, // Memperbesar tinggi sel dari 40 menjadi 60
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: cellColor,
+                    border: Border.all(color: Colors.black, width: 0.5),
+                  ),
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      // Tanggal di pojok kiri atas
+                      Positioned(
+                        top: 4,
+                        left: 4,
+                        child: Text(
+                          displayDay.toString(),
+                          style: TextStyle(
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      // Icon X di tengah sel
+                      if (hasWorkout)
+                        GestureDetector(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return Dialog(
+                                  backgroundColor: const Color(
+                                      0xFFFFE0A3), // warna kuning dari background box
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12.0),
+                                    side: const BorderSide(
+                                      color: Colors.brown, // border gelap
+                                      width: 3,
+                                    ),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(16.0),
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Center(
+                                          child: Text(
+                                            workoutTitle,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: 20,
+                                              shadows: [
+                                                Shadow(
+                                                  offset: Offset(1.5, 1.5),
+                                                  blurRadius: 1.0,
+                                                  color: Colors.black38,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        const Text(
+                                          'Exercises:',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 8),
+                                        const Text(
+                                            '• Pushups\n  Sets 3 | Reps 12\n  Active Time: none | Rest Time: 02:00'),
+                                        const SizedBox(height: 6),
+                                        const Text(
+                                            '• Pike Pushups\n  Sets 3 | Reps 12\n  Active Time: none | Rest Time: 02:00'),
+                                        const SizedBox(height: 6),
+                                        const Text(
+                                            '• Dips\n  Sets 2 | Reps 12\n  Active Time: none | Rest Time: 02:00'),
+                                        const SizedBox(height: 12),
+                                        const Text(
+                                          'Monday Workout (Custom)',
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 6),
+                                        const Text(
+                                            '• Plank\n  Sets 5 | Active Time: 00:20 | Rest Time: 02:00'),
+                                        const SizedBox(height: 16),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          },
+                          child: Image.asset(
+                            'assets/widgets/icons/x_wh.png',
+                            width: 24,
+                            height: 24,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
       ],
     );
   }

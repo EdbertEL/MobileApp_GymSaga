@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'homepage.dart';
+import 'homepage.dart'; // Make sure to import your HomePage
 
 class FinishSettingUp extends StatelessWidget {
+  const FinishSettingUp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,9 +41,11 @@ class FinishSettingUp extends StatelessWidget {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      Navigator.push(
+                      // Use pushAndRemoveUntil to clear all previous routes
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => HomePage()),
+                        (route) => false, // Remove all previous routes
                       );
                     },
                     child: Container(

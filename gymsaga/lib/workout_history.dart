@@ -66,13 +66,16 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
                     ],
                   ),
                   const SizedBox(height: 8.0),
-                  // Underline image
-                  Image.asset(
-                    'assets/widgets/background/garis.png',
+                  Container(
                     width: double.infinity,
-                    height: 8.0,
-                    fit: BoxFit.fitWidth,
+                    height: 20.0,
+                    child: Image.asset(
+                      'assets/widgets/background/garis.png',
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none, // atau BoxFit.cover, tergantung efek yang kamu mau
+                    ),
                   ),
+
                 ],
               ),
             ),

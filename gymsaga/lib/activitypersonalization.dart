@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'finishsettingup.dart';
+import 'permission.dart';
 
 class ActivityPersonalization extends StatelessWidget {
+  const ActivityPersonalization({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +33,7 @@ class ActivityPersonalization extends StatelessWidget {
                 _buildActivityButton(
                   context,
                   'assets/widgets/images/activity_level_2.png',
-                  'I walk ocasionally for 30m',
+                  'I walk occasionally for 30m',
                 ),
                 const SizedBox(height: 20),
                 _buildActivityButton(
@@ -57,15 +59,15 @@ class ActivityPersonalization extends StatelessWidget {
       children: [
         Image.asset(
           imagePath,
-          width: 50,
-          height: 50,
+          width: 100,
+          height: 100,
         ),
         const SizedBox(height: 10),
         InkWell(
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => FinishSettingUp()),
+              MaterialPageRoute(builder: (context) => const PermissionPage()),
             );
           },
           child: Container(

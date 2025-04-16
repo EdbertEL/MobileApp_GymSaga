@@ -17,6 +17,8 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
   final List<FocusNode> _focusNodes = List.generate(5, (_) => FocusNode());
   bool _isCodeComplete = false;
   List<bool> _isFieldFilled = List.generate(5, (_) => false);
+  int _resendCount = 0;
+  bool _isResendEnabled = true;
 
   @override
   void initState() {
@@ -60,6 +62,37 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
     );
   }
 
+  void _resendEmail() {
+    if (_isResendEnabled) {
+      setState(() {
+        _resendCount++;
+        _isResendEnabled = false;
+      });
+
+      // Simulate email resend (replace with actual email resend logic)
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Email Resent (Attempt $_resendCount)'),
+          duration: const Duration(seconds: 2),
+        ),
+      );
+
+      // Enable resend after 30 seconds
+      Future.delayed(const Duration(seconds: 30), () {
+        setState(() {
+          _isResendEnabled = true;
+        });
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please wait before requesting another email'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -83,7 +116,7 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                       ),
                       child: IconButton(
                         padding: EdgeInsets.zero,
-                        icon: Icon(Icons.chevron_left, size: 24),
+                        icon: const Icon(Icons.chevron_left, size: 24),
                         onPressed: () => Navigator.pop(context),
                       ),
                     ),
@@ -129,8 +162,10 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                             ),
                             TextSpan(
                               text: widget.email,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold),
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: Colors.blue,
+                              ),
                             ),
                             TextSpan(
                               text:
@@ -181,6 +216,11 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                               style: const TextStyle(fontSize: 24),
                               decoration: const InputDecoration(
                                 border: InputBorder.none,
+                                hintText: '•',
+                                hintStyle: TextStyle(
+                                  color: Colors.grey,
+                                  fontSize: 24,
+                                ),
                               ),
                               onChanged: (value) {
                                 if (value.length == 1 && index < 4) {
@@ -237,16 +277,14 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                                 fontSize: 14, color: Colors.grey[600]),
                           ),
                           TextButton(
-                            onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Email Resent')),
-                              );
-                            },
+                            onPressed: _resendEmail,
                             child: Text(
                               'Resend Email',
                               style: TextStyle(
                                 fontSize: 14,
-                                color: Colors.blue,
+                                color: _isResendEnabled
+                                    ? Colors.blue
+                                    : Colors.grey,
                                 decoration: TextDecoration.underline,
                               ),
                             ),

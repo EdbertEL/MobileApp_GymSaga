@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'pushday.dart';
+import 'core.dart';
+import 'legs.dart';
+import 'arm.dart';
+import 'pull.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({Key? key}) : super(key: key);
@@ -103,40 +108,53 @@ class WorkoutPage extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              Stack(
-                                children: [
-                                  Image.asset(
-                                    'assets/widgets/buttons/golden_button.png',
-                                    height: 40,
-                                    width: 120,
-                                    fit: BoxFit.fill,
-                                  ),
-                                  const SizedBox(
-                                    height: 40,
-                                    width: 120,
-                                    child: Center(
-                                      child: Padding(
-                                        padding: EdgeInsets.only(bottom: 1),
-                                        child: Text(
-                                          'START',
-                                          style: TextStyle(
-                                            fontFamily: 'Jersey25',
-                                            fontSize: 21,
-                                            color: Colors.white,
-                                            height: -1.01,
-                                            shadows: [
-                                              Shadow(
-                                                offset: Offset(0, 2),
-                                                blurRadius: 2,
-                                                color: Colors.black45,
-                                              ),
-                                            ],
+                              // Tombol START bisa di-adjust secara manual
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            const PushDayPage()),
+                                  );
+                                },
+                                child: Stack(
+                                  children: [
+                                    Image.asset(
+                                      'assets/widgets/buttons/golden_button.png',
+                                      height: 40,
+                                      width: 120,
+                                      fit: BoxFit.fill,
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      width: 120,
+                                      child: Align(
+                                        alignment: Alignment(0, -0.8),
+                                        child: Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 1),
+                                          child: Text(
+                                            'START',
+                                            style: TextStyle(
+                                              fontFamily: 'Jersey25',
+                                              fontSize: 21,
+                                              color: Colors.white,
+                                              height: 1,
+                                              shadows: [
+                                                Shadow(
+                                                  offset: Offset(0, 2),
+                                                  blurRadius: 2,
+                                                  color: Colors.black45,
+                                                ),
+                                              ],
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -158,14 +176,14 @@ class WorkoutPage extends StatelessWidget {
                       scrollDirection: Axis.horizontal,
                       child: Row(
                         children: [
-                          workoutCard(
-                              'assets/widgets/images/corewomen.png', 'Core'),
-                          workoutCard(
-                              'assets/widgets/images/legsman.png', 'Legs'),
-                          workoutCard(
-                              'assets/widgets/images/armman.png', 'Arm'),
-                          workoutCard(
-                              'assets/widgets/images/pullman.png', 'Pull'),
+                          workoutCard('assets/widgets/images/corewomen.png',
+                              'Core', const CorePage(), context),
+                          workoutCard('assets/widgets/images/legsman.png',
+                              'Legs', const LegsPage(), context),
+                          workoutCard('assets/widgets/images/armman.png', 'Arm',
+                              const ArmPage(), context),
+                          workoutCard('assets/widgets/images/pullman.png',
+                              'Pull', const PullPage(), context),
                         ],
                       ),
                     ),
@@ -182,36 +200,44 @@ class WorkoutPage extends StatelessWidget {
   }
 }
 
-// Fungsi untuk bikin card workout horizontal
-Widget workoutCard(String imagePath, String title) {
-  return Container(
-    margin: const EdgeInsets.only(right: 16),
-    width: 150,
-    height: 230,
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(12),
-      image: DecorationImage(
-        image: AssetImage(imagePath),
-        fit: BoxFit.cover,
+Widget workoutCard(
+    String imagePath, String title, Widget targetPage, BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => targetPage),
+      );
+    },
+    child: Container(
+      margin: const EdgeInsets.only(right: 16),
+      width: 150,
+      height: 230,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        image: DecorationImage(
+          image: AssetImage(imagePath),
+          fit: BoxFit.cover,
+        ),
       ),
-    ),
-    child: Align(
-      alignment: Alignment.bottomLeft,
-      child: Padding(
-        padding: const EdgeInsets.all(14.0),
-        child: Text(
-          title,
-          style: const TextStyle(
-            fontFamily: 'Jersey25',
-            fontSize: 28,
-            color: Colors.white,
-            shadows: [
-              Shadow(
-                offset: Offset(0, 2),
-                blurRadius: 4,
-                color: Colors.black45,
-              ),
-            ],
+      child: Align(
+        alignment: Alignment.bottomLeft,
+        child: Padding(
+          padding: const EdgeInsets.all(14.0),
+          child: Text(
+            title,
+            style: const TextStyle(
+              fontFamily: 'Jersey25',
+              fontSize: 28,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  offset: Offset(0, 2),
+                  blurRadius: 4,
+                  color: Colors.black45,
+                ),
+              ],
+            ),
           ),
         ),
       ),

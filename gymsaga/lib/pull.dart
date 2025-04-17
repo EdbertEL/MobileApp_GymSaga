@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
-class PushDayPage extends StatelessWidget {
-  const PushDayPage({super.key});
+class PullPage extends StatelessWidget {
+  const PullPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +30,7 @@ class PushDayPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            // Title "Push Day"
+            // Title "Pull Day"
             Positioned(
               top: 24,
               left: 0,
@@ -39,7 +39,7 @@ class PushDayPage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Text(
-                      'Push Day',
+                      'Pull Day',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -50,7 +50,7 @@ class PushDayPage extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      'Push Day',
+                      'Pull Day',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',

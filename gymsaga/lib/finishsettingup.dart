@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/login.dart';
 import 'homepage.dart'; // Make sure to import your HomePage
 
 class FinishSettingUp extends StatelessWidget {
@@ -44,7 +45,7 @@ class FinishSettingUp extends StatelessWidget {
                       // Use pushAndRemoveUntil to clear all previous routes
                       Navigator.pushAndRemoveUntil(
                         context,
-                        MaterialPageRoute(builder: (context) => HomePage()),
+                        MaterialPageRoute(builder: (context) => LoginPage()),
                         (route) => false, // Remove all previous routes
                       );
                     },

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'pushdaypage/pushup.dart';
-import 'core.dart';
+import 'coredaypage/plank.dart';
 import 'legs.dart';
 import 'arm.dart';
 import 'pull.dart';
@@ -177,7 +177,7 @@ class WorkoutPage extends StatelessWidget {
                       child: Row(
                         children: [
                           workoutCard('assets/widgets/images/corewomen.png',
-                              'Core', const CorePage(), context),
+                              'Core', const PlankPage(), context),
                           workoutCard('assets/widgets/images/legsman.png',
                               'Legs', const LegsPage(), context),
                           workoutCard('assets/widgets/images/armman.png', 'Arm',

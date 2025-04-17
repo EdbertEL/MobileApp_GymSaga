@@ -38,7 +38,7 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
               right: 0,
               child: const Center(
                 child: Text(
-                  'Push Day',
+                  'Workout',
                   style: TextStyle(
                     fontSize: 32,
                     fontFamily: 'Jersey25',
@@ -74,6 +74,8 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
                   const SizedBox(height: 12),
                   buildFinishedExerciseBox("Pike Pushups – 3 x 10–12 Reps"),
                   const SizedBox(height: 12),
+                  buildFinishedExerciseBox("Pike Pushups – 3 x 10–12 Reps"),
+                  const SizedBox(height: 12),
                   buildFinishedExerciseBox("Dips – 3 x 10–15 Reps"),
                 ],
               ),
@@ -81,7 +83,7 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
 
             // ✅ Rewards dan Complete button
             Positioned(
-              top: 420,
+              top: 500,
               left: 20,
               right: 20,
               child: Column(

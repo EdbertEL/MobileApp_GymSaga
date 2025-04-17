@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
-import 'glutebridges.dart';
+import 'singlearmrows.dart';
 
-class LungesPage extends StatelessWidget {
-  const LungesPage({super.key});
+class PullupsPage extends StatelessWidget {
+  const PullupsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class LungesPage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Text(
-                      'Lunges',
+                      'Pullups',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -45,7 +45,7 @@ class LungesPage extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      'Lunges',
+                      'Pullups',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -80,11 +80,11 @@ class LungesPage extends StatelessWidget {
             Positioned.fill(
               top: 120,
               child: ExerciseDetailCard(
-                title: 'Lunges',
-                imagePath: 'assets/widgets/images/lunges.png',
+                title: 'Pullups',
+                imagePath: 'assets/widgets/images/pullups.png',
                 description:
-                    'Keep your torso upright\nStep far enough forward\nEngage your quads and glutes',
-                reps: '3 x 12 (each leg)',
+                    'Use a full range of motion\nControl the movement\nAvoid swinging or jerking',
+                reps: '3 x 6',
                 onStart: () {
                   Navigator.push(
                     context,
@@ -94,7 +94,7 @@ class LungesPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const GluteBridgesPage(),
+                              builder: (context) => const SingleArmRowsPage(),
                             ),
                           );
                         },

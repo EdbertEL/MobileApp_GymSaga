@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
-import 'legraise.dart'; // lanjut ke gerakan berikutnya
+import 'legraise.dart';
 
 class RussianTwistPage extends StatelessWidget {
   const RussianTwistPage({super.key});

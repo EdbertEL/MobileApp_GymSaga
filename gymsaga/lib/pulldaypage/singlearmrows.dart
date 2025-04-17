@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
-import 'glutebridges.dart';
+import 'reverseflies.dart';
 
-class LungesPage extends StatelessWidget {
-  const LungesPage({super.key});
+class SingleArmRowsPage extends StatelessWidget {
+  const SingleArmRowsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class LungesPage extends StatelessWidget {
                 child: Stack(
                   children: [
                     Text(
-                      'Lunges',
+                      'Single Arm Rows',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -45,7 +45,7 @@ class LungesPage extends StatelessWidget {
                       ),
                     ),
                     const Text(
-                      'Lunges',
+                      'Single Arm Rows',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -80,11 +80,11 @@ class LungesPage extends StatelessWidget {
             Positioned.fill(
               top: 120,
               child: ExerciseDetailCard(
-                title: 'Lunges',
-                imagePath: 'assets/widgets/images/lunges.png',
+                title: 'Single Arm Rows',
+                imagePath: 'assets/widgets/images/singlearmrows.png',
                 description:
-                    'Keep your torso upright\nStep far enough forward\nEngage your quads and glutes',
-                reps: '3 x 12 (each leg)',
+                    'Pull with your back, not your arms\nKeep your elbow close to your body\nMaintain a flat back',
+                reps: '3 x 12 (each side)',
                 onStart: () {
                   Navigator.push(
                     context,
@@ -94,7 +94,7 @@ class LungesPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const GluteBridgesPage(),
+                              builder: (context) => const ReverseFliesPage(),
                             ),
                           );
                         },

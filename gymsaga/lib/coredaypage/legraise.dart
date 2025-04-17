@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
-import 'mountainclimbers.dart'; // lanjut ke gerakan berikutnya
+import 'mountainclimbers.dart';
 
 class LegRaisePage extends StatelessWidget {
   const LegRaisePage({super.key});

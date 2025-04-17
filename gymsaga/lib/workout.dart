@@ -4,7 +4,7 @@ import 'pushdaypage/pushup.dart';
 import 'coredaypage/plank.dart';
 import 'legsdaypage/squats.dart';
 import 'armdaypage/shoulderpress.dart';
-import 'pull.dart';
+import 'pulldaypage/bodyweightrows.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({Key? key}) : super(key: key);
@@ -183,7 +183,7 @@ class WorkoutPage extends StatelessWidget {
                           workoutCard('assets/widgets/images/armman.png', 'Arm',
                               const ShoulderPressPage(), context),
                           workoutCard('assets/widgets/images/pullman.png',
-                              'Pull', const PullPage(), context),
+                              'Pull', const BodyweightRowsPage(), context),
                         ],
                       ),
                     ),

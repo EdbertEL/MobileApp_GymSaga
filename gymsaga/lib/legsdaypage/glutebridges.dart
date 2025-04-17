@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
-import 'calfraises.dart'; // lanjut ke gerakan berikutnya
+import 'calfraises.dart';
 
 class GluteBridgesPage extends StatelessWidget {
   const GluteBridgesPage({super.key});

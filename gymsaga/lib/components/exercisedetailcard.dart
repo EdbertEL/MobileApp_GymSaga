@@ -104,10 +104,7 @@ class ExerciseDetailCard extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           GestureDetector(
-            onTap: () {
-              print('✅ onStart dari ExerciseDetailCard kepanggil');
-              onStart();
-            },
+            onTap: onStart,
             child: Container(
               width: 200,
               height: 60,

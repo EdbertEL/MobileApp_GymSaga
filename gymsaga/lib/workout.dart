@@ -3,7 +3,7 @@ import 'navbar.dart';
 import 'pushdaypage/pushup.dart';
 import 'coredaypage/plank.dart';
 import 'legsdaypage/squats.dart';
-import 'arm.dart';
+import 'armdaypage/shoulderpress.dart';
 import 'pull.dart';
 
 class WorkoutPage extends StatelessWidget {
@@ -181,7 +181,7 @@ class WorkoutPage extends StatelessWidget {
                           workoutCard('assets/widgets/images/legsman.png',
                               'Legs', const SquatsPage(), context),
                           workoutCard('assets/widgets/images/armman.png', 'Arm',
-                              const ArmPage(), context),
+                              const ShoulderPressPage(), context),
                           workoutCard('assets/widgets/images/pullman.png',
                               'Pull', const PullPage(), context),
                         ],

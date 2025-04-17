@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
-import 'pushday.dart';
+import 'pushdaypage/pushup.dart';
 import 'core.dart';
 import 'legs.dart';
 import 'arm.dart';

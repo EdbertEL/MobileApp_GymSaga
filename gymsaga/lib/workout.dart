@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 import 'pushdaypage/pushup.dart';
 import 'coredaypage/plank.dart';
-import 'legs.dart';
+import 'legsdaypage/squats.dart';
 import 'arm.dart';
 import 'pull.dart';
 
@@ -179,7 +179,7 @@ class WorkoutPage extends StatelessWidget {
                           workoutCard('assets/widgets/images/corewomen.png',
                               'Core', const PlankPage(), context),
                           workoutCard('assets/widgets/images/legsman.png',
-                              'Legs', const LegsPage(), context),
+                              'Legs', const SquatsPage(), context),
                           workoutCard('assets/widgets/images/armman.png', 'Arm',
                               const ArmPage(), context),
                           workoutCard('assets/widgets/images/pullman.png',

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../components/exercisedetailcard.dart';
-import '../components/excercisetimer.dart';
-import '../components/excercisefinishedcard.dart';
+import '../components/exercisetimer.dart';
+import '../components/exercisefinishedcard.dart';
 import '../workout.dart';
 
 class MountainClimbersPage extends StatefulWidget {

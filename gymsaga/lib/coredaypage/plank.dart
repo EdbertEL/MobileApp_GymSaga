@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../navbar.dart';
 import '../components/exercisecard.dart';
 import '../components/exercisedetailcard.dart';
-import '../components/excercisetimer.dart';
+import '../components/exercisetimer.dart';
 import 'russiantwist.dart';
 
 class PlankPage extends StatefulWidget {

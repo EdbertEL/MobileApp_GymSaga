@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
+import 'editprofile.dart';
 import 'workout_history.dart';
-import 'stat_calories.dart'; // Import added for StatCaloriesPage
+import 'myweight.dart';
+import 'stat_calories.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -126,10 +128,20 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Image.asset(
-                          'assets/widgets/buttons/edit_button.png',
-                          width: 28,
-                          height: 28,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const EditProfilePage(),
+                              ),
+                            );
+                          },
+                          child: Image.asset(
+                            'assets/widgets/buttons/edit_button.png',
+                            width: 28,
+                            height: 28,
+                          ),
                         ),
                       ],
                     ),
@@ -147,10 +159,20 @@ class ProfilePage extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  const ProfileButton(
-                      label: 'My Weight', icon: Icons.monitor_weight),
                   ProfileButton(
-                    label: 'Workout History', 
+                    label: 'My Weight',
+                    icon: Icons.monitor_weight,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MyWeightPage(),
+                        ),
+                      );
+                    },
+                  ),
+                  ProfileButton(
+                    label: 'Workout History',
                     icon: Icons.fitness_center,
                     onTap: () {
                       Navigator.push(
@@ -162,7 +184,7 @@ class ProfilePage extends StatelessWidget {
                     },
                   ),
                   ProfileButton(
-                    label: 'Statistics', 
+                    label: 'Statistics',
                     icon: Icons.show_chart,
                     onTap: () {
                       Navigator.push(
@@ -237,9 +259,9 @@ class ProfileButton extends StatelessWidget {
   final VoidCallback? onTap;
 
   const ProfileButton({
-    super.key, 
-    required this.label, 
-    required this.icon, 
+    super.key,
+    required this.label,
+    required this.icon,
     this.onTap,
   });
 

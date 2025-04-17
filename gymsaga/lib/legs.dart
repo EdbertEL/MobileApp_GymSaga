@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
-class PushDayPage extends StatefulWidget {
-  const PushDayPage({super.key});
+class LegsPage extends StatefulWidget {
+  const LegsPage({super.key});
 
   @override
-  State<PushDayPage> createState() => _PushDayPageState();
+  State<LegsPage> createState() => _PushDayPageState();
 }
 
-class _PushDayPageState extends State<PushDayPage> {
+class _PushDayPageState extends State<LegsPage> {
   bool showExerciseDetail = false;
 
   @override
@@ -40,7 +40,7 @@ class _PushDayPageState extends State<PushDayPage> {
                 child: Stack(
                   children: [
                     Text(
-                      'Push Day',
+                      'Legs Day',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -51,7 +51,7 @@ class _PushDayPageState extends State<PushDayPage> {
                       ),
                     ),
                     const Text(
-                      'Push Day',
+                      'Legs Day',
                       style: TextStyle(
                         fontSize: 32,
                         fontFamily: 'Jersey25',
@@ -112,11 +112,13 @@ class _PushDayPageState extends State<PushDayPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildExerciseCard('Pushups – 3 x 12 Reps'),
+            buildExerciseCard('Squats – 3 x 15 Reps'),
             const SizedBox(height: 10),
-            buildExerciseCard('Pike Pushups – 3 x 12 Reps'),
+            buildExerciseCard('Lunges – 3 x 12 Reps (each leg)'),
             const SizedBox(height: 10),
-            buildExerciseCard('Dips – 2 x 12 Reps'),
+            buildExerciseCard('Glute Bridges – 3 x 15 Reps'),
+            const SizedBox(height: 10),
+            buildExerciseCard('Calf Raises – 3 x 20 Reps'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -138,7 +140,7 @@ class _PushDayPageState extends State<PushDayPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    '+120 XP',
+                    '+75 XP',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 22,
@@ -146,7 +148,7 @@ class _PushDayPageState extends State<PushDayPage> {
                     ),
                   ),
                   Text(
-                    '🔥 200 KCAL',
+                    '🔥 90 KCAL',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 22,
@@ -253,7 +255,7 @@ class _PushDayPageState extends State<PushDayPage> {
                   padding: const EdgeInsets.all(12),
                   alignment: Alignment.centerLeft,
                   child: const Text(
-                    'Pushups',
+                    'Squats',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 20,
@@ -268,7 +270,7 @@ class _PushDayPageState extends State<PushDayPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
                     child: Image.asset(
-                      'assets/widgets/images/pushupman.png',
+                      'assets/widgets/images/squats.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -278,7 +280,7 @@ class _PushDayPageState extends State<PushDayPage> {
                 const Padding(
                   padding: EdgeInsets.only(top: 12),
                   child: Text(
-                    'Pushups',
+                    'Squats',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 20,
@@ -298,7 +300,7 @@ class _PushDayPageState extends State<PushDayPage> {
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: const Text(
-                      'Activate your core muscles\nStrict form, no cheating\nAvoid rounding up your back',
+                      'Keep Your Chest Up\n Go to At Least 90°',
                       style: TextStyle(
                         fontFamily: 'Jersey25',
                         fontSize: 14,
@@ -313,7 +315,7 @@ class _PushDayPageState extends State<PushDayPage> {
                 const Padding(
                   padding: EdgeInsets.only(bottom: 12),
                   child: Text(
-                    '3 x 12',
+                    '3 x 15',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 16,

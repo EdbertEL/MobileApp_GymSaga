@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
-import 'navbar.dart';
+import '../navbar.dart';
+import '../components/exercisecard.dart';
+import '../components/exercisedetailcard.dart';
+import '../components/exercisetimer.dart';
+import 'pullups.dart';
 
-class PullPage extends StatefulWidget {
-  const PullPage({super.key});
+class BodyweightRowsPage extends StatefulWidget {
+  const BodyweightRowsPage({super.key});
 
   @override
-  State<PullPage> createState() => _PushDayPageState();
+  State<BodyweightRowsPage> createState() => _BodyweightRowsPageState();
 }
 
-class _PushDayPageState extends State<PullPage> {
+class _BodyweightRowsPageState extends State<BodyweightRowsPage> {
   bool showExerciseDetail = false;
 
   @override
@@ -18,7 +22,6 @@ class _PushDayPageState extends State<PullPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Dekorasi Background
             Positioned(
               top: 100,
               left: 0,
@@ -31,7 +34,6 @@ class _PushDayPageState extends State<PullPage> {
               right: 0,
               child: Image.asset('assets/widgets/background/header.png'),
             ),
-            // Judul Push Day
             Positioned(
               top: 24,
               left: 0,
@@ -62,7 +64,6 @@ class _PushDayPageState extends State<PullPage> {
                 ),
               ),
             ),
-            // Tombol Back di header
             Positioned(
               top: 16,
               left: 16,
@@ -90,12 +91,33 @@ class _PushDayPageState extends State<PullPage> {
                 ),
               ),
             ),
-
-            // Tampilan konten
             Positioned.fill(
               top: 120,
               child: showExerciseDetail
-                  ? buildPushupDetailCard()
+                  ? ExerciseDetailCard(
+                      title: 'Bodyweight Rows',
+                      imagePath: 'assets/widgets/images/bodyweightrows.png',
+                      description:
+                          'Keep your body straight\nPull your chest to the bar\nSqueeze your back at the top',
+                      reps: '3 x 10',
+                      onStart: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseTimerPage(
+                              onContinue: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const PullupsPage(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   : buildWorkoutList(),
             ),
           ],
@@ -112,13 +134,18 @@ class _PushDayPageState extends State<PullPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            buildExerciseCard('Bodyweight Rows – 3 x 15 Reps'),
+            ExerciseCard(
+              title: 'Bodyweight Rows – 3 x 10 Reps',
+              onTap: () {
+                setState(() {
+                  showExerciseDetail = true;
+                });
+              },
+            ),
             const SizedBox(height: 10),
-            buildExerciseCard('PullUps/Assisted – 2 x 10 Reps'),
+            const ExerciseCard(title: 'Australian Pullups – 3 x 10 Reps'),
             const SizedBox(height: 10),
-            buildExerciseCard('Single Arm Rows – 3 x 15 Reps'),
-            const SizedBox(height: 10),
-            buildExerciseCard('Reverse Flies – 3 x 15 Reps'),
+            const ExerciseCard(title: 'Negative Pullups – 2 x 6 Reps'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -140,7 +167,7 @@ class _PushDayPageState extends State<PullPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
                   Text(
-                    '+225 XP',
+                    '+120 XP',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 22,
@@ -148,7 +175,7 @@ class _PushDayPageState extends State<PullPage> {
                     ),
                   ),
                   Text(
-                    '🔥 300 KCAL',
+                    '🔥 180 KCAL',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
                       fontSize: 22,
@@ -169,7 +196,7 @@ class _PushDayPageState extends State<PullPage> {
                 child: Container(
                   width: 200,
                   height: 60,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
                           'assets/widgets/buttons/golden_button.png'),
@@ -225,171 +252,6 @@ class _PushDayPageState extends State<PullPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget buildPushupDetailCard() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        children: [
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-              color: const Color(0xFFFFD185),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.orange.shade800, width: 2),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.orange.shade200,
-                  offset: const Offset(4, 4),
-                  blurRadius: 4,
-                ),
-              ],
-            ),
-            child: Column(
-              children: [
-                // Header
-                Container(
-                  padding: const EdgeInsets.all(12),
-                  alignment: Alignment.centerLeft,
-                  child: const Text(
-                    'Pull Day',
-                    style: TextStyle(
-                      fontFamily: 'Jersey25',
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-
-                // Gambar
-                Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 12),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
-                      'assets/widgets/images/bodyweightrows.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-
-                // Judul
-                const Padding(
-                  padding: EdgeInsets.only(top: 12),
-                  child: Text(
-                    'Bodyweight Rows',
-                    style: TextStyle(
-                      fontFamily: 'Jersey25',
-                      fontSize: 20,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-
-                // Deskripsi
-                Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.orange.shade400,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: const Text(
-                      'Pull your chest towards the bar or surface\nKeeping your body straight.',
-                      style: TextStyle(
-                        fontFamily: 'Jersey25',
-                        fontSize: 14,
-                        color: Colors.black,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
-
-                // Reps
-                const Padding(
-                  padding: EdgeInsets.only(bottom: 12),
-                  child: Text(
-                    '3 x 15',
-                    style: TextStyle(
-                      fontFamily: 'Jersey25',
-                      fontSize: 16,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          const SizedBox(height: 30),
-
-          // Tombol START di bawahnya
-          GestureDetector(
-            onTap: () {
-              // Aksi ketika tombol ditekan (selanjutnya)
-            },
-            child: Container(
-              width: 200,
-              height: 60,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/widgets/buttons/golden_button.png'),
-                  fit: BoxFit.fill,
-                ),
-              ),
-              alignment: const Alignment(0, -0.7),
-              child: const Text(
-                'START',
-                style: TextStyle(
-                  fontFamily: 'Jersey25',
-                  fontSize: 24,
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                  shadows: [
-                    Shadow(
-                      offset: Offset(0, 2),
-                      blurRadius: 0,
-                      color: Colors.black54,
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget buildExerciseCard(String text) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: const Color(0xFFFFE9B2),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: Colors.orange, width: 2),
-      ),
-      child: Row(
-        children: [
-          const Icon(Icons.fitness_center, color: Colors.black),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontFamily: 'Jersey25',
-                fontSize: 20,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }

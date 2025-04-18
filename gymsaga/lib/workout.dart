@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
-import 'pushday.dart';
-import 'core.dart';
-import 'legs.dart';
-import 'arm.dart';
-import 'pull.dart';
+import 'pushdaypage/pushup.dart';
+import 'coredaypage/plank.dart';
+import 'legsdaypage/squats.dart';
+import 'armdaypage/shoulderpress.dart';
+import 'pulldaypage/bodyweightrows.dart';
 
 class WorkoutPage extends StatelessWidget {
   const WorkoutPage({Key? key}) : super(key: key);
@@ -177,13 +177,13 @@ class WorkoutPage extends StatelessWidget {
                       child: Row(
                         children: [
                           workoutCard('assets/widgets/images/corewomen.png',
-                              'Core', const CorePage(), context),
+                              'Core', const PlankPage(), context),
                           workoutCard('assets/widgets/images/legsman.png',
-                              'Legs', const LegsPage(), context),
+                              'Legs', const SquatsPage(), context),
                           workoutCard('assets/widgets/images/armman.png', 'Arm',
-                              const ArmPage(), context),
+                              const ShoulderPressPage(), context),
                           workoutCard('assets/widgets/images/pullman.png',
-                              'Pull', const PullPage(), context),
+                              'Pull', const BodyweightRowsPage(), context),
                         ],
                       ),
                     ),

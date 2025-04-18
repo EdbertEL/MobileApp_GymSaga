@@ -6,7 +6,6 @@ import 'passwordreset.dart';
 class CheckEmailForCodePage extends StatefulWidget {
   final String email;
   const CheckEmailForCodePage({super.key, required this.email});
-
   @override
   CheckEmailForCodeState createState() => CheckEmailForCodeState();
 }
@@ -52,7 +51,6 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
   void _handleVerification() {
     String enteredCode =
         _codeControllers.map((controller) => controller.text).join();
-
     // Navigasi ke halaman PasswordResetPage
     Navigator.push(
       context,
@@ -69,12 +67,46 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
         _isResendEnabled = false;
       });
 
-      // Simulate email resend (replace with actual email resend logic)
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Email Resent (Attempt $_resendCount)'),
-          duration: const Duration(seconds: 2),
-        ),
+      // Show a popup dialog instead of a snackbar
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(15),
+            ),
+            title: const Text(
+              'Email Sent',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            content: Text(
+              'Code successfully resent to your email: ${widget.email}',
+              textAlign: TextAlign.center,
+            ),
+            actions: [
+              Center(
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    backgroundColor: const Color(0xFFEC9F59),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 30, vertical: 10),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('OK'),
+                ),
+              ),
+            ],
+          );
+        },
       );
 
       // Enable resend after 30 seconds
@@ -234,7 +266,6 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                         }),
                       ),
                       const SizedBox(height: 50),
-
                       // Verify Button
                       Center(
                         child: InkWell(
@@ -266,7 +297,6 @@ class CheckEmailForCodeState extends State<CheckEmailForCodePage> {
                           ),
                         ),
                       ),
-
                       const SizedBox(height: 30),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,

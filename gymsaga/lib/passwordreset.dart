@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'setnewpassword.dart'; // Import the SetNewPasswordPage
 
 class PasswordResetPage extends StatelessWidget {
   const PasswordResetPage({super.key});
@@ -32,7 +33,7 @@ class PasswordResetPage extends StatelessWidget {
               ),
               const SizedBox(height: 60),
               const Text(
-                'Check your email',
+                'Verify is Success',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Jersey25',
@@ -45,7 +46,7 @@ class PasswordResetPage extends StatelessWidget {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 8),
                 child: Text(
-                  'Your password has been successfully reset. Click confirm to set a new password',
+                  'Your Verify Email has been successfully Land. Click confirm to set a new password',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontFamily: 'Jersey25',
@@ -57,7 +58,15 @@ class PasswordResetPage extends StatelessWidget {
               const SizedBox(height: 60),
               Center(
                 child: GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    // Navigate to SetNewPasswordPage when the button is pressed
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SetNewPasswordPage(),
+                      ),
+                    );
+                  },
                   child: Container(
                     width: 340,
                     height: 70,

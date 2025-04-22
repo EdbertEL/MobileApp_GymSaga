@@ -248,7 +248,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       
                       const SizedBox(height: 16.0),
                       
-                      // START NOW button with golden_button_large.png
+                      // START NOW button
                       Row(
                         children: [
                           Expanded(
@@ -271,7 +271,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                           const SizedBox(width: 12.0),
                           
-                          // Plus button using create_exercise.png
+                          // Plus button using create_workout.png
                           GestureDetector(
                             onTap: () {
                               // Handle add exercise action
@@ -336,20 +336,15 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                                 ),
                                 const SizedBox(width: 12.0),
                                 
-                                // Calendar button
-                                Container(
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFFA500), // Orange
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    border: Border.all(color: Colors.brown, width: 2),
-                                  ),
-                                  width: 50.0,
-                                  height: 46.0,
-                                  child: const Center(
-                                    child: Icon(
-                                      Icons.calendar_today,
-                                      color: Colors.white,
-                                    ),
+                                // Calendar button using calendar.png asset
+                                GestureDetector(
+                                  onTap: () {
+                                    // Calendar button action
+                                  },
+                                  child: Image.asset(
+                                    'assets/widgets/buttons/calendar.png',
+                                    width: 50.0,
+                                    height: 46.0,
                                   ),
                                 ),
                               ],
@@ -360,22 +355,22 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       
                       const SizedBox(height: 16.0),
                       
-                      // SCHEDULE button using golden_button_large.png
+                      // SCHEDULE button
                       GestureDetector(
                         onTap: () {
                           // Handle schedule action
                         },
                         child: Stack(
-                                alignment: Alignment.center,
-                                children: [
-                                  Image.asset(
-                                    'assets/widgets/buttons/schedule.png',
-                                    fit: BoxFit.fill,
-                                    width: double.infinity,
-                                    filterQuality: FilterQuality.none,
-                                  ),
-                                ],
-                              ),
+                          alignment: Alignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/widgets/buttons/schedule.png',
+                              fit: BoxFit.fill,
+                              width: double.infinity,
+                              filterQuality: FilterQuality.none,
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),

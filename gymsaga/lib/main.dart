@@ -6,6 +6,7 @@ import 'package:gymsaga/register.dart';
 import 'package:gymsaga/homepage.dart';
 import 'package:gymsaga/steps.dart';
 import 'package:gymsaga/workout.dart';
+//import 'firebase_options.dart';
 
 void main() {
   runApp(const MainApp());

@@ -204,7 +204,7 @@ class HomePage extends StatelessWidget {
                   _buildWorkoutCard(
                     context: context,
                     title: "Legs",
-                    xp: "+120 XP",
+                    xp: "+100 XP",
                     exercises: "Squats | Lunges | Glute Bridges | Calf Rises",
                   ),
                   

@@ -107,7 +107,7 @@ class StatCaloriesPage extends StatelessWidget {
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacementNamed(context, '/stat_weight.dart');
+                                Navigator.pushReplacementNamed(context, '/stat_weight');
                               },
                               child: Container(
                                 decoration: BoxDecoration(

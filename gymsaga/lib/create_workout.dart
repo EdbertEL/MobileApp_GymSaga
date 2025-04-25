@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/create_exercise.dart';
 import 'package:intl/intl.dart';
+import 'package:gymsaga/create_workout_1.dart';
 
 class CreateWorkoutPage extends StatefulWidget {
   const CreateWorkoutPage({Key? key}) : super(key: key);
@@ -12,7 +14,6 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
   final TextEditingController _workoutNameController = TextEditingController();
   final TextEditingController _exerciseNameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  
   int sets = 4;
   int reps = 20;
   String activityTime = "none";
@@ -30,6 +31,47 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
   void initState() {
     super.initState();
     _exerciseNameController.text = "Jumping-Jacks";
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    // Membatasi pilihan tanggal hanya untuk April 2025
+    final DateTime initialDate = DateTime(2025, 4, 15); // Mid April 2025
+    final DateTime firstDate = DateTime(2025, 4, 1); // April 1, 2025
+    final DateTime lastDate = DateTime(2025, 4, 30); // April 30, 2025
+
+    // Menampilkan dialog tanggal
+    final DateTime? selectedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: firstDate,
+      lastDate: lastDate,
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData(
+            fontFamily: "Jersey25",
+            colorScheme: ColorScheme.light(
+              primary: Colors.orange, // Warna header & tombol OK
+              onPrimary: Colors.white, // Warna teks pada tombol OK
+              onSurface: Colors.black87, // Warna teks pada tanggal
+            ),
+            dialogBackgroundColor: Color(0xFFFBEBD2), // Warna latar dialog
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Colors.orange, // Warna tombol CANCEL dan OK
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+
+    if (selectedDate != null) {
+      // Mengubah format tanggal menjadi dd/MM/yyyy
+      setState(() {
+        _dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
+      });
+    }
   }
 
   @override
@@ -71,7 +113,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           height: 30.0,
                         ),
                       ),
-                      
+
                       const SizedBox(width: 10.0),
                       // CREATE A WORKOUT text
                       const Expanded(
@@ -86,7 +128,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                         ),
                       ),
-                      
+
                       // Settings gear icon
                       Positioned(
                         top: 32, // same vertical as text for alignment
@@ -136,9 +178,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      
+
                       // Workout name input field with frame.png background
                       Stack(
+                        alignment: Alignment.center,
                         children: [
                           // Background frame image
                           Image.asset(
@@ -147,8 +190,8 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                             fit: BoxFit.fill,
                           ),
                           // Input field on top of the frame
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 24),
                             child: TextField(
                               controller: _workoutNameController,
                               decoration: const InputDecoration(
@@ -156,13 +199,14 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                                 border: OutlineInputBorder(),
                                 fillColor: Colors.white,
                                 filled: true,
-                                contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 12.0, vertical: 8.0),
                               ),
                             ),
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 24.0),
                       const Text(
                         'Create an exercise:',
@@ -172,7 +216,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      
+
                       // Exercise details box with frame.png background
                       Stack(
                         children: [
@@ -185,58 +229,68 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                           // Exercise details content
                           Padding(
-                            padding: const EdgeInsets.all(12.0),
+                            padding: const EdgeInsets.all(18.0),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   _exerciseNameController.text,
                                   style: const TextStyle(
-                                    fontSize: 18.0,
+                                    fontSize: 24.0,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                const SizedBox(height: 12.0),
-                                
+                                const SizedBox(height: 4.0),
+
                                 // Sets and reps row
                                 Row(
                                   children: [
-                                    const Text(
-                                      'Sets: 4',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    
-                                    // Activity time and rest time display
                                     Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: const [
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
                                         Text(
-                                          'Activity Time: none',
+                                          'Sets: $sets',
                                           style: TextStyle(
-                                            color: Colors.grey,
+                                            color: Colors.black54,
+                                            fontSize: 18,
                                           ),
                                         ),
                                         Text(
-                                          'Rest Time: 00:30',
+                                          'Reps: $reps',
                                           style: TextStyle(
-                                            color: Colors.grey,
+                                            color: Colors.black54,
+                                            fontSize: 18,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  ],
-                                ),
-                                
-                                const Row(
-                                  children: [
-                                    Text(
-                                      'Reps: 20',
-                                      style: TextStyle(
-                                        color: Colors.grey,
-                                      ),
+                                    Container(
+                                      height: 30,
+                                      width: 1,
+                                      color: Colors.black,
+                                      margin:
+                                          EdgeInsets.symmetric(horizontal: 20),
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          'Activity Time: $activityTime',
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                        Text(
+                                          'Rest Time: $restTime',
+                                          style: TextStyle(
+                                            color: Colors.black54,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
@@ -245,16 +299,33 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16.0),
-                      
+
                       // START NOW button
                       Row(
                         children: [
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // Handle start now action
+                                // Navigate to CustomWorkoutPage when START NOW is clicked
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CustomWorkoutPage(
+                                      workoutName: _workoutNameController.text,
+                                      exerciseName:
+                                          _exerciseNameController.text,
+                                      sets: sets,
+                                      reps: reps,
+                                      activityTime: activityTime,
+                                      restTime: restTime,
+                                      date: _dateController.text.isEmpty
+                                          ? 'Today'
+                                          : _dateController.text,
+                                    ),
+                                  ),
+                                );
                               },
                               child: Stack(
                                 alignment: Alignment.center,
@@ -270,21 +341,35 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                             ),
                           ),
                           const SizedBox(width: 12.0),
-                          
+
                           // Plus button using create_workout.png
                           GestureDetector(
-                            onTap: () {
-                              // Handle add exercise action
+                            onTap: () async {
+                              final result = await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => CreateExercisePage(),
+                                ),
+                              );
+
+                              if (result != null) {
+                                setState(() {
+                                  _exerciseNameController.text =
+                                      result['exerciseName'];
+                                  sets = int.parse(result['sets']);
+                                  reps = int.parse(result['reps']);
+                                  activityTime = result['activeTime'];
+                                  restTime = result['restTime'];
+                                });
+                              }
                             },
                             child: Image.asset(
                               'assets/widgets/buttons/create_workout.png',
-                              width: 50.0,
-                              height: 50.0,
                             ),
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 12.0),
                       const Center(
                         child: Text(
@@ -296,7 +381,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                         ),
                       ),
                       const SizedBox(height: 12.0),
-                      
+
                       // Schedule Workout section
                       const Text(
                         'Schedule Workout:',
@@ -306,9 +391,10 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                         ),
                       ),
                       const SizedBox(height: 8.0),
-                      
+
                       // Date picker field with frame.png background
                       Stack(
+                        alignment: Alignment.center,
                         children: [
                           // Background frame image
                           Image.asset(
@@ -325,21 +411,22 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                                   child: TextField(
                                     controller: _dateController,
                                     decoration: const InputDecoration(
-                                      hintText: '....',
+                                      hintText: 'Select April date...',
                                       border: OutlineInputBorder(),
                                       fillColor: Colors.white,
                                       filled: true,
-                                      contentPadding: EdgeInsets.symmetric(horizontal: 12.0, vertical: 8.0),
+                                      contentPadding: EdgeInsets.symmetric(
+                                          horizontal: 12.0, vertical: 8.0),
                                     ),
                                     readOnly: true,
                                   ),
                                 ),
                                 const SizedBox(width: 12.0),
-                                
+
                                 // Calendar button using calendar.png asset
                                 GestureDetector(
                                   onTap: () {
-                                    // Calendar button action
+                                    _selectDate(context);
                                   },
                                   child: Image.asset(
                                     'assets/widgets/buttons/calendar.png',
@@ -352,13 +439,38 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                         ],
                       ),
-                      
+
                       const SizedBox(height: 16.0),
-                      
+
                       // SCHEDULE button
                       GestureDetector(
                         onTap: () {
-                          // Handle schedule action
+                          // Validasi form
+                          if (_workoutNameController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text('Please enter a workout name')),
+                            );
+                            return;
+                          }
+
+                          if (_dateController.text.trim().isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Please select a date')),
+                            );
+                            return;
+                          }
+
+                          // Return data to HomePage
+                          Navigator.pop(context, {
+                            'workoutName': _workoutNameController.text,
+                            'exerciseName': _exerciseNameController.text,
+                            'sets': sets.toString(),
+                            'reps': reps.toString(),
+                            'activeTime': activityTime,
+                            'restTime': restTime,
+                            'date': _dateController.text,
+                          });
                         },
                         child: Stack(
                           alignment: Alignment.center,

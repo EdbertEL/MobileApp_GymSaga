@@ -12,25 +12,16 @@ class CreateWorkoutPage extends StatefulWidget {
 
 class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
   final TextEditingController _workoutNameController = TextEditingController();
-  final TextEditingController _exerciseNameController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  int sets = 4;
-  int reps = 20;
-  String activityTime = "none";
-  String restTime = "00:30";
+
+  // List to store multiple exercises
+  List<Map<String, dynamic>> exercises = [];
 
   @override
   void dispose() {
     _workoutNameController.dispose();
-    _exerciseNameController.dispose();
     _dateController.dispose();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _exerciseNameController.text = "Jumping-Jacks";
   }
 
   Future<void> _selectDate(BuildContext context) async {
@@ -72,6 +63,35 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
         _dateController.text = DateFormat('dd/MM/yyyy').format(selectedDate);
       });
     }
+  }
+
+  // Function to add a new exercise
+  void _addExercise() async {
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateExercisePage(),
+      ),
+    );
+
+    if (result != null) {
+      setState(() {
+        exercises.add({
+          'exerciseName': result['exerciseName'],
+          'sets': int.parse(result['sets']),
+          'reps': int.parse(result['reps']),
+          'activityTime': result['activeTime'],
+          'restTime': result['restTime'],
+        });
+      });
+    }
+  }
+
+  // Function to remove an exercise
+  void _removeExercise(int index) {
+    setState(() {
+      exercises.removeAt(index);
+    });
   }
 
   @override
@@ -209,7 +229,7 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
 
                       const SizedBox(height: 24.0),
                       const Text(
-                        'Create an exercise:',
+                        'Create exercises:',
                         style: TextStyle(
                           fontSize: 18.0,
                           fontWeight: FontWeight.bold,
@@ -217,109 +237,171 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                       ),
                       const SizedBox(height: 8.0),
 
-                      // Exercise details box with frame.png background
-                      Stack(
-                        children: [
-                          // Background frame image
-                          Image.asset(
-                            'assets/widgets/background/frame.png',
-                            width: double.infinity,
-                            height: 120,
-                            fit: BoxFit.fill,
-                          ),
-                          // Exercise details content
-                          Padding(
-                            padding: const EdgeInsets.all(18.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _exerciseNameController.text,
-                                  style: const TextStyle(
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                const SizedBox(height: 4.0),
+                      // Show exercises list if any exercises exist
+                      ...exercises.asMap().entries.map((entry) {
+                        int index = entry.key;
+                        var exercise = entry.value;
 
-                                // Sets and reps row
-                                Row(
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Sets: $sets',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 18,
-                                          ),
+                        return Column(
+                          children: [
+                            Stack(
+                              children: [
+                                // Background frame image
+                                Image.asset(
+                                  'assets/widgets/background/frame.png',
+                                  width: double.infinity,
+                                  height: 120,
+                                  fit: BoxFit.fill,
+                                ),
+                                // Exercise details content
+                                Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              exercise['exerciseName'],
+                                              style: const TextStyle(
+                                                fontSize: 24.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            const SizedBox(height: 4.0),
+
+                                            // Sets and reps row
+                                            Row(
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Sets: ${exercise['sets']}',
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Reps: ${exercise['reps']}',
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Container(
+                                                  height: 30,
+                                                  width: 1,
+                                                  color: Colors.black,
+                                                  margin: EdgeInsets.symmetric(
+                                                      horizontal: 20),
+                                                ),
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      'Activity Time: ${exercise['activityTime']}',
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      'Rest Time: ${exercise['restTime']}',
+                                                      style: TextStyle(
+                                                        color: Colors.black54,
+                                                        fontSize: 18,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          'Reps: $reps',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 18,
-                                          ),
+                                      ),
+                                      // Delete button
+                                      GestureDetector(
+                                        onTap: () => _removeExercise(index),
+                                        child: Icon(
+                                          Icons.delete,
+                                          color: Colors.red,
+                                          size: 28,
                                         ),
-                                      ],
-                                    ),
-                                    Container(
-                                      height: 30,
-                                      width: 1,
-                                      color: Colors.black,
-                                      margin:
-                                          EdgeInsets.symmetric(horizontal: 20),
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          'Activity Time: $activityTime',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        Text(
-                                          'Rest Time: $restTime',
-                                          style: TextStyle(
-                                            color: Colors.black54,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),
-                          ),
-                        ],
-                      ),
+                            const SizedBox(height: 12.0),
+                          ],
+                        );
+                      }).toList(),
+
+                      // Empty state - shown when no exercises exist
+                      if (exercises.isEmpty)
+                        Stack(
+                          children: [
+                            // Background frame image
+                            Image.asset(
+                              'assets/widgets/background/frame.png',
+                              width: double.infinity,
+                              height: 120,
+                              fit: BoxFit.fill,
+                            ),
+                            // Empty exercise prompt
+                            const Padding(
+                              padding: EdgeInsets.all(18.0),
+                              child: Center(
+                                child: Text(
+                                  'No exercises added yet.\nClick the + button to add exercises.',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 18.0,
+                                    color: Colors.black54,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
 
                       const SizedBox(height: 16.0),
 
-                      // START NOW button
+                      // START NOW and Add Exercise button row
                       Row(
                         children: [
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
-                                // Navigate to CustomWorkoutPage when START NOW is clicked
+                                // Validate there's at least one exercise
+                                if (exercises.isEmpty) {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                          'Please add at least one exercise'),
+                                      backgroundColor: Colors.red,
+                                    ),
+                                  );
+                                  return;
+                                }
+
+                                // Navigate to CustomWorkoutPage with first exercise
+                                // You may need to modify CustomWorkoutPage to accept a list of exercises
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => CustomWorkoutPage(
                                       workoutName: _workoutNameController.text,
-                                      exerciseName:
-                                          _exerciseNameController.text,
-                                      sets: sets,
-                                      reps: reps,
-                                      activityTime: activityTime,
-                                      restTime: restTime,
+                                      exercises: exercises,
                                       date: _dateController.text.isEmpty
                                           ? 'Today'
                                           : _dateController.text,
@@ -342,27 +424,9 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           ),
                           const SizedBox(width: 12.0),
 
-                          // Plus button using create_workout.png
+                          // Plus button to add exercise
                           GestureDetector(
-                            onTap: () async {
-                              final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => CreateExercisePage(),
-                                ),
-                              );
-
-                              if (result != null) {
-                                setState(() {
-                                  _exerciseNameController.text =
-                                      result['exerciseName'];
-                                  sets = int.parse(result['sets']);
-                                  reps = int.parse(result['reps']);
-                                  activityTime = result['activeTime'];
-                                  restTime = result['restTime'];
-                                });
-                              }
-                            },
+                            onTap: _addExercise,
                             child: Image.asset(
                               'assets/widgets/buttons/create_workout.png',
                             ),
@@ -448,27 +512,39 @@ class _CreateWorkoutPageState extends State<CreateWorkoutPage> {
                           // Validasi form
                           if (_workoutNameController.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                  content: Text('Please enter a workout name')),
+                              const SnackBar(
+                                content: Text('Please enter a workout name'),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                            return;
+                          }
+
+                          if (exercises.isEmpty) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content:
+                                    Text('Please add at least one exercise'),
+                                backgroundColor: Colors.red,
+                              ),
                             );
                             return;
                           }
 
                           if (_dateController.text.trim().isEmpty) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Please select a date')),
+                              const SnackBar(
+                                content: Text('Please select a date'),
+                                backgroundColor: Colors.red,
+                              ),
                             );
                             return;
                           }
 
-                          // Return data to HomePage
+                          // Return data to HomePage with all exercises
                           Navigator.pop(context, {
                             'workoutName': _workoutNameController.text,
-                            'exerciseName': _exerciseNameController.text,
-                            'sets': sets.toString(),
-                            'reps': reps.toString(),
-                            'activeTime': activityTime,
-                            'restTime': restTime,
+                            'exercises': exercises,
                             'date': _dateController.text,
                           });
                         },

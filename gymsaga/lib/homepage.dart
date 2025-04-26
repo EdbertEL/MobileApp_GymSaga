@@ -19,9 +19,16 @@ class _HomePageState extends State<HomePage> {
   // This list will store scheduled workouts
   final Map<String, List<Map<String, dynamic>>> _scheduledWorkouts = {};
   
+  // Track the selected date for viewing workouts
+  late String _selectedDateString;
+  late DateTime _selectedDate;
+  
   @override
   void initState() {
     super.initState();
+    // Set the initial selected date to today
+    _selectedDate = DateTime.now();
+    _selectedDateString = DateFormat('dd/MM/yyyy').format(_selectedDate);
     // Example data - in a real app, this would come from a database or shared preferences
     _loadScheduledWorkouts();
   }
@@ -54,8 +61,6 @@ class _HomePageState extends State<HomePage> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Rest of the code remains the same until the calendar section
-            
             // Checkerboard pattern background
             Container(
               decoration: const BoxDecoration(
@@ -162,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   
-                  // NEW: Horizontal scrollable calendar for April
+                  // Horizontal scrollable calendar for April
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
                     child: Column(
@@ -194,14 +199,17 @@ class _HomePageState extends State<HomePage> {
                               final isToday = date.day == now.day && 
                                              date.month == now.month && 
                                              date.year == now.year;
+                              final isSelected = dateString == _selectedDateString;
                               final hasWorkout = _scheduledWorkouts.containsKey(dateString);
 
                               return _buildDayBox(
                                 DateFormat('E').format(date).substring(0, 3),
                                 date.day.toString(),
                                 isToday,
+                                isSelected,
                                 hasWorkout,
                                 dateString,
+                                date,
                               );
                             },
                           ),
@@ -241,13 +249,15 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   
-                  // Today's workouts header - Update to show the selected date's workouts
+                  // Updated: Selected date's workouts header
                   Padding(
                     padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Today's Scheduled Workouts",
+                        _selectedDateString == DateFormat('dd/MM/yyyy').format(now)
+                            ? "Today's Scheduled Workouts"
+                            : "Workouts for ${DateFormat('MMM d').format(_selectedDate)}",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -265,8 +275,8 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   
-                  // Scheduled workouts for today
-                  ..._buildWorkoutCards(DateFormat('dd/MM/yyyy').format(now)),
+                  // Scheduled workouts for selected date
+                  ..._buildWorkoutCards(_selectedDateString),
                   
                   const SizedBox(height: 80),
                 ],
@@ -295,6 +305,11 @@ class _HomePageState extends State<HomePage> {
                           'xp': '+100 XP', // Default XP value
                           'exercises': result['exerciseName'],
                         });
+                        
+                        // If a new workout was added for the selected date, refresh the UI
+                        if (date == _selectedDateString) {
+                          setState(() {});
+                        }
                       });
                     }
                   });
@@ -326,40 +341,22 @@ class _HomePageState extends State<HomePage> {
     return dates;
   }
 
-  Widget _buildDayBox(String day, String number, bool isToday, bool hasWorkout, String dateString) {
+  Widget _buildDayBox(
+    String day, 
+    String number, 
+    bool isToday, 
+    bool isSelected,
+    bool hasWorkout, 
+    String dateString,
+    DateTime date,
+  ) {
     return GestureDetector(
       onTap: () {
-        // Show the workouts for this date when tapped
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: Text('Workouts for $dateString'),
-            content: Container(
-              width: double.maxFinite,
-              child: ListView(
-                shrinkWrap: true,
-                children: _scheduledWorkouts.containsKey(dateString)
-                    ? _scheduledWorkouts[dateString]!
-                        .map((workout) => ListTile(
-                              title: Text(workout['title']),
-                              subtitle: Text(workout['exercises']),
-                            ))
-                        .toList()
-                    : [
-                        Center(
-                          child: Text('No workouts scheduled for this day'),
-                        )
-                      ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Close'),
-              ),
-            ],
-          ),
-        );
+        // Update the selected date when tapped
+        setState(() {
+          _selectedDateString = dateString;
+          _selectedDate = date;
+        });
       },
       child: Container(
         margin: EdgeInsets.symmetric(horizontal: 5),
@@ -370,6 +367,16 @@ class _HomePageState extends State<HomePage> {
             image: AssetImage('assets/widgets/icons/date.png'),
             fit: BoxFit.fill,
           ),
+          // Add a highlight for the selected date
+          boxShadow: isSelected 
+              ? [
+                  BoxShadow(
+                    color: const Color.fromARGB(255, 58, 58, 58).withOpacity(0.7),
+                    spreadRadius: 2,
+                    blurRadius: 4,
+                  ),
+                ] 
+              : null,
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -390,7 +397,7 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold,
                 fontFamily: 'Jersey25',
                 color: isToday ? const Color(0xFFE32020) : Colors.black,
-                shadows: isToday
+                shadows: isToday || isSelected
                     ? [
                         Shadow(
                           offset: Offset(1, 1),
@@ -406,7 +413,7 @@ class _HomePageState extends State<HomePage> {
                 width: 6,
                 height: 6,
                 decoration: BoxDecoration(
-                  color: Colors.purple,
+                  color: const Color.fromARGB(255, 116, 115, 117),
                   shape: BoxShape.circle,
                 ),
               ),
@@ -431,7 +438,9 @@ class _HomePageState extends State<HomePage> {
           ),
           child: Center(
             child: Text(
-              'No workouts scheduled for today',
+              dateString == DateFormat('dd/MM/yyyy').format(DateTime.now())
+                ? 'No workouts scheduled for today'
+                : 'No workouts scheduled for this date',
               style: TextStyle(
                 fontFamily: 'Jersey25',
                 fontSize: 14,

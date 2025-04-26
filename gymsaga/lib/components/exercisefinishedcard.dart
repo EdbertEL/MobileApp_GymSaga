@@ -20,6 +20,12 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
       body: SafeArea(
         child: Stack(
           children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/widgets/background/checkerboard.png',
+                fit: BoxFit.cover,
+              ),
+            ),
             Positioned(
               top: 100,
               left: 0,

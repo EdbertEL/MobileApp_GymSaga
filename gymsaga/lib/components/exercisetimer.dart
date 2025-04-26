@@ -75,6 +75,12 @@ class _ExerciseTimerPageState extends State<ExerciseTimerPage> {
       body: SafeArea(
         child: Stack(
           children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/widgets/background/checkerboard.png',
+                fit: BoxFit.cover,
+              ),
+            ),
             Positioned(
               top: 0,
               left: 0,

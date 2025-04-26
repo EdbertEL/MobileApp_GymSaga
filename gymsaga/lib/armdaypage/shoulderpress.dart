@@ -4,6 +4,7 @@ import '../components/exercisecard.dart';
 import '../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
 import 'lateralraises.dart';
+import 'package:table_calendar/table_calendar.dart';
 
 class ShoulderPressPage extends StatefulWidget {
   const ShoulderPressPage({super.key});
@@ -14,6 +15,99 @@ class ShoulderPressPage extends StatefulWidget {
 
 class _ShoulderPressPageState extends State<ShoulderPressPage> {
   bool showExerciseDetail = false;
+  final TextEditingController _dateController = TextEditingController();
+
+  Future<void> _selectDate(BuildContext context) async {
+    showDialog(
+      context: context,
+      builder: (context) {
+        DateTime selectedDay = DateTime.now();
+
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          child: Container(
+            padding: const EdgeInsets.all(16),
+            color: const Color(0xFFF7E4C3),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Text(
+                  'Pick a Date',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontFamily: 'Jersey25',
+                    color: Color(0xFFFF9900),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                TableCalendar(
+                  firstDay: DateTime.now(),
+                  lastDay: DateTime(2101),
+                  focusedDay: DateTime.now(),
+                  calendarStyle: CalendarStyle(
+                    todayDecoration: BoxDecoration(
+                      color: const Color(0xFFFF9900),
+                      shape: BoxShape.circle,
+                    ),
+                    selectedDecoration: BoxDecoration(
+                      color: const Color(0xFFFF9900),
+                      shape: BoxShape.circle,
+                    ),
+                    todayTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Jersey25',
+                      fontSize: 18,
+                    ),
+                    selectedTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Jersey25',
+                      fontSize: 18,
+                    ),
+                    defaultTextStyle: const TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 16,
+                    ),
+                    weekendTextStyle: const TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 16,
+                      color: Colors.red,
+                    ),
+                  ),
+                  headerStyle: HeaderStyle(
+                    formatButtonVisible: false,
+                    titleCentered: true,
+                    titleTextStyle: const TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 20,
+                      color: Color(0xFFFF9900),
+                    ),
+                    leftChevronIcon: const Icon(Icons.chevron_left,
+                        color: Color(0xFFFF9900)),
+                    rightChevronIcon: const Icon(Icons.chevron_right,
+                        color: Color(0xFFFF9900)),
+                  ),
+                  onDaySelected: (selectedDayTemp, focusedDay) {
+                    setState(() {
+                      selectedDay = selectedDayTemp;
+                      _dateController.text =
+                          '${selectedDay.day}/${selectedDay.month}/${selectedDay.year}';
+                    });
+                    Navigator.pop(context);
+                  },
+                  selectedDayPredicate: (day) {
+                    return isSameDay(day, selectedDay);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,6 +116,12 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
       body: SafeArea(
         child: Stack(
           children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/widgets/background/checkerboard.png',
+                fit: BoxFit.cover,
+              ),
+            ),
             Positioned(
               top: 100,
               left: 0,
@@ -83,41 +183,38 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
                     color: Colors.black.withOpacity(0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 28,
-                  ),
+                  child: const Icon(Icons.arrow_back,
+                      color: Colors.white, size: 28),
                 ),
               ),
             ),
             Positioned.fill(
               top: 120,
               child: showExerciseDetail
-                  ? ExerciseDetailCard(
-                      title: 'Shoulder Press',
-                      imagePath: 'assets/widgets/images/shoulderpress.png',
-                      description:
-                          'Keep your core tight and back straight\nPush evenly through both arms\nAvoid shrugging your shoulders',
-                      reps: '3 x 12',
-                      onStart: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseTimerPage(
-                              onContinue: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const LateralRaisesPage(),
-                                  ),
-                                );
-                              },
+                  ? SingleChildScrollView(
+                      child: ExerciseDetailCard(
+                        title: 'Shoulder Press',
+                        imagePath: 'assets/widgets/images/shoulderpress.png',
+                        description:
+                            'Keep your back straight\nPush both arms overhead\nControl the movement down',
+                        reps: '3 x 12',
+                        onStart: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseTimerPage(
+                                onContinue: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const LateralRaisesPage(),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     )
                   : buildWorkoutList(),
             ),
@@ -144,11 +241,9 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
               },
             ),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Pike Pushups – 3 x 12 Reps'),
+            const ExerciseCard(title: 'Pike Pushup – 3 x 10 Reps'),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Dips – 2 x 12 Reps'),
-            const SizedBox(height: 10),
-            const ExerciseCard(title: 'Dips – 2 x 12 Reps'),
+            const ExerciseCard(title: 'Plank to Downward Dog – 3 x 12'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -197,8 +292,8 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
                   });
                 },
                 child: Container(
-                  width: 200,
-                  height: 60,
+                  width: 340,
+                  height: 80,
                   decoration: const BoxDecoration(
                     image: DecorationImage(
                       image: AssetImage(
@@ -206,12 +301,12 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
                       fit: BoxFit.fill,
                     ),
                   ),
-                  alignment: const Alignment(0, -0.7),
+                  alignment: const Alignment(0, -0.8),
                   child: const Text(
                     'START',
                     style: TextStyle(
                       fontFamily: 'Jersey25',
-                      fontSize: 24,
+                      fontSize: 38,
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1.2,
@@ -231,25 +326,68 @@ class _ShoulderPressPageState extends State<ShoulderPressPage> {
               ),
             ),
             const SizedBox(height: 12),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.orange, width: 2),
-                borderRadius: BorderRadius.circular(8),
+            const Text(
+              'Schedule Workout:',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
               ),
-              child: Row(
-                children: const [
-                  Expanded(
-                    child: Text(
-                      'Schedule Workout:',
-                      style: TextStyle(
-                        fontFamily: 'Jersey25',
-                        fontSize: 20,
+            ),
+            const SizedBox(height: 8.0),
+            Stack(
+              children: [
+                Image.asset(
+                  'assets/widgets/background/frame.png',
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextField(
+                          controller: _dateController,
+                          decoration: const InputDecoration(
+                            hintText: 'Choose date...',
+                            border: OutlineInputBorder(),
+                            fillColor: Colors.white,
+                            filled: true,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 12.0, vertical: 8.0),
+                          ),
+                          readOnly: true,
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 12.0),
+                      GestureDetector(
+                        onTap: () => _selectDate(context),
+                        child: Image.asset(
+                          'assets/widgets/buttons/calendar.png',
+                          width: 50.0,
+                          height: 46.0,
+                        ),
+                      ),
+                    ],
                   ),
-                  Icon(Icons.calendar_month, color: Colors.orange),
+                ),
+              ],
+            ),
+            const SizedBox(height: 16.0),
+            GestureDetector(
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(content: Text("Workout scheduled!")),
+                );
+              },
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/widgets/buttons/schedule.png',
+                    fit: BoxFit.fill,
+                    width: double.infinity,
+                  ),
                 ],
               ),
             ),

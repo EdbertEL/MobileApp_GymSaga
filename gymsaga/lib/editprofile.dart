@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({super.key});
@@ -10,10 +11,12 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   bool isEditingName = false;
   bool isEditingGoal = false;
+  bool isEditingAvatar = false; // NEW STATE
 
   String name = 'Katie';
   String goal = '50.00';
   final String startingWeight = '60.4 kg';
+  String avatarPath = 'assets/widgets/images/female_profile.png'; // NEW AVATAR PATH
 
   final nameController = TextEditingController();
   final goalController = TextEditingController();
@@ -30,6 +33,114 @@ class _EditProfilePageState extends State<EditProfilePage> {
     nameController.dispose();
     goalController.dispose();
     super.dispose();
+  }
+
+  void openAvatarEditing() {
+    setState(() {
+      isEditingAvatar = true;
+    });
+  }
+
+  void selectAvatar(String path) {
+    setState(() {
+      avatarPath = path;
+      isEditingAvatar = false;
+    });
+  }
+
+  Widget buildAvatarArea() {
+    if (isEditingName || isEditingGoal || isEditingAvatar) {
+      // Avatar editing mode
+      return Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        decoration: BoxDecoration(
+          color: Colors.orange, // orange background
+          borderRadius: BorderRadius.circular(40), // fully rounded
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Male avatar button
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  avatarPath = 'assets/widgets/images/male_profile.png';
+                  isEditingAvatar = false;
+                });
+              },
+              child: CircleAvatar(
+                radius: 30, // same size
+                backgroundColor: Colors.black,
+                child: CircleAvatar(
+                  radius: 28,
+                  backgroundImage: AssetImage('assets/widgets/images/male_profile.png'),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+
+            // Female avatar button
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  avatarPath = 'assets/widgets/images/female_profile.png';
+                  isEditingAvatar = false;
+                });
+              },
+              child: CircleAvatar(
+                radius: 30, // same size
+                backgroundColor: Colors.black,
+                child: CircleAvatar(
+                  radius: 28,
+                  backgroundImage: AssetImage('assets/widgets/images/female_profile.png'),
+                ),
+              ),
+            ),
+            const SizedBox(width: 16),
+
+// Camera button
+            GestureDetector(
+              onTap: pickImageFromGallery, // your gallery picker function
+              child: CircleAvatar(
+                radius: 30,
+                backgroundColor: Colors.white, // white circle background
+                child: Icon(
+                  Icons.camera_alt,
+                  color: Colors.black, // black camera icon
+                  size: 28,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+
+    } else {
+      // Normal avatar
+      return GestureDetector(
+        onTap: openAvatarEditing,
+        child: CircleAvatar(
+          radius: 40,
+          backgroundColor: Colors.black,
+          child: CircleAvatar(
+            radius: 38,
+            backgroundImage: AssetImage(avatarPath),
+          ),
+        ),
+      );
+    }
+  }
+
+  Future<void> pickImageFromGallery() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+    if (image != null) {
+      setState(() {
+        avatarPath = image.path;
+        isEditingAvatar = false; // Close after picking
+      });
+    }
   }
 
   Widget buildEditableField({
@@ -62,7 +173,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(width: 8),
-              if (enabled) // <-- ADD this check
+              if (enabled)
                 GestureDetector(
                   onTap: () {
                     if (isEditing) {
@@ -70,13 +181,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         if (label == 'Name') {
                           name = controller.text;
                           isEditingName = false;
+                          isEditingAvatar = false;
                         } else if (label == 'Weigh Goal') {
                           goal = controller.text;
                           isEditingGoal = false;
+                          isEditingAvatar = false;
                         }
                       });
                     } else {
                       onToggle();
+                      openAvatarEditing();
                     }
                   },
                   child: Image.asset(
@@ -91,24 +205,28 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ),
           const SizedBox(height: 4),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0), // <-- Add consistent left padding
+            padding: const EdgeInsets.only(left: 8.0),
             child: isEditing
-                ? Container(
-              // Set a fixed width for the TextField
-              width: double.infinity,
-              child: TextField(
-                controller: controller,
-                enabled: enabled,
-                decoration: const InputDecoration(
-                  isDense: true,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-                  filled: true,
-                  fillColor: Colors.white,
-                  border: OutlineInputBorder(),
+                ? TextField(
+              controller: controller,
+              enabled: enabled,
+              decoration: InputDecoration(
+                isDense: true,
+                filled: true,
+                fillColor: Colors.white,
+                contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                style: const TextStyle(
-                  fontSize: 16,
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.black, width: 2),
+                  borderRadius: BorderRadius.circular(4),
                 ),
+              ),
+              style: const TextStyle(
+                fontSize: 16,
+                color: Colors.black,
               ),
             )
                 : Text(
@@ -118,7 +236,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 color: enabled ? Colors.black : Colors.grey[600],
               ),
             ),
-          ),
+          )
         ],
       ),
     );
@@ -199,16 +317,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
             const SizedBox(height: 16),
 
-            // Avatar
-            CircleAvatar(
-              radius: 40,
-              backgroundColor: Colors.black,
-              child: CircleAvatar(
-                radius: 38,
-                backgroundImage:
-                    AssetImage('assets/widgets/images/female_profile.png'),
-              ),
-            ),
+            // Avatar Area
+            buildAvatarArea(),
 
             const SizedBox(height: 24),
 

@@ -15,33 +15,33 @@ class CustomWorkoutPage extends StatelessWidget {
 
   // Menghitung total XP
   // Menghitung total XP - updated to match homepage.dart calculation
-int calculateTotalXP() {
-  int totalXP = 0;
-  for (var exercise in exercises) {
-    int sets = exercise['sets'];
-    int reps = exercise['reps'];
-    
-    // Parse active time
-    String activeTimeStr = exercise['activityTime'] ?? '00:00';
-    List<String> activeTimeParts = activeTimeStr.split(':');
-    int activeTimeMinutes = int.tryParse(activeTimeParts[0]) ?? 0;
-    int activeTimeSeconds = int.tryParse(activeTimeParts[1]) ?? 0;
-    int totalActiveSeconds = (activeTimeMinutes * 60) + activeTimeSeconds;
-    
-    // XP calculation matching homepage.dart
-    int exerciseXP = 0;
-    
-    // XP from sets and reps
-    exerciseXP += sets * 15;  // 15 XP per set
-    exerciseXP += sets * reps;  // 1 XP per rep
-    
-    // XP from active time (1 XP per 10 seconds)
-    exerciseXP += (totalActiveSeconds ~/ 10);
-    
-    totalXP += exerciseXP;
+  int calculateTotalXP() {
+    int totalXP = 0;
+    for (var exercise in exercises) {
+      int sets = exercise['sets'];
+      int reps = exercise['reps'];
+
+      // Parse active time
+      String activeTimeStr = exercise['activityTime'] ?? '00:00';
+      List<String> activeTimeParts = activeTimeStr.split(':');
+      int activeTimeMinutes = int.tryParse(activeTimeParts[0]) ?? 0;
+      int activeTimeSeconds = int.tryParse(activeTimeParts[1]) ?? 0;
+      int totalActiveSeconds = (activeTimeMinutes * 60) + activeTimeSeconds;
+
+      // XP calculation matching homepage.dart
+      int exerciseXP = 0;
+
+      // XP from sets and reps
+      exerciseXP += sets * 15; // 15 XP per set
+      exerciseXP += sets * reps; // 1 XP per rep
+
+      // XP from active time (1 XP per 10 seconds)
+      exerciseXP += (totalActiveSeconds ~/ 10);
+
+      totalXP += exerciseXP;
+    }
+    return totalXP;
   }
-  return totalXP;
-}
 
   // Menghitung total KCAL
   int calculateTotalKCAL() {
@@ -71,7 +71,8 @@ int calculateTotalXP() {
             // HEADER
             Container(
               color: const Color.fromARGB(255, 228, 205, 167),
-              padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
+              padding: const EdgeInsets.only(
+                  top: 40, left: 16, right: 16, bottom: 16),
               child: Column(
                 children: [
                   Row(
@@ -103,7 +104,10 @@ int calculateTotalXP() {
                         color: Colors.black,
                         size: 28,
                         shadows: const [
-                          Shadow(offset: Offset(0, 3), blurRadius: 0, color: Colors.white),
+                          Shadow(
+                              offset: Offset(0, 3),
+                              blurRadius: 0,
+                              color: Colors.white),
                         ],
                       ),
                     ],
@@ -129,69 +133,71 @@ int calculateTotalXP() {
                 child: ListView(
                   children: [
                     ...exercises.map((exercise) => Padding(
-                      padding: const EdgeInsets.only(bottom: 16.0),
-                      child: Stack(
-                        alignment: Alignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/widgets/background/frame.png',
-                            width: double.infinity,
-                            fit: BoxFit.fill,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                            child: Row(
-                              children: [
-                                Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange.withOpacity(0.3),
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: const Icon(
-                                    Icons.fitness_center,
-                                    color: Colors.black,
-                                    size: 28,
-                                  ),
+                          padding: const EdgeInsets.only(bottom: 16.0),
+                          child: Stack(
+                            alignment: Alignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/widgets/background/frame.png',
+                                width: double.infinity,
+                                fit: BoxFit.fill,
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 16),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      width: 50,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.orange.withOpacity(0.3),
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: const Icon(
+                                        Icons.fitness_center,
+                                        color: Colors.black,
+                                        size: 28,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            exercise['exerciseName'],
+                                            style: const TextStyle(
+                                              fontSize: 20,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Text(
+                                            "Sets: ${exercise['sets']}  Reps: ${exercise['reps']}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                          Text(
+                                            "Active: ${exercise['activityTime']}  Rest: ${exercise['restTime']}",
+                                            style: const TextStyle(
+                                              fontSize: 16,
+                                              color: Colors.black87,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(width: 16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        exercise['exerciseName'],
-                                        style: const TextStyle(
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 4),
-                                      Text(
-                                        "Sets: ${exercise['sets']}  Reps: ${exercise['reps']}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                      Text(
-                                        "Active: ${exercise['activityTime']}  Rest: ${exercise['restTime']}",
-                                        style: const TextStyle(
-                                          fontSize: 16,
-                                          color: Colors.black87,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    )),
+                        )),
 
                     // Rewards
                     const SizedBox(height: 24),
@@ -249,45 +255,45 @@ int calculateTotalXP() {
                             ],
                           ),
                         ),
-                        
                       ],
                     ),
                     // Tambahkan ini setelah Rewards!
-const SizedBox(height: 24),
+                    const SizedBox(height: 24),
 
 // Tombol START
-Container(
-  width: double.infinity,
-  height: 100,
-  margin: const EdgeInsets.symmetric(horizontal: 20),
-  child: GestureDetector(
-    onTap: () {
-      if (exercises.isNotEmpty) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => CustomWorkoutTimerPage(
-              workoutName: workoutName,
-              exerciseName: exercises[0]['exerciseName'],
-              sets: exercises[0]['sets'],
-              reps: exercises[0]['reps'],
-              activityTime: exercises[0]['activityTime'],
-              restTime: exercises[0]['restTime'],
-              date: date,
-            ),
-          ),
-        );
-      }
-    },
-    child: Image.asset(
-      'assets/widgets/buttons/start_button.png',
-      fit: BoxFit.contain,
-      filterQuality: FilterQuality.none,
-    ),
-  ),
-),
-const SizedBox(height: 40),
-
+                    Container(
+                      width: double.infinity,
+                      height: 100,
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      child: GestureDetector(
+                        onTap: () {
+                          if (exercises.isNotEmpty) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CustomWorkoutTimerPage(
+                                  workoutName: workoutName,
+                                  exerciseName: exercises[0]['exerciseName'],
+                                  sets: exercises[0]['sets'],
+                                  reps: exercises[0]['reps'],
+                                  activityTime: exercises[0]['activityTime'],
+                                  restTime: exercises[0]['restTime'],
+                                  date: date,
+                                  // Pass all exercises too (will be used in CustomWorkout2Page)
+                                  allExercises: exercises,
+                                ),
+                              ),
+                            );
+                          }
+                        },
+                        child: Image.asset(
+                          'assets/widgets/buttons/start_button.png',
+                          fit: BoxFit.contain,
+                          filterQuality: FilterQuality.none,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 40),
                   ],
                 ),
               ),

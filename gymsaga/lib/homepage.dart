@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/create_workout_1.dart';
 import 'navbar.dart';
 import 'steps.dart';
 import 'profile.dart';
@@ -125,7 +126,7 @@ class _HomePageState extends State<HomePage> {
       int exerciseXP = 0;
       
       // XP from sets and reps
-      exerciseXP += sets * 15;  // 5 XP per set
+      exerciseXP += sets * 15;  // 15 XP per set
       exerciseXP += sets * reps;  // 1 XP per rep
       
       // XP from active time (1 XP per 10 seconds)
@@ -547,52 +548,74 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  List<Widget> _buildWorkoutCards(String dateString) {
-    if (!_scheduledWorkouts.containsKey(dateString) ||
-        _scheduledWorkouts[dateString]!.isEmpty) {
-      return [
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-          padding: const EdgeInsets.all(15),
-          decoration: const BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/widgets/background/frame.png'),
-              fit: BoxFit.fill,
-            ),
+  // In the _buildWorkoutCards function, modify it to pass the exercise details
+
+List<Widget> _buildWorkoutCards(String dateString) {
+  if (!_scheduledWorkouts.containsKey(dateString) ||
+      _scheduledWorkouts[dateString]!.isEmpty) {
+    return [
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
+        padding: const EdgeInsets.all(15),
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage('assets/widgets/background/frame.png'),
+            fit: BoxFit.fill,
           ),
-          child: Center(
-            child: Text(
-              dateString == DateFormat('dd/MM/yyyy').format(DateTime.now())
-                  ? 'No workouts scheduled for today'
-                  : 'No workouts scheduled for this date',
-              style: TextStyle(
-                fontFamily: 'Jersey25',
-                fontSize: 14,
-              ),
+        ),
+        child: Center(
+          child: Text(
+            dateString == DateFormat('dd/MM/yyyy').format(DateTime.now())
+                ? 'No workouts scheduled for today'
+                : 'No workouts scheduled for this date',
+            style: TextStyle(
+              fontFamily: 'Jersey25',
+              fontSize: 14,
             ),
           ),
         ),
-      ];
-    }
-
-    return _scheduledWorkouts[dateString]!
-        .map((workout) => _buildWorkoutCard(
-              context: context,
-              title: workout['title'],
-              xp: workout['xp'],
-              exercises: workout['exercises'],
-            ))
-        .toList();
+      ),
+    ];
   }
 
-  Widget _buildWorkoutCard({
-    required BuildContext context,
-    required String title,
-    required String xp,
-    required String exercises,
-    bool showAddButton = false,
-  }) {
-    return Container(
+  return _scheduledWorkouts[dateString]!
+      .map((workout) => _buildWorkoutCard(
+            context: context,
+            title: workout['title'],
+            xp: workout['xp'],
+            exercises: workout['exercises'],
+            exerciseDetails: workout['exerciseDetails'],
+            date: dateString,
+          ))
+      .toList();
+}
+
+// Update the _buildWorkoutCard method to include exerciseDetails parameter and make it clickable
+
+Widget _buildWorkoutCard({
+  required BuildContext context,
+  required String title,
+  required String xp,
+  required String exercises,
+  required List<Map<String, dynamic>> exerciseDetails,
+  required String date,
+  bool showAddButton = false,
+}) {
+  return GestureDetector(
+    onTap: () {
+      // Navigate to CustomWorkoutPage when workout card is tapped
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CustomWorkoutPage(
+            workoutName: title,
+            exercises: exerciseDetails,
+            date: date,
+          ),
+        ),
+      );
+    },
+    child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 5),
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -684,6 +707,7 @@ class _HomePageState extends State<HomePage> {
             ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

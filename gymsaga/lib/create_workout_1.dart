@@ -14,17 +14,34 @@ class CustomWorkoutPage extends StatelessWidget {
   }) : super(key: key);
 
   // Menghitung total XP
-  int calculateTotalXP() {
-    int totalXP = 0;
-    for (var exercise in exercises) {
-      int sets = exercise['sets'];
-      int reps = exercise['reps'];
-      int baseXP = 15 * sets;
-      int extraXP = ((reps - 20) > 0) ? ((reps - 20) ~/ 5) * 5 : 0;
-      totalXP += (baseXP + extraXP);
-    }
-    return totalXP;
+  // Menghitung total XP - updated to match homepage.dart calculation
+int calculateTotalXP() {
+  int totalXP = 0;
+  for (var exercise in exercises) {
+    int sets = exercise['sets'];
+    int reps = exercise['reps'];
+    
+    // Parse active time
+    String activeTimeStr = exercise['activityTime'] ?? '00:00';
+    List<String> activeTimeParts = activeTimeStr.split(':');
+    int activeTimeMinutes = int.tryParse(activeTimeParts[0]) ?? 0;
+    int activeTimeSeconds = int.tryParse(activeTimeParts[1]) ?? 0;
+    int totalActiveSeconds = (activeTimeMinutes * 60) + activeTimeSeconds;
+    
+    // XP calculation matching homepage.dart
+    int exerciseXP = 0;
+    
+    // XP from sets and reps
+    exerciseXP += sets * 15;  // 15 XP per set
+    exerciseXP += sets * reps;  // 1 XP per rep
+    
+    // XP from active time (1 XP per 10 seconds)
+    exerciseXP += (totalActiveSeconds ~/ 10);
+    
+    totalXP += exerciseXP;
   }
+  return totalXP;
+}
 
   // Menghitung total KCAL
   int calculateTotalKCAL() {

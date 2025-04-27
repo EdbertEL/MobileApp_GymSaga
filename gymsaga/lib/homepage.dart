@@ -18,11 +18,11 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   // This list will store scheduled workouts
   final Map<String, List<Map<String, dynamic>>> _scheduledWorkouts = {};
-  
+
   // Track the selected date for viewing workouts
   late String _selectedDateString;
   late DateTime _selectedDate;
-  
+
   @override
   void initState() {
     super.initState();
@@ -32,30 +32,126 @@ class _HomePageState extends State<HomePage> {
     // Example data - in a real app, this would come from a database or shared preferences
     _loadScheduledWorkouts();
   }
-  
+
   void _loadScheduledWorkouts() {
-    // Example data for demonstration
+    // Example data for demonstration with calculated XP values
     _scheduledWorkouts['05/04/2025'] = [
-      {'title': 'Push Day', 'xp': '+120 XP', 'exercises': 'Pushups | Pike Pushups | Dips'},
+      {
+        'title': 'Push Day',
+        'xp': '+120 XP',
+        'exercises': 'Pushups | Pike Pushups | Dips',
+        'exerciseDetails': [
+          {
+            'exerciseName': 'Pushups',
+            'sets': 3,
+            'reps': 15,
+            'activeTime': '00:45',
+            'restTime': '00:30',
+          },
+          {
+            'exerciseName': 'Pike Pushups',
+            'sets': 2,
+            'reps': 10,
+            'activeTime': '00:30',
+            'restTime': '00:30',
+          },
+          {
+            'exerciseName': 'Dips',
+            'sets': 3,
+            'reps': 8,
+            'activeTime': '00:30',
+            'restTime': '00:30',
+          },
+        ],
+      },
     ];
     _scheduledWorkouts['12/04/2025'] = [
-      {'title': 'Legs', 'xp': '+100 XP', 'exercises': 'Squats | Lunges | Glute Bridges | Calf Rises'},
+      {
+        'title': 'Legs',
+        'xp': '+100 XP',
+        'exercises': 'Squats | Lunges | Glute Bridges | Calf Rises',
+        'exerciseDetails': [
+          {
+            'exerciseName': 'Squats',
+            'sets': 3,
+            'reps': 12,
+            'activeTime': '00:40',
+            'restTime': '00:30',
+          },
+          {
+            'exerciseName': 'Lunges',
+            'sets': 2,
+            'reps': 10,
+            'activeTime': '00:30',
+            'restTime': '00:30',
+          },
+          {
+            'exerciseName': 'Glute Bridges',
+            'sets': 3,
+            'reps': 15,
+            'activeTime': '00:20',
+            'restTime': '00:20',
+          },
+          {
+            'exerciseName': 'Calf Rises',
+            'sets': 2,
+            'reps': 15,
+            'activeTime': '00:20',
+            'restTime': '00:20',
+          },
+        ],
+      },
     ];
+  }
+
+  // Calculate XP based on exercise details
+  String calculateXP(List<Map<String, dynamic>> exercises) {
+    if (exercises.isEmpty) return '+0 XP';
+    
+    int totalXP = 0;
+    
+    for (var exercise in exercises) {
+      int sets = exercise['sets'] ?? 0;
+      int reps = exercise['reps'] ?? 0;
+      
+      // Parse active time
+      String activeTimeStr = exercise['activeTime'] ?? '00:00';
+      List<String> activeTimeParts = activeTimeStr.split(':');
+      int activeTimeMinutes = int.tryParse(activeTimeParts[0]) ?? 0;
+      int activeTimeSeconds = int.tryParse(activeTimeParts[1]) ?? 0;
+      int totalActiveSeconds = (activeTimeMinutes * 60) + activeTimeSeconds;
+      
+      // Base XP calculation
+      int exerciseXP = 0;
+      
+      // XP from sets and reps
+      exerciseXP += sets * 15;  // 5 XP per set
+      exerciseXP += sets * reps;  // 1 XP per rep
+      
+      // XP from active time (1 XP per 10 seconds)
+      exerciseXP += (totalActiveSeconds ~/ 10);
+      
+      totalXP += exerciseXP;
+    }
+    
+    return '+${totalXP} XP';
   }
 
   @override
   Widget build(BuildContext context) {
     // Get the current date
     final DateTime now = DateTime.now();
-    
+
     // Create a list of dates for April
     final List<DateTime> aprilDates = _generateAprilDates(now.year);
-    
+
     // Find today's index in the list
-    int todayIndex = aprilDates.indexWhere((date) => 
-      date.day == now.day && date.month == now.month && date.year == now.year);
+    int todayIndex = aprilDates.indexWhere((date) =>
+        date.day == now.day &&
+        date.month == now.month &&
+        date.year == now.year);
     if (todayIndex == -1) todayIndex = 0;
-    
+
     return Scaffold(
       backgroundColor: const Color(0xFFF7E3C3),
       body: SafeArea(
@@ -65,12 +161,13 @@ class _HomePageState extends State<HomePage> {
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/widgets/background/checkerboard.png'),
+                  image:
+                      AssetImage('assets/widgets/background/checkerboard.png'),
                   repeat: ImageRepeat.repeat,
                 ),
               ),
             ),
-            
+
             // Decor overlay
             Positioned(
               top: 80,
@@ -140,10 +237,11 @@ class _HomePageState extends State<HomePage> {
               child: Column(
                 children: [
                   const SizedBox(height: 100),
-                  
+
                   // Daily Quest section with frame
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 20),
                     child: Stack(
                       alignment: Alignment.center,
                       children: [
@@ -166,7 +264,7 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  
+
                   // Horizontal scrollable calendar for April
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 10),
@@ -191,16 +289,20 @@ class _HomePageState extends State<HomePage> {
                             padding: const EdgeInsets.symmetric(horizontal: 10),
                             itemCount: aprilDates.length,
                             controller: ScrollController(
-                              initialScrollOffset: max(0, (todayIndex - 2) * 50.0),
+                              initialScrollOffset:
+                                  max(0, (todayIndex - 2) * 50.0),
                             ),
                             itemBuilder: (context, index) {
                               final date = aprilDates[index];
-                              final dateString = DateFormat('dd/MM/yyyy').format(date);
-                              final isToday = date.day == now.day && 
-                                             date.month == now.month && 
-                                             date.year == now.year;
-                              final isSelected = dateString == _selectedDateString;
-                              final hasWorkout = _scheduledWorkouts.containsKey(dateString);
+                              final dateString =
+                                  DateFormat('dd/MM/yyyy').format(date);
+                              final isToday = date.day == now.day &&
+                                  date.month == now.month &&
+                                  date.year == now.year;
+                              final isSelected =
+                                  dateString == _selectedDateString;
+                              final hasWorkout =
+                                  _scheduledWorkouts.containsKey(dateString);
 
                               return _buildDayBox(
                                 DateFormat('E').format(date).substring(0, 3),
@@ -217,17 +319,20 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  
+
                   // Reminder box
                   Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    margin: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     decoration: BoxDecoration(
                       image: DecorationImage(
-                        image: AssetImage('assets/widgets/background/frame.png'),
+                        image:
+                            AssetImage('assets/widgets/background/frame.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
                     child: Row(
                       children: [
                         Image.asset(
@@ -248,14 +353,16 @@ class _HomePageState extends State<HomePage> {
                       ],
                     ),
                   ),
-                  
+
                   // Updated: Selected date's workouts header
                   Padding(
-                    padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 10),
+                    padding: EdgeInsets.only(
+                        left: 20, right: 20, top: 20, bottom: 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        _selectedDateString == DateFormat('dd/MM/yyyy').format(now)
+                        _selectedDateString ==
+                                DateFormat('dd/MM/yyyy').format(now)
                             ? "Today's Scheduled Workouts"
                             : "Workouts for ${DateFormat('MMM d').format(_selectedDate)}",
                         style: TextStyle(
@@ -274,15 +381,15 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
-                  
+
                   // Scheduled workouts for selected date
                   ..._buildWorkoutCards(_selectedDateString),
-                  
+
                   const SizedBox(height: 80),
                 ],
               ),
             ),
-            
+
             // Button create_workout di posisi fix kanan bawah
             Positioned(
               right: 20,
@@ -291,7 +398,8 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreateWorkoutPage()),
+                    MaterialPageRoute(
+                        builder: (context) => CreateWorkoutPage()),
                   ).then((result) {
                     // If workout was scheduled, update the list
                     if (result != null && result is Map<String, dynamic>) {
@@ -300,12 +408,27 @@ class _HomePageState extends State<HomePage> {
                         if (!_scheduledWorkouts.containsKey(date)) {
                           _scheduledWorkouts[date] = [];
                         }
+
+                        // Get the exercise list
+                        final List<Map<String, dynamic>> exercisesList =
+                            List<Map<String, dynamic>>.from(
+                                result['exercises']);
+                                
+                        // Create a string representation of exercises
+                        final String exercisesString = exercisesList
+                            .map((exercise) => exercise['exerciseName'])
+                            .join(' | ');
+                            
+                        // Calculate XP based on exercises
+                        final String xpValue = calculateXP(exercisesList);
+
                         _scheduledWorkouts[date]!.add({
                           'title': result['workoutName'],
-                          'xp': '+100 XP', // Default XP value
-                          'exercises': result['exerciseName'],
+                          'xp': xpValue,
+                          'exercises': exercisesString,
+                          'exerciseDetails': exercisesList,
                         });
-                        
+
                         // If a new workout was added for the selected date, refresh the UI
                         if (date == _selectedDateString) {
                           setState(() {});
@@ -333,20 +456,20 @@ class _HomePageState extends State<HomePage> {
     List<DateTime> dates = [];
     final DateTime firstDay = DateTime(year, 4, 1);
     final int daysInMonth = DateTime(year, 5, 0).day;
-    
+
     for (int i = 0; i < daysInMonth; i++) {
       dates.add(firstDay.add(Duration(days: i)));
     }
-    
+
     return dates;
   }
 
   Widget _buildDayBox(
-    String day, 
-    String number, 
-    bool isToday, 
+    String day,
+    String number,
+    bool isToday,
     bool isSelected,
-    bool hasWorkout, 
+    bool hasWorkout,
     String dateString,
     DateTime date,
   ) {
@@ -368,14 +491,15 @@ class _HomePageState extends State<HomePage> {
             fit: BoxFit.fill,
           ),
           // Add a highlight for the selected date
-          boxShadow: isSelected 
+          boxShadow: isSelected
               ? [
                   BoxShadow(
-                    color: const Color.fromARGB(255, 58, 58, 58).withOpacity(0.7),
+                    color:
+                        const Color.fromARGB(255, 58, 58, 58).withOpacity(0.7),
                     spreadRadius: 2,
                     blurRadius: 4,
                   ),
-                ] 
+                ]
               : null,
         ),
         child: Column(
@@ -424,7 +548,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> _buildWorkoutCards(String dateString) {
-    if (!_scheduledWorkouts.containsKey(dateString) || 
+    if (!_scheduledWorkouts.containsKey(dateString) ||
         _scheduledWorkouts[dateString]!.isEmpty) {
       return [
         Container(
@@ -439,8 +563,8 @@ class _HomePageState extends State<HomePage> {
           child: Center(
             child: Text(
               dateString == DateFormat('dd/MM/yyyy').format(DateTime.now())
-                ? 'No workouts scheduled for today'
-                : 'No workouts scheduled for this date',
+                  ? 'No workouts scheduled for today'
+                  : 'No workouts scheduled for this date',
               style: TextStyle(
                 fontFamily: 'Jersey25',
                 fontSize: 14,
@@ -547,7 +671,8 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CreateWorkoutPage()),
+                    MaterialPageRoute(
+                        builder: (context) => CreateWorkoutPage()),
                   );
                 },
                 child: Image.asset(

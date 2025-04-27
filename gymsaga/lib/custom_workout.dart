@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:gymsaga/custom_workout2.dart';
 
 class CustomWorkoutTimerPage extends StatefulWidget {
   final String workoutName;
@@ -9,6 +10,7 @@ class CustomWorkoutTimerPage extends StatefulWidget {
   final String activityTime;
   final String restTime;
   final String date;
+  final List<Map<String, dynamic>>? allExercises; // Add this parameter
 
   const CustomWorkoutTimerPage({
     Key? key,
@@ -19,6 +21,7 @@ class CustomWorkoutTimerPage extends StatefulWidget {
     required this.activityTime,
     required this.restTime,
     required this.date,
+    this.allExercises, // Make it optional for backward compatibility
   }) : super(key: key);
 
   @override
@@ -33,14 +36,14 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
   bool _isResting = true;
   bool _isFinished = false;
   bool _showCongrats = false;
-  
+
   late AnimationController _slideController;
   late Animation<Offset> _slideAnimation;
 
   @override
   void initState() {
     super.initState();
-    
+
     // Parse rest time from the format "MM:SS"
     List<String> parts = widget.restTime.split(':');
     if (parts.length == 2) {
@@ -48,13 +51,13 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
       int seconds = int.tryParse(parts[1]) ?? 0;
       _totalSeconds = minutes * 60 + seconds;
     }
-    
+
     // Setup slide-up animation for congrats panel
     _slideController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    
+
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 1), // Start from bottom
       end: Offset.zero,
@@ -91,7 +94,7 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
             // Workout completed
             _timer?.cancel();
             _isFinished = true;
-            
+
             // Show congrats panel after a short delay
             Future.delayed(const Duration(milliseconds: 500), () {
               setState(() {
@@ -109,11 +112,11 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
     int hours = totalSeconds ~/ 3600;
     int minutes = (totalSeconds % 3600) ~/ 60;
     int seconds = totalSeconds % 60;
-    
+
     String hoursStr = hours.toString().padLeft(2, '0');
     String minutesStr = minutes.toString().padLeft(2, '0');
     String secondsStr = seconds.toString().padLeft(2, '0');
-    
+
     return "$hoursStr : $minutesStr : $secondsStr";
   }
 
@@ -121,33 +124,33 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
   int calculateXP() {
     // Base XP per set is 15
     int baseXP = 15 * widget.sets;
-    
+
     // Additional XP for every 5 reps above base (assuming base is 20)
     int baseReps = 20;
     int extraReps = widget.reps - baseReps;
     int extraXP = 0;
-    
+
     if (extraReps > 0) {
       extraXP = (extraReps / 5).floor() * 5;
     }
-    
+
     return baseXP + extraXP;
   }
-  
+
   // Calculate KCAL based on sets and reps
   int calculateKCAL() {
     // Base KCAL per set is 10
     int baseKCAL = 10 * widget.sets;
-    
+
     // Additional KCAL for every 5 reps above base (assuming base is 20)
     int baseReps = 20;
     int extraReps = widget.reps - baseReps;
     int extraKCAL = 0;
-    
+
     if (extraReps > 0) {
       extraKCAL = (extraReps / 5).floor() * 3;
     }
-    
+
     return baseKCAL + extraKCAL;
   }
 
@@ -191,7 +194,7 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                         ),
                       ),
                       const SizedBox(width: 10.0),
-                      
+
                       // Custom Workout text
                       Expanded(
                         child: Text(
@@ -257,7 +260,8 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                               ),
                             ),
                             Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 16.0, vertical: 8.0),
                               // decoration: BoxDecoration(
                               //   color: Colors.white,
                               //   borderRadius: BorderRadius.circular(8.0),
@@ -274,9 +278,9 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16.0),
-                        
+
                         // Timer display
                         Stack(
                           alignment: Alignment.center,
@@ -296,9 +300,9 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                             ),
                           ],
                         ),
-                        
+
                         const SizedBox(height: 16.0),
-                        
+
                         // START/FINISHED button
                         GestureDetector(
                           onTap: () {
@@ -309,7 +313,7 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                             }
                           },
                           child: Image.asset(
-                            _isFinished 
+                            _isFinished
                                 ? 'assets/widgets/buttons/finish_buram.png'
                                 : 'assets/widgets/buttons/start_button.png',
                             width: double.infinity,
@@ -320,7 +324,7 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                       ],
                     ),
                   ),
-                  
+
                   // Congratulations slide-up panel
                   if (_showCongrats)
                     Positioned(
@@ -367,36 +371,51 @@ class _CustomWorkoutTimerPageState extends State<CustomWorkoutTimerPage>
                               ),
                               const SizedBox(height: 16),
                               // Continue button
-                              GestureDetector(
-                                onTap: () {
-                                  Navigator.pop(context);
-                                },
-                                child: Container(
-                                  width: 200,
-                                  height: 40,
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    boxShadow: const [
-                                      BoxShadow(
-                                        color: Colors.black54,
-                                        offset: Offset(0, 3),
-                                        blurRadius: 0,
-                                      ),
-                                    ],
-                                  ),
-                                  alignment: Alignment.center,
-                                  child: const Text(
-                                    'CONTINUE',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
+
+
+                              // Update the _showCongrats section in _CustomWorkoutTimerPageState class
+// Replace only this part of the code in custom_workout.dart
+
+// Inside _CustomWorkoutTimerPageState class
+// Find the GestureDetector inside the Congratulations slide-up panel
+// and replace its onTap function:
+
+GestureDetector(
+  onTap: () {
+    // Navigate to CustomWorkout2Page instead of just popping
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CustomWorkout2Page(
+          workoutName: widget.workoutName,
+          totalXP: calculateXP(),
+          totalKCAL: calculateKCAL(),
+          date: widget.date,
+          // Use all exercises if available, otherwise use current exercise only
+          exercises: widget.allExercises ?? [
+            {
+              'exerciseName': widget.exerciseName,
+              'sets': widget.sets,
+              'reps': widget.reps,
+              'activityTime': widget.activityTime,
+              'restTime': widget.restTime,
+            }
+          ],
+        ),
+      ),
+    );
+  },
+  child: Container(
+    width: 100,
+    height: 40,
+    alignment: Alignment.center,
+    child: Image.asset(
+      'assets/widgets/buttons/continue.png',
+      fit: BoxFit.contain,
+      filterQuality: FilterQuality.none,
+    ),
+  ),
+),                            ],
                           ),
                         ),
                       ),

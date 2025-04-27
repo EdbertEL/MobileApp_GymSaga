@@ -4,6 +4,7 @@ import 'editprofile.dart';
 import 'workout_history.dart';
 import 'myweight.dart';
 import 'stat_calories.dart';
+import 'settings.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -79,126 +80,139 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            // Gear Icon on the right
+// Gear Icon on the right
             Positioned(
               top: 32, // same vertical as text for alignment
               right: 16,
-              child: Icon(
-                Icons.settings,
-                color: Colors.black,
-                size: 28,
-                shadows: [
-                  Shadow(
-                    offset: Offset(0, 3),
-                    blurRadius: 0,
-                    color: Colors.white,
-                  ),
-                ],
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                  );
+                },
+                child: Icon(
+                  Icons.settings,
+                  color: Colors.black,
+                  size: 28,
+                  shadows: const [
+                    Shadow(
+                      offset: Offset(0, 3),
+                      blurRadius: 0,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
               ),
             ),
             // Actual page content
-            SingleChildScrollView(
-              child: Column(
-                children: [
-                  const SizedBox(height: 160), // make space for background
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        const CircleAvatar(
-                          radius: 32,
-                          backgroundImage: AssetImage(
-                            'assets/widgets/images/female_profile.png',
-                          ),
-                        ),
-                        Flexible(
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 16.0),
-                            child: Text(
-                              'Katie',
-                              style: const TextStyle(
-                                fontSize: 42,
-                                fontFamily: 'Jersey25',
-                              ),
-                              textAlign: TextAlign.center,
-                              overflow: TextOverflow.ellipsis,
+            Positioned(
+              top: 120, // <-- start below the header and gear
+              left: 0,
+              right: 0,
+              bottom: 0,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 40),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const CircleAvatar(
+                            radius: 32,
+                            backgroundImage: AssetImage(
+                              'assets/widgets/images/female_profile.png',
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const EditProfilePage(),
+                          Flexible(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              child: Text(
+                                'Katie',
+                                style: const TextStyle(
+                                  fontSize: 42,
+                                  fontFamily: 'Jersey25',
+                                ),
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
                               ),
-                            );
-                          },
-                          child: Image.asset(
-                            'assets/widgets/buttons/edit_button.png',
-                            width: 28,
-                            height: 28,
+                            ),
                           ),
-                        ),
-                      ],
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const EditProfilePage(),
+                                ),
+                              );
+                            },
+                            child: Image.asset(
+                              'assets/widgets/buttons/edit_button.png',
+                              width: 28,
+                              height: 28,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: const [
-                        ProfileStat(label: 'Start Weight', value: '60.4 KG'),
-                        ProfileStat(label: 'Goal', value: '50.0 KG'),
-                        ProfileStat(label: 'Daily Calories', value: '594 kcal'),
-                      ],
+                    const SizedBox(height: 20),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: const [
+                          ProfileStat(label: 'Start Weight', value: '60.4 KG'),
+                          ProfileStat(label: 'Goal', value: '50.0 KG'),
+                          ProfileStat(label: 'Daily Calories', value: '594 kcal'),
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 20),
-                  ProfileButton(
-                    label: 'My Weight',
-                    icon: Icons.monitor_weight,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MyWeightPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ProfileButton(
-                    label: 'Workout History',
-                    icon: Icons.fitness_center,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const WorkoutHistoryPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  ProfileButton(
-                    label: 'Statistics',
-                    icon: Icons.show_chart,
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const StatCaloriesPage(),
-                        ),
-                      );
-                    },
-                  ),
-                  const ProfileButton(
-                      label: 'Achievements', icon: Icons.emoji_events),
-                  const SizedBox(height: 80), // Extra space for navbar
-                ],
+                    const SizedBox(height: 20),
+                    ProfileButton(
+                      label: 'My Weight',
+                      icon: Icons.monitor_weight,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const MyWeightPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    ProfileButton(
+                      label: 'Workout History',
+                      icon: Icons.fitness_center,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const WorkoutHistoryPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    ProfileButton(
+                      label: 'Statistics',
+                      icon: Icons.show_chart,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const StatCaloriesPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    const ProfileButton(
+                        label: 'Achievements', icon: Icons.emoji_events),
+                    const SizedBox(height: 80), // Extra space for navbar
+                  ],
+                ),
               ),
             ),
           ],

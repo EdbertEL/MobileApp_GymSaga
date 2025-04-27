@@ -62,57 +62,63 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
               const SizedBox(width: 8),
-              GestureDetector(
-                onTap: () {
-                  if (isEditing) {
-                    // Save and exit edit mode
-                    setState(() {
-                      if (label == 'Name') {
-                        name = controller.text;
-                        isEditingName = false;
-                      } else if (label == 'Weigh Goal') {
-                        goal = controller.text;
-                        isEditingGoal = false;
-                      }
-                    });
-                  } else {
-                    onToggle();
-                  }
-                },
-                child: Image.asset(
-                  isEditing
-                      ? 'assets/widgets/buttons/button_plus.png'
-                      : 'assets/widgets/buttons/edit_button.png',
-                  width: 20,
-                  height: 20,
+              if (enabled) // <-- ADD this check
+                GestureDetector(
+                  onTap: () {
+                    if (isEditing) {
+                      setState(() {
+                        if (label == 'Name') {
+                          name = controller.text;
+                          isEditingName = false;
+                        } else if (label == 'Weigh Goal') {
+                          goal = controller.text;
+                          isEditingGoal = false;
+                        }
+                      });
+                    } else {
+                      onToggle();
+                    }
+                  },
+                  child: Image.asset(
+                    isEditing
+                        ? 'assets/widgets/buttons/confirm_button.png'
+                        : 'assets/widgets/buttons/edit_button.png',
+                    width: 20,
+                    height: 20,
+                  ),
                 ),
-              )
             ],
           ),
           const SizedBox(height: 4),
-          isEditing
-              ? TextField(
-                  controller: controller,
-                  enabled: enabled,
-                  decoration: const InputDecoration(
-                    isDense: true,
-                    contentPadding:
-                        EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(),
-                  ),
-                  style: const TextStyle(
-                    fontSize: 16,
-                  ),
-                )
-              : Text(
-                  controller.text,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: enabled ? Colors.black : Colors.grey[600],
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(left: 8.0), // <-- Add consistent left padding
+            child: isEditing
+                ? Container(
+              // Set a fixed width for the TextField
+              width: double.infinity,
+              child: TextField(
+                controller: controller,
+                enabled: enabled,
+                decoration: const InputDecoration(
+                  isDense: true,
+                  contentPadding: EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+                  filled: true,
+                  fillColor: Colors.white,
+                  border: OutlineInputBorder(),
                 ),
+                style: const TextStyle(
+                  fontSize: 16,
+                ),
+              ),
+            )
+                : Text(
+              controller.text,
+              style: TextStyle(
+                fontSize: 16,
+                color: enabled ? Colors.black : Colors.grey[600],
+              ),
+            ),
+          ),
         ],
       ),
     );

@@ -1,5 +1,35 @@
+import 'dart:async';
+import 'dart:math';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'navbar.dart';
+
+class StepData {
+  int steps;
+  String status;
+  bool isMoving;
+
+  StepData({this.steps = 0, this.status = 'Resting', this.isMoving = false});
+
+  Map<String, dynamic> toMap() {
+    return {
+      'steps': steps,
+      'status': status,
+      'isMoving': isMoving,
+    };
+  }
+
+  factory StepData.fromMap(Map<String, dynamic> map) {
+    return StepData(
+      steps: map['steps'] ?? 0,
+      status: map['status'] ?? 'Resting',
+      isMoving: map['isMoving'] ?? false,
+    );
+  }
+}
 
 class StepsPage extends StatefulWidget {
   const StepsPage({Key? key}) : super(key: key);
@@ -8,8 +38,101 @@ class StepsPage extends StatefulWidget {
   _StepsPageState createState() => _StepsPageState();
 }
 
-class _StepsPageState extends State<StepsPage> {
-  int currentSteps = 0; // Track steps here, can be updated later
+class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
+  StepData _stepData = StepData();
+  Timer? _stepTimer;
+  late SharedPreferences _prefs;
+  final String _stepsKey = 'stepData';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _loadPreferences();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    _stepTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadPreferences(); // Reload when returning to page
+    }
+  }
+
+  Future<void> _loadPreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    final String? stepDataMap = _prefs.getString(_stepsKey);
+    if (stepDataMap != null) {
+      Map<String, dynamic> decodedMap =
+      Map<String, dynamic>.from(jsonDecode(stepDataMap));
+      setState(() {
+        _stepData = StepData.fromMap(decodedMap);
+      });
+
+      if (_stepData.isMoving) {
+        _startTimer(); // Restart timer if walking
+      }
+    }
+  }
+
+  Future<void> _savePreferences() async {
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.setString(_stepsKey, jsonEncode(_stepData.toMap()));
+
+  }
+
+  void _toggleWalking() {
+    if (_stepData.isMoving) {
+      setState(() {
+        _stepData.isMoving = false;
+        _stepData.status = 'Resting';
+      });
+      _stepTimer?.cancel();
+    } else {
+      setState(() {
+        _stepData.isMoving = true;
+        _stepData.status = 'Walking';
+      });
+      _startTimer();
+    }
+    _savePreferences();
+  }
+
+  void _startTimer() {
+    _stepTimer?.cancel(); // Clear existing timer if any
+    _stepTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
+      if (_stepData.isMoving) {
+        final randomSteps = Random().nextInt(4) + 2;
+        setState(() {
+          _stepData.steps += randomSteps;
+        });
+        _savePreferences();
+      }
+    });
+  }
+
+  Widget _buildStatusWidget() {
+    return Text(
+      '${_stepData.steps}',
+      style: const TextStyle(
+        fontSize: 48,
+        fontFamily: 'Jersey25',
+        color: Color(0xFFFF7F11),
+        shadows: [
+          Shadow(
+            offset: Offset(0, 4),
+            color: Colors.white,
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,19 +144,16 @@ class _StepsPageState extends State<StepsPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Pixelated background image (top 3/4 of screen)
             Positioned(
               top: 100,
               left: 0,
               right: 0,
-              height: screenHeight * 3/4 - 100,
+              height: screenHeight * 3 / 4 - 100,
               child: Image.asset(
                 'assets/widgets/background/background_steps_spliced.png',
                 fit: BoxFit.cover,
               ),
             ),
-
-            // Header Image
             Positioned(
               top: 0,
               left: 0,
@@ -43,8 +163,6 @@ class _StepsPageState extends State<StepsPage> {
                 fit: BoxFit.cover,
               ),
             ),
-
-            // "STEPS" title
             Positioned(
               top: 24,
               left: 0,
@@ -63,7 +181,7 @@ class _StepsPageState extends State<StepsPage> {
                           ..color = Colors.black,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'STEP TRACKER',
                       style: TextStyle(
                         fontSize: 32,
@@ -73,7 +191,7 @@ class _StepsPageState extends State<StepsPage> {
                           Shadow(
                             offset: Offset(0, 5),
                             blurRadius: 0,
-                            color: Colors.black.withOpacity(0.4),
+                            color: Color(0x66000000),
                           ),
                         ],
                       ),
@@ -82,8 +200,6 @@ class _StepsPageState extends State<StepsPage> {
                 ),
               ),
             ),
-
-            // "STEPS TODAY" Text with orange steps and line
             Positioned(
               top: 120,
               left: 0,
@@ -91,7 +207,7 @@ class _StepsPageState extends State<StepsPage> {
               child: Center(
                 child: Column(
                   children: [
-                    Text(
+                    const Text(
                       'STEPS TODAY',
                       style: TextStyle(
                         fontSize: 36,
@@ -106,22 +222,8 @@ class _StepsPageState extends State<StepsPage> {
                         ],
                       ),
                     ),
-                    // Steps count (orange text)
-                    Text(
-                      '$currentSteps',
-                      style: TextStyle(
-                        fontSize: 48,
-                        fontFamily: 'Jersey25',
-                        color: Color(0xFFFF7F11), // Orange color
-                        shadows: [
-                          Shadow(
-                            offset: Offset(0, 4),
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                    // 4px stroke width line (200 pixels wide)
+                    _buildStatusWidget(),
+                    const SizedBox(height: 8),
                     Container(
                       width: 200,
                       height: 8,
@@ -130,21 +232,29 @@ class _StepsPageState extends State<StepsPage> {
                         borderRadius: BorderRadius.circular(2),
                       ),
                     ),
+                    const SizedBox(height: 10),
+                    Text(
+                      _stepData.status,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontFamily: 'Jersey25',
+                        color: _stepData.status == 'Walking'
+                            ? Colors.green
+                            : Colors.grey[700],
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
-
-            // Character Container Group - moved down by 80 pixels
             Positioned(
-              top: screenHeight * 0.45, // 1/3 from bottom (~50% down)
+              top: screenHeight * 0.45,
               left: 0,
               right: 0,
               child: Center(
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Chat bubble with steps - text moved up
                     SizedBox(
                       width: 110,
                       height: 50,
@@ -157,7 +267,7 @@ class _StepsPageState extends State<StepsPage> {
                             fit: BoxFit.contain,
                           ),
                           Positioned(
-                            top: 10, // Moved text higher up
+                            top: 10,
                             left: 0,
                             right: 0,
                             child: RichText(
@@ -165,14 +275,14 @@ class _StepsPageState extends State<StepsPage> {
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: '$currentSteps',
-                                    style: TextStyle(
+                                    text: '${_stepData.steps}',
+                                    style: const TextStyle(
                                       fontSize: 20,
                                       fontFamily: 'Jersey25',
                                       color: Colors.black,
                                     ),
                                   ),
-                                  TextSpan(
+                                  const TextSpan(
                                     text: ' steps',
                                     style: TextStyle(
                                       fontSize: 20,
@@ -187,17 +297,17 @@ class _StepsPageState extends State<StepsPage> {
                         ],
                       ),
                     ),
-                    // Character image
                     SizedBox(
                       height: 200,
                       child: Image.asset(
-                        'assets/widgets/images/running_tracker.png',
+                        _stepData.status == 'Walking'
+                            ? 'assets/widgets/images/running_tracker.png'
+                            : 'assets/widgets/images/running_tracker.png',
                         height: 200,
                         fit: BoxFit.fitHeight,
                       ),
                     ),
-                    // "YOU" label
-                    Text(
+                    const Text(
                       'You',
                       style: TextStyle(
                         fontSize: 40,
@@ -218,13 +328,14 @@ class _StepsPageState extends State<StepsPage> {
           ],
         ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: _toggleWalking,
+        backgroundColor: const Color(0xFFFF7F11),
+        child:
+        Icon(_stepData.isMoving ? Icons.pause : Icons.play_arrow), // Toggle icon
+      ),
       bottomNavigationBar: const CustomNavBar(currentIndex: 1),
     );
-  }
-
-  void updateSteps(int newSteps) {
-    setState(() {
-      currentSteps = newSteps;
-    });
   }
 }

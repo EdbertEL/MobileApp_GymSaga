@@ -16,13 +16,23 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with SingleTickerProviderStateMixin {
   // This list will store scheduled workouts
   final Map<String, List<Map<String, dynamic>>> _scheduledWorkouts = {};
 
   // Track the selected date for viewing workouts
   late String _selectedDateString;
   late DateTime _selectedDate;
+  
+  // Animation controller for TV frame color change
+  late AnimationController _colorAnimationController;
+  late Animation<Color?> _colorAnimation;
+  
+  // For scrolling text
+  final ScrollController _scrollController = ScrollController();
+  double _scrollPosition = 0.0;
+  final double _textWidth = 300.0; // Approximate width of the text
+  final double _frameWidth = 300.0; // Approximate width of the frame
 
   @override
   void initState() {
@@ -30,8 +40,57 @@ class _HomePageState extends State<HomePage> {
     // Set the initial selected date to today
     _selectedDate = DateTime.now();
     _selectedDateString = DateFormat('dd/MM/yyyy').format(_selectedDate);
+    
+    // Initialize the color animation controller
+    _colorAnimationController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 1), // Change color every second
+    );
+    
+    // Define the color animation
+    _colorAnimation = ColorTween(
+      begin: Colors.yellow,
+      end: Colors.blue,
+    ).animate(_colorAnimationController)
+      ..addListener(() {
+        setState(() {}); // Rebuild the widget when animation value changes
+      });
+    
+    // Make the animation repeat back and forth
+    _colorAnimationController.repeat(reverse: true);
+    
+    // Start a timer to update the scrolling text position
+    Future.delayed(Duration.zero, () {
+      _startScrollingText();
+    });
+    
     // Example data - in a real app, this would come from a database or shared preferences
     _loadScheduledWorkouts();
+  }
+  
+  void _startScrollingText() {
+    // Set up a ticker to update the scroll position
+    Future.doWhile(() async {
+      await Future.delayed(const Duration(milliseconds: 16)); // ~60fps
+      if (!mounted) return false;
+      
+      setState(() {
+        _scrollPosition -= 1.0; // Move text to the left
+        
+        // Reset the position when the text is completely off screen
+        if (_scrollPosition < -_textWidth) {
+          _scrollPosition = _frameWidth;
+        }
+      });
+      
+      return true;
+    });
+  }
+
+  @override
+  void dispose() {
+    _colorAnimationController.dispose();
+    super.dispose();
   }
 
   void _loadScheduledWorkouts() {
@@ -240,31 +299,106 @@ class _HomePageState extends State<HomePage> {
                   const SizedBox(height: 100),
 
                   // Daily Quest section with frame
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 20),
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Image.asset(
-                          'assets/widgets/background/quest_frame.png',
-                          width: double.infinity,
-                        ),
-                        const Positioned(
-                          top: 25,
-                          child: Text(
-                            'Daily Quest:',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xFF9C27B0),
-                              fontFamily: 'Jersey25',
+Padding(
+  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+  child: Stack(
+    alignment: Alignment.center,
+    children: [
+      // Frame image
+      Image.asset(
+        'assets/widgets/background/quest_frame.png',
+        width: double.infinity,
+      ),
+      // Add colorful background properly sized to fit inside the frame
+      Positioned(
+        // Position the colored background to fit inside the TV screen area
+        top: 18,  // Adjust these values based on your exact frame dimensions
+        left: 24,
+        right: 24,
+        bottom: 36,
+        child: Container(
+          decoration: BoxDecoration(
+            color: _colorAnimation.value, // Animated color background
+            borderRadius: BorderRadius.circular(1),
+          ),
+        ),
+      ),
+      const Positioned(
+        top: 25,
+        child: Text(
+          'Daily Quest:',
+          style: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF9C27B0),
+            fontFamily: 'Jersey25',
+            shadows: [
+              Shadow(
+                offset: Offset(1, 1),
+                blurRadius: 2,
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ),
+      // Container to clip the scrolling text
+      Positioned(
+        top: 100,
+        left: 24,
+        right: 24,
+        height: 30,
+        child: ClipRect(
+          child: Stack(
+            children: [
+              Positioned(
+                left: _scrollPosition,
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(
+                        text: 'Reach 2000 steps ',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: 'Jersey25',
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1, 1),
+                              blurRadius: 2,
+                              color: Colors.black,
                             ),
-                          ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                      TextSpan(
+                        text: '+15 xp',
+                        style: TextStyle(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF00BFFF), // Bright blue color
+                          fontFamily: 'Jersey25',
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1, 1),
+                              blurRadius: 2,
+                              color: Colors.black,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  ),
+),
 
                   // Horizontal scrollable calendar for April
                   Padding(

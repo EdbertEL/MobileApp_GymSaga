@@ -97,11 +97,12 @@ class _ExerciseTimerPageState extends State<ExerciseTimerPage> {
                         width: 40,
                         height: 40,
                         decoration: BoxDecoration(
-                          color: Colors.orange,
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child:
-                            const Icon(Icons.arrow_back, color: Colors.black),
+                        child: Image.asset(
+                          'assets/widgets/buttons/back_button.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     const Expanded(
@@ -191,11 +192,13 @@ class _ExerciseTimerPageState extends State<ExerciseTimerPage> {
           ),
         ),
         Container(
-          height: 60,
-          decoration: BoxDecoration(
-            color: const Color(0xFFFFE9B2),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.orange, width: 2),
+          height: 80, // sedikit lebih tinggi biar frame asset pas
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/widgets/background/frame.png'),
+              fit: BoxFit.fill,
+            ),
           ),
           child: Center(
             child: Text(

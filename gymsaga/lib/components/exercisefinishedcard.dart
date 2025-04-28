@@ -69,7 +69,7 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
               ),
             ),
 
-            // ✅ Container gerakan dengan red bar
+            //  Container dengan frame
             Positioned(
               top: 120,
               left: 20,
@@ -87,7 +87,7 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
               ),
             ),
 
-            // ✅ Rewards dan Complete button
+            //  Rewards dan Complete button
             Positioned(
               top: 500,
               left: 20,
@@ -106,9 +106,12 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
                   const SizedBox(height: 8),
                   Container(
                     decoration: BoxDecoration(
-                      color: const Color(0xFFFFE9B2),
+                      image: DecorationImage(
+                        image:
+                            AssetImage('assets/widgets/background/frame.png'),
+                        fit: BoxFit.fill,
+                      ),
                       borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.orange, width: 2),
                     ),
                     child: Column(
                       children: [
@@ -234,7 +237,7 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
       children: [
         Container(
           width: double.infinity,
-          height: 70, // ✅ ukuran container diperbesar
+          height: 70,
           decoration: BoxDecoration(
             color: Colors.brown[100]?.withOpacity(0.5),
             borderRadius: BorderRadius.circular(12),
@@ -251,11 +254,11 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
           ),
         ),
         Positioned(
-          top: 27, // ✅ Redbar diposisikan di tengah container (70px / 2 - 8px)
+          top: 27,
           left: 0,
           right: 0,
           child: SizedBox(
-            height: 16, // ✅ redbar tipis
+            height: 16,
             child: Image.asset(
               'assets/widgets/images/redbar.png',
               fit: BoxFit.fitWidth,

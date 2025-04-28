@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart'; // <--- Tambahin ini buat kalender custom
+import 'package:table_calendar/table_calendar.dart';
 import '../navbar.dart';
-import '../components/exercisecard.dart';
 import '../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
 import 'russiantwist.dart';
@@ -144,7 +143,7 @@ class _PlankPageState extends State<PlankPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExerciseCard(
+            buildExerciseCard(
               title: 'Plank – 60s x4',
               onTap: () {
                 setState(() {
@@ -153,11 +152,11 @@ class _PlankPageState extends State<PlankPage> {
               },
             ),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Russian Twist – 3 x 15 Reps'),
+            buildExerciseCard(title: 'Russian Twist – 3 x 15 Reps'),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Leg Raises – 3 x 12 Reps'),
+            buildExerciseCard(title: 'Leg Raises – 3 x 12 Reps'),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Mountain Climbers – 4 x 15 Reps'),
+            buildExerciseCard(title: 'Mountain Climbers – 4 x 15 Reps'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -171,9 +170,11 @@ class _PlankPageState extends State<PlankPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE9B2),
+                image: const DecorationImage(
+                  image: AssetImage('assets/widgets/background/frame.png'),
+                  fit: BoxFit.fill,
+                ),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange, width: 2),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -293,8 +294,9 @@ class _PlankPageState extends State<PlankPage> {
                 if (_dateController.text.isNotEmpty) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                        content: Text(
-                            "Workout scheduled for ${_dateController.text}!")),
+                      content: Text(
+                          "Workout scheduled for ${_dateController.text}!"),
+                    ),
                   );
                 }
               },
@@ -307,6 +309,43 @@ class _PlankPageState extends State<PlankPage> {
                     width: double.infinity,
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildExerciseCard({required String title, void Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assets/widgets/background/frame.png'),
+            fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Row(
+          children: [
+            Image.asset(
+              'assets/widgets/images/barbel.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Jersey25',
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],

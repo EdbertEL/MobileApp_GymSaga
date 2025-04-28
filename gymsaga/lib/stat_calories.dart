@@ -212,13 +212,12 @@ class StatCaloriesPage extends StatelessWidget {
                 padding: const EdgeInsets.all(16.0),
                 child: ListView(
                   children: [
-                    sectionTitle('Calories Burned'),
-                    sectionSubtitle('7-Days'),
-                    caloriesBarChart(days: true),
-                    sectionSubtitle('Months'),
-                    caloriesBarChart(),
-                    sectionSubtitle('Years'),
-                    yearBarChart(),
+                    caloriesBurnedTitle(),
+                    daysSection(),
+                    const SizedBox(height: 20.0),
+                    monthsSection(),
+                    const SizedBox(height: 20.0),
+                    yearsSection(),
                   ],
                 ),
               ),
@@ -229,15 +228,16 @@ class StatCaloriesPage extends StatelessWidget {
     );
   }
 
-  Widget sectionTitle(String text) {
+  Widget caloriesBurnedTitle() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 12.0),
       child: Center(
         child: Text(
-          text,
+          'Calories Burned',
           style: TextStyle(
             fontFamily: 'Jersey25',
-            fontSize: 18,
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
             color: Colors.brown[800],
           ),
         ),
@@ -245,106 +245,438 @@ class StatCaloriesPage extends StatelessWidget {
     );
   }
 
-  Widget sectionSubtitle(String text) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Text(
-        text,
-        style: TextStyle(
-          fontFamily: 'Jersey25',
-          fontSize: 12,
-          color: Colors.brown[600],
+  Widget daysSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '7-Days',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
         ),
-      ),
-    );
-  }
-
-  Widget caloriesBarChart({bool days = false}) {
-    return AspectRatio(
-      aspectRatio: 1.5,
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.spaceAround,
-          barGroups: List.generate(7, (i) {
-            final values = [600, 700, 850, 670, 620, 590, 710];
-            return BarChartGroupData(x: i, barRods: [
-              BarChartRodData(toY: values[i] / 1000, width: 18, color: Colors.deepOrangeAccent),
-            ]);
-          }),
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: false,
-            getDrawingHorizontalLine: (value) => FlLine(
-              color: const Color.fromARGB(255, 188, 170, 164),
-              dashArray: [5],
-              strokeWidth: 1,
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
             ),
           ),
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(
-              sideTitles: SideTitles(showTitles: true, reservedSize: 30, interval: 0.2)),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) {
-                  final labels = days
-                      ? ['28', '29', '30', '31', '1', '2', '3']
-                      : ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr'];
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 6.0),
-                    child: Text(
-                      labels[value.toInt() % labels.length],
-                      style: TextStyle(fontFamily: 'Jersey25', fontSize: 8),
-                    ),
-                  );
-                },
-              ),
-            ),
-          ),
-          borderData: FlBorderData(show: false),
-        ),
-      ),
-    );
-  }
-
-  Widget yearBarChart() {
-    final years = ['2023', '2024', '2025'];
-    final values = [320, 370, 280];
-    return AspectRatio(
-      aspectRatio: 1.4,
-      child: BarChart(
-        BarChartData(
-          alignment: BarChartAlignment.center,
-          barGroups: List.generate(3, (i) => BarChartGroupData(x: i, barRods: [
-            BarChartRodData(toY: values[i] / 100, width: 22, color: Colors.deepOrange),
-          ])),
-          gridData: FlGridData(
-            show: true,
-            drawVerticalLine: false,
-            getDrawingHorizontalLine: (value) => FlLine(
-              color: const Color.fromARGB(255, 188, 170, 164),
-              dashArray: [5],
-              strokeWidth: 1,
-            ),
-          ),
-          titlesData: FlTitlesData(
-            leftTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-            bottomTitles: AxisTitles(
-              sideTitles: SideTitles(
-                showTitles: true,
-                getTitlesWidget: (value, meta) => Padding(
-                  padding: const EdgeInsets.only(top: 6.0),
-                  child: Text(
-                    years[value.toInt()],
-                    style: TextStyle(fontFamily: 'Jersey25', fontSize: 8),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'kCal',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
                   ),
                 ),
               ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 1000,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getDaysBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 200,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0 || value == 1000 || value % 200 != 0) return SizedBox();
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                value.toInt().toString(),
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontFamily: 'Jersey25',
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30, // Increased to give more room
+                          getTitlesWidget: (value, meta) {
+                            final labels = ['28', '29', '30', '31', '1', '2', '3'];
+                            final months = ['Jan', 'Feb'];
+                            
+                            // Only show month for day 1
+                            String label = labels[value.toInt()];
+                            String? month = value.toInt() == 4 ? months[0] : null;
+                            
+                            return Column(
+                              mainAxisSize: MainAxisSize.min, // Use min size to avoid overflow
+                              children: [
+                                Text(
+                                  label,
+                                  style: TextStyle(
+                                    fontFamily: 'Jersey25', 
+                                    fontSize: 10,
+                                    color: Colors.brown[800],
+                                  ),
+                                ),
+                                if (month != null)
+                                  Text(
+                                    month,
+                                    style: TextStyle(
+                                      fontFamily: 'Jersey25', 
+                                      fontSize: 9,
+                                      color: Colors.brown[800],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget monthsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Months',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
             ),
           ),
-          borderData: FlBorderData(show: false),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'kCal in thousands (\'000)',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 100,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getMonthsBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 25,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            // Show values 0, 25, 50, 75, 100 to ensure all values are displayed
+                            if (value % 25 == 0 && value <= 100) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    color: Colors.brown,
+                                    fontFamily: 'Jersey25',
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            }
+                            return SizedBox();
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40, // Increased height for year labels
+                          getTitlesWidget: (value, meta) {
+                            final labels = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+                            final years = value.toInt() >= 3 && value.toInt() <= 5 ? '2025' : '2024';
+                            
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  labels[value.toInt()],
+                                  style: TextStyle(
+                                    fontFamily: 'Jersey25', 
+                                    fontSize: 10,
+                                    color: Colors.brown[800],
+                                  ),
+                                ),
+                                if (value.toInt() == 0 || value.toInt() == 3)
+                                  Text(
+                                    years,
+                                    style: TextStyle(
+                                      fontFamily: 'Jersey25', 
+                                      fontSize: 9,
+                                      color: Colors.brown[800],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
+    );
+  }
+
+  Widget yearsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Years',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'Workouts',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 400,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getYearsBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 50,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0 || value == 400 || value % 50 != 0) return SizedBox();
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                value.toInt().toString(),
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontFamily: 'Jersey25',
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 25, // Increased to give more room
+                          getTitlesWidget: (value, meta) {
+                            final years = ['2023', '2024', '2025'];
+                            return Text(
+                              years[value.toInt()],
+                              style: TextStyle(
+                                fontFamily: 'Jersey25', 
+                                fontSize: 10,
+                                color: Colors.brown[800],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<BarChartGroupData> _getDaysBarGroups() {
+    // Mengubah semua nilai menjadi 0 untuk semua batang
+    final values = [0, 0, 0, 0, 0, 0, 0]; // Semua nilai 0
+    return List.generate(7, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 22,
+            color: Colors.deepOrange,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  List<BarChartGroupData> _getMonthsBarGroups() {
+    // Mengubah semua nilai menjadi 0 untuk semua batang
+    final values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]; // Semua nilai 0
+    return List.generate(12, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 16,
+            color: Colors.deepOrange,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  List<BarChartGroupData> _getYearsBarGroups() {
+    // Mengubah semua nilai menjadi 0 untuk semua batang
+    final values = [0, 0, 0]; // Semua nilai 0
+    return List.generate(3, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 50,
+            color: Colors.deepOrange,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
     );
   }
 }

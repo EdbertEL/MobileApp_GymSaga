@@ -5,6 +5,7 @@ import 'workout_history.dart';
 import 'myweight.dart';
 import 'stat_calories.dart';
 import 'settings.dart';
+import 'achievement.dart'; // Added this import
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -88,7 +89,8 @@ class ProfilePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SettingsPage()),
+                    MaterialPageRoute(
+                        builder: (context) => const SettingsPage()),
                   );
                 },
                 child: Icon(
@@ -129,7 +131,8 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Flexible(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
                                 'Katie',
                                 style: const TextStyle(
@@ -167,7 +170,8 @@ class ProfilePage extends StatelessWidget {
                         children: const [
                           ProfileStat(label: 'Start Weight', value: '60.4 KG'),
                           ProfileStat(label: 'Goal', value: '50.0 KG'),
-                          ProfileStat(label: 'Daily Calories', value: '594 kcal'),
+                          ProfileStat(
+                              label: 'Daily Calories', value: '594 kcal'),
                         ],
                       ),
                     ),
@@ -208,8 +212,18 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                     ),
-                    const ProfileButton(
-                        label: 'Achievements', icon: Icons.emoji_events),
+                    ProfileButton(
+                      label: 'Achievements',
+                      icon: Icons.emoji_events,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AchievementScreen(),
+                          ),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 80), // Extra space for navbar
                   ],
                 ),

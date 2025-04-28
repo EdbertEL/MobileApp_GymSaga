@@ -63,22 +63,22 @@ class LateralRaisesPage extends StatelessWidget {
               ),
             ),
             Positioned(
-              top: 16,
+              top: 20,
               left: 16,
               child: GestureDetector(
                 onTap: () {
                   Navigator.of(context).pop();
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 28,
+                  child: Image.asset(
+                    'assets/widgets/buttons/back_button.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),

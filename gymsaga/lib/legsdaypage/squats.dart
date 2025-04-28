@@ -17,13 +17,14 @@ class SquatsPage extends StatefulWidget {
 class _SquatsPageState extends State<SquatsPage> {
   bool showExerciseDetail = false;
   final TextEditingController _dateController = TextEditingController();
+  DateTime _selectedDay = DateTime.now();
 
   Future<void> _selectDate(BuildContext context) async {
-    showDialog(
+    DateTime tempSelectedDay = _selectedDay;
+
+    await showDialog(
       context: context,
       builder: (context) {
-        DateTime selectedDay = DateTime.now();
-
         return Dialog(
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -45,14 +46,24 @@ class _SquatsPageState extends State<SquatsPage> {
                 TableCalendar(
                   firstDay: DateTime.now(),
                   lastDay: DateTime(2101),
-                  focusedDay: DateTime.now(),
+                  focusedDay: tempSelectedDay,
+                  selectedDayPredicate: (day) =>
+                      isSameDay(tempSelectedDay, day),
+                  onDaySelected: (selectedDay, focusedDay) {
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _dateController.text =
+                          DateFormat('dd/MM/yyyy').format(selectedDay);
+                    });
+                    Navigator.pop(context);
+                  },
                   calendarStyle: CalendarStyle(
-                    todayDecoration: BoxDecoration(
-                      color: const Color(0xFFFF9900),
+                    todayDecoration: const BoxDecoration(
+                      color: Color(0xFFFF9900),
                       shape: BoxShape.circle,
                     ),
-                    selectedDecoration: BoxDecoration(
-                      color: const Color(0xFFFF9900),
+                    selectedDecoration: const BoxDecoration(
+                      color: Color(0xFFFF9900),
                       shape: BoxShape.circle,
                     ),
                     todayTextStyle: const TextStyle(
@@ -94,17 +105,6 @@ class _SquatsPageState extends State<SquatsPage> {
                       color: Color(0xFFFF9900),
                     ),
                   ),
-                  onDaySelected: (selectedDayTemp, focusedDay) {
-                    setState(() {
-                      selectedDay = selectedDayTemp;
-                      _dateController.text =
-                          '${selectedDay.day}/${selectedDay.month}/${selectedDay.year}';
-                    });
-                    Navigator.pop(context);
-                  },
-                  selectedDayPredicate: (day) {
-                    return isSameDay(day, selectedDay);
-                  },
                 ),
               ],
             ),
@@ -170,7 +170,7 @@ class _SquatsPageState extends State<SquatsPage> {
               ),
             ),
             Positioned(
-              top: 16,
+              top: 20,
               left: 16,
               child: GestureDetector(
                 onTap: () {
@@ -183,15 +183,15 @@ class _SquatsPageState extends State<SquatsPage> {
                   }
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 28,
+                  child: Image.asset(
+                    'assets/widgets/buttons/back_button.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
@@ -207,7 +207,6 @@ class _SquatsPageState extends State<SquatsPage> {
                             'Keep your chest up and back straight\nGo deep to engage glutes and hamstrings\nAvoid letting knees go past toes',
                         reps: '3 x 15',
                         onStart: () {
-                          print('➡ Navigating to ExerciseTimerPage...');
                           Navigator.of(context).push(
                             MaterialPageRoute(
                               builder: (context) => ExerciseTimerPage(
@@ -240,7 +239,7 @@ class _SquatsPageState extends State<SquatsPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExerciseCard(
+            buildExerciseCard(
               title: 'Squats – 3 x 15 Reps',
               onTap: () {
                 setState(() {
@@ -249,9 +248,9 @@ class _SquatsPageState extends State<SquatsPage> {
               },
             ),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Lunges – 3 x 12 Reps'),
+            buildExerciseCard(title: 'Lunges – 3 x 12 Reps'),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Wall Sit – 60s x 2'),
+            buildExerciseCard(title: 'Wall Sit – 60s x 2'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -265,9 +264,11 @@ class _SquatsPageState extends State<SquatsPage> {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE9B2),
+                image: const DecorationImage(
+                  image: AssetImage('assets/widgets/background/frame.png'),
+                  fit: BoxFit.fill,
+                ),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange, width: 2),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -397,6 +398,43 @@ class _SquatsPageState extends State<SquatsPage> {
                     width: double.infinity,
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildExerciseCard({required String title, void Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assets/widgets/background/frame.png'),
+            fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Row(
+          children: [
+            Image.asset(
+              'assets/widgets/images/barbel.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 12),
+            Flexible(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontFamily: 'Jersey25',
+                  fontSize: 20,
+                  color: Colors.black,
+                ),
               ),
             ),
           ],

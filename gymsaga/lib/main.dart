@@ -6,6 +6,10 @@ import 'package:gymsaga/register.dart';
 import 'package:gymsaga/homepage.dart';
 import 'package:gymsaga/steps.dart';
 import 'package:gymsaga/workout.dart';
+import 'package:gymsaga/stat_calories.dart';
+import 'package:gymsaga/stat_weight.dart';
+import 'package:gymsaga/stat_steps.dart';
+import 'package:gymsaga/stat_workouts.dart';
 //import 'firebase_options.dart';
 
 void main() {
@@ -41,6 +45,11 @@ class MainApp extends StatelessWidget {
         '/profile': (context) => const ProfilePage(),
         '/steps': (context) => const StepsPage(),
         '/workout': (context) => const WorkoutPage(),
+
+        '/stat_calories': (context) => const StatCaloriesPage(),
+  '/stat_weight': (context) => const StatWeightPage(),
+  '/stat_steps': (context) => const StatStepsPage(),
+  '/stat_workouts': (context) => const StatWorkoutsPage(),
       },
       onGenerateRoute: (settings) {
         // Periksa apakah route harus tanpa animasi

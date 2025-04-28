@@ -6,8 +6,8 @@ class StatWorkoutsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3),
       body: Container(
+        // Use checkerboard pattern background
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage('assets/widgets/background/checkerboard.png'),
@@ -16,100 +16,200 @@ class StatWorkoutsPage extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Header
+            // Header with orange background
             Container(
-              color: const Color.fromARGB(255, 228, 205, 167),
-              padding: const EdgeInsets.only(top: 40, left: 16, right: 16, bottom: 16),
+              color: const Color.fromARGB(255, 228, 205, 167), // Light orange/beige background color
+              padding: const EdgeInsets.only(
+                top: 40.0,
+                left: 16.0,
+                right: 16.0,
+                bottom: 16.0,
+              ),
               child: Column(
                 children: [
+                  // Back button and title
                   Row(
                     children: [
+                      // Back button
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacementNamed(context, '/profile');
+                          Navigator.pop(context);
                         },
                         child: Image.asset(
                           'assets/widgets/buttons/back_button.png',
-                          width: 30,
-                          height: 30,
+                          width: 30.0,
+                          height: 30.0,
                         ),
                       ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        'STATISTICS',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Color.fromARGB(255, 32, 32, 32),
-                          letterSpacing: 1.0,
+                      
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            'STATISTICS',
+                            style: TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                              color: Color.fromARGB(255, 32, 32, 32), // Dark text color
+                              letterSpacing: 1.0,
+                            ),
+                          ),
                         ),
                       ),
+                      
+                      // Empty SizedBox for balance
+                      SizedBox(width: 30.0),
                     ],
                   ),
-                  // Navbar
+                  
+                  // Tab Bar - Custom implementation with image backgrounds
                   Container(
-                    margin: const EdgeInsets.only(top: 16),
-                    height: 40,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/widgets/background/stat_navbar.png'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                    margin: EdgeInsets.only(top: 10.0),
+                    height: 40.0,
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildNavButton(context, 'CALORIES'),
-                        _buildNavButton(context, 'WEIGHT'),
-                        _buildNavButton(context, 'STEPS'),
-                        _buildNavButton(context, 'WORKOUTS', isActive: true),
+                        // CALORIES tab
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/stat_calories');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/widgets/background/stat_navbar.png'),
+                                  fit: BoxFit.fill,
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.grey.withOpacity(0.7), 
+                                    BlendMode.modulate,
+                                  ),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'CALORIES',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        // WEIGHT tab
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/stat_weight');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/widgets/background/stat_navbar.png'),
+                                  fit: BoxFit.fill,
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.grey.withOpacity(0.7), 
+                                    BlendMode.modulate,
+                                  ),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'WEIGHT',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        // STEPS tab
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.pushReplacementNamed(context, '/stat_steps');
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/widgets/background/stat_navbar.png'),
+                                  fit: BoxFit.fill,
+                                  colorFilter: ColorFilter.mode(
+                                    Colors.grey.withOpacity(0.7), 
+                                    BlendMode.modulate,
+                                  ),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'STEPS',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.brown,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        
+                        // WORKOUTS tab - selected by default
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              // Already on this page
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/widgets/background/stat_navbar.png'),
+                                  fit: BoxFit.fill,
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'WORKOUTS',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 14,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  Image.asset(
-                    'assets/widgets/background/garis.png',
+                  const SizedBox(height: 8.0),
+                  Container(
                     width: double.infinity,
-                    height: 8,
-                    fit: BoxFit.fitWidth,
+                    height: 20.0,
+                    child: Image.asset(
+                      'assets/widgets/background/garis.png',
+                      fit: BoxFit.fill,
+                      filterQuality: FilterQuality.none,
+                    ),
                   ),
                 ],
               ),
             ),
-            // Dummy Content
+
+            // Content area for workouts statistics
             const Expanded(
               child: Center(
                 child: Text('Workouts Statistics Page (Coming Soon)', style: TextStyle(fontSize: 18)),
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildNavButton(BuildContext context, String text, {bool isActive = false}) {
-    return GestureDetector(
-      onTap: () {
-        if (text == 'CALORIES') {
-          Navigator.pushReplacementNamed(context, '/stat_calories');
-        } else if (text == 'WEIGHT') {
-          Navigator.pushReplacementNamed(context, '/stat_weight');
-        } else if (text == 'STEPS') {
-          Navigator.pushReplacementNamed(context, '/stat_steps');
-        }
-        // Tidak navigasi kalau WORKOUTS, karena sudah aktif
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        alignment: Alignment.center,
-        child: Text(
-          text,
-          style: TextStyle(
-            color: isActive ? Colors.black : Colors.black.withOpacity(0.6),
-            fontWeight: isActive ? FontWeight.bold : FontWeight.normal,
-            fontSize: 14,
-          ),
         ),
       ),
     );

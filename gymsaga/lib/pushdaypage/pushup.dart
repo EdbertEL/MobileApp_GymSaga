@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import '../navbar.dart';
-import '../components/exercisecard.dart';
 import '../components/exercisedetailcard.dart';
 import '../components/exercisetimer.dart';
 import 'pikepushup.dart';
@@ -121,15 +120,12 @@ class _PushDayPageState extends State<PushDayPage> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Background Checkerboard
             Positioned.fill(
               child: Image.asset(
                 'assets/widgets/background/checkerboard.png',
                 fit: BoxFit.cover,
               ),
             ),
-
-            // Dekorasi Atas
             Positioned(
               top: 100,
               left: 0,
@@ -142,8 +138,6 @@ class _PushDayPageState extends State<PushDayPage> {
               right: 0,
               child: Image.asset('assets/widgets/background/header.png'),
             ),
-
-            // Judul Push Day
             Positioned(
               top: 24,
               left: 0,
@@ -174,10 +168,8 @@ class _PushDayPageState extends State<PushDayPage> {
                 ),
               ),
             ),
-
-            // Tombol Back
             Positioned(
-              top: 16,
+              top: 20,
               left: 16,
               child: GestureDetector(
                 onTap: () {
@@ -190,21 +182,19 @@ class _PushDayPageState extends State<PushDayPage> {
                   }
                 },
                 child: Container(
-                  padding: const EdgeInsets.all(8),
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(20),
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(24),
                   ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                    size: 28,
+                  child: Image.asset(
+                    'assets/widgets/buttons/back_button.png',
+                    fit: BoxFit.contain,
                   ),
                 ),
               ),
             ),
-
-            // Konten Utama
             Positioned.fill(
               top: 120,
               child: showExerciseDetail
@@ -249,18 +239,18 @@ class _PushDayPageState extends State<PushDayPage> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            ExerciseCard(
-              title: 'Pushups – 3 x 12 Reps',
+            buildFrameCard(
               onTap: () {
                 setState(() {
                   showExerciseDetail = true;
                 });
               },
+              title: 'Pushups – 3 x 12 Reps',
             ),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Pike Pushups – 3 x 12 Reps'),
+            buildFrameCard(title: 'Pike Pushups – 3 x 12 Reps'),
             const SizedBox(height: 10),
-            const ExerciseCard(title: 'Dips – 2 x 12 Reps'),
+            buildFrameCard(title: 'Dips – 2 x 12 Reps'),
             const SizedBox(height: 24),
             const Text(
               'Rewards',
@@ -272,12 +262,14 @@ class _PushDayPageState extends State<PushDayPage> {
             ),
             const SizedBox(height: 12),
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               decoration: BoxDecoration(
-                color: const Color(0xFFFFE9B2),
+                image: const DecorationImage(
+                  image: AssetImage('assets/widgets/background/frame.png'),
+                  fit: BoxFit.fill,
+                ),
                 borderRadius: BorderRadius.circular(8),
-                border: Border.all(color: Colors.orange, width: 2),
               ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: const [
@@ -301,6 +293,7 @@ class _PushDayPageState extends State<PushDayPage> {
               ),
             ),
             const SizedBox(height: 20),
+            // Tombol Start
             Center(
               child: GestureDetector(
                 onTap: () {
@@ -406,6 +399,42 @@ class _PushDayPageState extends State<PushDayPage> {
                     width: double.infinity,
                   ),
                 ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildFrameCard({String title = '', void Function()? onTap}) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          image: const DecorationImage(
+            image: AssetImage('assets/widgets/background/frame.png'),
+            fit: BoxFit.fill,
+          ),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/widgets/images/barbel.png',
+              width: 24,
+              height: 24,
+            ),
+            const SizedBox(width: 12),
+            Text(
+              title,
+              style: const TextStyle(
+                fontFamily: 'Jersey25',
+                fontSize: 20,
+                color: Colors.black,
               ),
             ),
           ],

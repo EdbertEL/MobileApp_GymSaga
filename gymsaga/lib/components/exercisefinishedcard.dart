@@ -61,11 +61,22 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
               ),
             ),
             Positioned(
-              top: 16,
-              left: 8,
+              top: 20,
+              left: 16,
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
-                child: const Icon(Icons.arrow_back, color: Colors.white),
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.transparent,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Image.asset(
+                    'assets/widgets/buttons/back_button.png',
+                    fit: BoxFit.contain,
+                  ),
+                ),
               ),
             ),
 
@@ -239,9 +250,11 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
           width: double.infinity,
           height: 70,
           decoration: BoxDecoration(
-            color: Colors.brown[100]?.withOpacity(0.5),
-            borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.brown, width: 2),
+            image: const DecorationImage(
+              image: AssetImage('assets/widgets/background/frame.png'),
+              fit: BoxFit.fill,
+            ),
+            borderRadius: BorderRadius.circular(8),
           ),
           alignment: Alignment.center,
           child: Text(

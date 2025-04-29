@@ -87,7 +87,16 @@ class _ExerciseTimerPageState extends State<ExerciseTimerPage> {
               right: 0,
               child: Container(
                 height: 80,
-                color: const Color(0xFFFFE9B2),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFFFE9B2),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: Offset(0, 3),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
                 child: Row(
                   children: [
                     GestureDetector(

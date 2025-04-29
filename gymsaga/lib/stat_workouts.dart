@@ -613,7 +613,7 @@ class StatWorkoutsPage extends StatelessWidget {
 
   List<BarChartGroupData> _getDaysBarGroups() {
     // Using the workout data from original implementation
-    final values = [0, 0, 0, 0, 0, 0, 0];
+    final values = [2, 0, 0, 0, 0, 0, 0];
     return List.generate(7, (i) => 
       BarChartGroupData(
         x: i,

@@ -215,25 +215,8 @@ class _StatWeightPageState extends State<StatWeightPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Title with shadow for weight tracking
-                    Container(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        'Weight Gain/Loss',
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
-                          shadows: [
-                            Shadow(
-                              offset: Offset(1.0, 1.0),
-                              blurRadius: 2.0,
-                              color: Colors.white.withOpacity(0.7),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                    // Title with jersey25 font for weight tracking - UPDATED to match stat_steps.dart
+                    weightGainLossTitle(),
                     
                     // 7-Day Chart
                     Container(
@@ -246,9 +229,10 @@ class _StatWeightPageState extends State<StatWeightPage> {
                             child: Text(
                               '7-Days',
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontFamily: 'Jersey25',
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Colors.brown[800],
                               ),
                             ),
                           ),
@@ -319,9 +303,10 @@ class _StatWeightPageState extends State<StatWeightPage> {
                             child: Text(
                               'Months',
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontFamily: 'Jersey25',
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Colors.brown[800],
                               ),
                             ),
                           ),
@@ -397,9 +382,10 @@ class _StatWeightPageState extends State<StatWeightPage> {
                             child: Text(
                               'Years',
                               style: TextStyle(
-                                fontSize: 16.0,
+                                fontFamily: 'Jersey25',
+                                fontSize: 16,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: Colors.brown[800],
                               ),
                             ),
                           ),
@@ -459,6 +445,24 @@ class _StatWeightPageState extends State<StatWeightPage> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  // NEW FUNCTION to match the statStepsTitle() in stat_steps.dart
+  Widget weightGainLossTitle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Center(
+        child: Text(
+          'Weight Gain/Loss',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
         ),
       ),
     );

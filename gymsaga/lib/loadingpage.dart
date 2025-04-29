@@ -1,18 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:loading_indicator/loading_indicator.dart';
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: LoadingScreen(),
-    );
-  }
-}
+import 'homepage.dart'; // Import HomePage
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -31,7 +20,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
   @override
   void initState() {
     super.initState();
-
     // Timer untuk animasi dot loading
     _dotTimer = Timer.periodic(const Duration(milliseconds: 500), (timer) {
       setState(() {
@@ -46,7 +34,15 @@ class _LoadingScreenState extends State<LoadingScreen> {
         showComplete = true;
       });
 
-      // selesai loading
+      // selesai loading, navigasi ke HomePage setelah 3 detik
+      Future.delayed(const Duration(seconds: 3), () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const HomePage()),
+        );
+      });
+
+      // Batalkan timer
       _dotTimer?.cancel();
     });
   }
@@ -98,7 +94,6 @@ class _LoadingScreenState extends State<LoadingScreen> {
                   pathBackgroundColor: Colors.transparent,
                 ),
               ),
-
             //  "Loading Complete"
             const SizedBox(height: 20),
             AnimatedOpacity(

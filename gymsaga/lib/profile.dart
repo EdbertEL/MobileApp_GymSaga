@@ -5,10 +5,45 @@ import 'workout_history.dart';
 import 'myweight.dart';
 import 'stat_calories.dart';
 import 'settings.dart';
-import 'achievement.dart'; // Added this import
 
-class ProfilePage extends StatelessWidget {
+class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
+
+  @override
+  State<ProfilePage> createState() => _ProfilePageState();
+}
+
+class _ProfilePageState extends State<ProfilePage> {
+  // These variables now track the state that can be updated
+  String name = 'Katie';
+  String goal = '50.0 KG';
+  String startingWeight = '60.4 KG';
+  String avatarPath = 'assets/widgets/images/female_profile.png';
+  String dailyCalories = '594 kcal';
+
+  Future<void> _openEditProfile() async {
+    // Navigate to EditProfilePage and await results
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditProfilePage(
+          initialName: name,
+          initialGoal: goal,
+          initialAvatarPath: avatarPath,
+          startingWeight: startingWeight,
+        ),
+      ),
+    );
+
+    // Update state if we got results back
+    if (result != null && result is ProfileData) {
+      setState(() {
+        name = result.name;
+        goal = result.goal;
+        avatarPath = result.avatarPath;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -17,14 +52,6 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
-            // Background checkerboard
-            Positioned.fill(
-              child: Image.asset(
-                'assets/widgets/background/checkerboard.png',
-                fit: BoxFit.cover,
-              ),
-            ),
-
             // Decor overlay right under header
             Positioned(
               top: 80, // adjust based on height of header.png
@@ -89,7 +116,7 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-// Gear Icon on the right
+            // Gear Icon on the right
             Positioned(
               top: 32, // same vertical as text for alignment
               right: 16,
@@ -130,17 +157,16 @@ class ProfilePage extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          const CircleAvatar(
+                          // Updated Avatar - now using the state variable
+                          CircleAvatar(
                             radius: 32,
-                            backgroundImage: AssetImage(
-                              'assets/widgets/images/female_profile.png',
-                            ),
+                            backgroundImage: AssetImage(avatarPath),
                           ),
                           Flexible(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
-                                'Katie',
+                                name, // Now using the state variable
                                 style: const TextStyle(
                                   fontSize: 42,
                                   fontFamily: 'Jersey25',
@@ -151,14 +177,7 @@ class ProfilePage extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => const EditProfilePage(),
-                                ),
-                              );
-                            },
+                            onTap: _openEditProfile, // Updated to use our new method
                             child: Image.asset(
                               'assets/widgets/buttons/edit_button.png',
                               width: 28,
@@ -173,10 +192,10 @@ class ProfilePage extends StatelessWidget {
                       padding: const EdgeInsets.symmetric(horizontal: 16.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: const [
-                          ProfileStat(label: 'Start Weight', value: '60.4 KG'),
-                          ProfileStat(label: 'Goal', value: '50.0 KG'),
-                          ProfileStat(label: 'Daily Calories', value: '594 kcal'),
+                        children: [
+                          ProfileStat(label: 'Start Weight', value: startingWeight),
+                          ProfileStat(label: 'Goal', value: goal), // Now using state variable
+                          ProfileStat(label: 'Daily Calories', value: dailyCalories),
                         ],
                       ),
                     ),
@@ -217,18 +236,8 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                     ),
-                    ProfileButton(
-                      label: 'Achievements',
-                      icon: Icons.emoji_events,
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const AchievementScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                    const ProfileButton(
+                        label: 'Achievements', icon: Icons.emoji_events),
                     const SizedBox(height: 80), // Extra space for navbar
                   ],
                 ),

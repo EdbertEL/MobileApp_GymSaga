@@ -1,8 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+// Define a class to hold profile data for easy passing between screens
+class ProfileData {
+  final String name;
+  final String goal;
+  final String avatarPath;
+
+  ProfileData({
+    required this.name,
+    required this.goal,
+    required this.avatarPath,
+  });
+}
+
 class EditProfilePage extends StatefulWidget {
-  const EditProfilePage({super.key});
+  final String initialName;
+  final String initialGoal;
+  final String initialAvatarPath;
+  final String startingWeight;
+
+  const EditProfilePage({
+    super.key,
+    required this.initialName,
+    required this.initialGoal,
+    required this.initialAvatarPath,
+    required this.startingWeight,
+  });
 
   @override
   State<EditProfilePage> createState() => _EditProfilePageState();
@@ -11,12 +35,12 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   bool isEditingName = false;
   bool isEditingGoal = false;
-  bool isEditingAvatar = false; // NEW STATE
+  bool isEditingAvatar = false;
 
-  String name = 'Katie';
-  String goal = '50.00';
-  final String startingWeight = '60.4 kg';
-  String avatarPath = 'assets/widgets/images/female_profile.png'; // NEW AVATAR PATH
+  late String name;
+  late String goal;
+  late String avatarPath;
+  late String startingWeight;
 
   final nameController = TextEditingController();
   final goalController = TextEditingController();
@@ -24,6 +48,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   void initState() {
     super.initState();
+    // Initialize with values passed from ProfilePage
+    name = widget.initialName;
+    goal = widget.initialGoal;
+    avatarPath = widget.initialAvatarPath;
+    startingWeight = widget.startingWeight;
+
     nameController.text = name;
     goalController.text = goal;
   }
@@ -67,6 +97,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 setState(() {
                   avatarPath = 'assets/widgets/images/male_profile.png';
                   isEditingAvatar = false;
+                  // Save changes when selecting avatar
+                  saveChanges();
                 });
               },
               child: CircleAvatar(
@@ -86,6 +118,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 setState(() {
                   avatarPath = 'assets/widgets/images/female_profile.png';
                   isEditingAvatar = false;
+                  // Save changes when selecting avatar
+                  saveChanges();
                 });
               },
               child: CircleAvatar(
@@ -99,7 +133,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
             const SizedBox(width: 16),
 
-// Camera button
+            // Camera button
             GestureDetector(
               onTap: pickImageFromGallery, // your gallery picker function
               child: CircleAvatar(
@@ -139,6 +173,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       setState(() {
         avatarPath = image.path;
         isEditingAvatar = false; // Close after picking
+        // Save changes when selecting photo from gallery
+        saveChanges();
       });
     }
   }
@@ -182,10 +218,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           name = controller.text;
                           isEditingName = false;
                           isEditingAvatar = false;
+                          // Save changes automatically when confirming
+                          saveChanges();
                         } else if (label == 'Weigh Goal') {
                           goal = controller.text;
                           isEditingGoal = false;
                           isEditingAvatar = false;
+                          // Save changes automatically when confirming
+                          saveChanges();
                         }
                       });
                     } else {
@@ -242,126 +282,149 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  // Function to save changes and return to ProfilePage
+  void saveChanges() {
+    // Return updated profile data to ProfilePage
+    final updatedData = ProfileData(
+      name: name,
+      goal: goal,
+      avatarPath: avatarPath,
+    );
+    Navigator.pop(context, updatedData);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SafeArea(
+      body: SafeArea(
         child: Container(
-        decoration: const BoxDecoration(
-        image: DecorationImage(
-        image: AssetImage('assets/widgets/background/checkerboard.png'), // << Your checkerboard
-    fit: BoxFit.cover, // or BoxFit.fill, depending how you want it
-    ),
-    ),
-    child: Column(
-    children: [            // Header
-            Container(
-              height: 100,
-              decoration: BoxDecoration(
-                color: const Color(0xFFF7E4C3),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    offset: const Offset(0, 3),
-                    blurRadius: 4,
-                  ),
-                ],
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    left: 16,
-                    top: 0,
-                    bottom: 0,
-                    child: Center(
-                      child: GestureDetector(
-                        onTap: () => Navigator.pop(context),
-                        child: Image.asset(
-                          'assets/widgets/buttons/back_button.png',
-                          width: 48,
-                          height: 48,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/widgets/background/checkerboard.png'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: Column(
+            children: [
+              // Header
+              Container(
+                height: 100,
+                decoration: BoxDecoration(
+                  color: const Color(0xFFF7E4C3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      offset: const Offset(0, 3),
+                      blurRadius: 4,
+                    ),
+                  ],
+                ),
+                child: Stack(
+                  children: [
+                    Positioned(
+                      left: 16,
+                      top: 0,
+                      bottom: 0,
+                      child: Center(
+                        child: GestureDetector(
+                          onTap: () {
+                            // Return current data when using back button
+                            final updatedData = ProfileData(
+                              name: name,
+                              goal: goal,
+                              avatarPath: avatarPath,
+                            );
+                            Navigator.pop(context, updatedData);
+                          },
+                          child: Image.asset(
+                            'assets/widgets/buttons/back_button.png',
+                            width: 48,
+                            height: 48,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  Center(
-                    child: Stack(
-                      children: [
-                        Text(
-                          'EDIT PROFILE',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'Jersey25',
-                            foreground: Paint()
-                              ..style = PaintingStyle.stroke
-                              ..strokeWidth = 3
-                              ..color = Colors.black,
+                    Center(
+                      child: Stack(
+                        children: [
+                          Text(
+                            'EDIT PROFILE',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'Jersey25',
+                              foreground: Paint()
+                                ..style = PaintingStyle.stroke
+                                ..strokeWidth = 3
+                                ..color = Colors.black,
+                            ),
                           ),
-                        ),
-                        const Text(
-                          'EDIT PROFILE',
-                          style: TextStyle(
-                            fontSize: 32,
-                            fontFamily: 'Jersey25',
-                            color: Colors.white,
-                            shadows: [
-                              Shadow(
-                                offset: Offset(0, 5),
-                                blurRadius: 0,
-                                color: Colors.black54,
-                              ),
-                            ],
+                          const Text(
+                            'EDIT PROFILE',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontFamily: 'Jersey25',
+                              color: Colors.white,
+                              shadows: [
+                                Shadow(
+                                  offset: Offset(0, 5),
+                                  blurRadius: 0,
+                                  color: Colors.black54,
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
 
-            const SizedBox(height: 16),
+              const SizedBox(height: 16),
 
-            // Avatar Area
-            buildAvatarArea(),
+              // Avatar Area
+              buildAvatarArea(),
 
-            const SizedBox(height: 24),
+              const SizedBox(height: 24),
 
-            // Editable Name Field
-            buildEditableField(
-              label: 'Name',
-              isEditing: isEditingName,
-              controller: nameController,
-              onToggle: () {
-                setState(() {
-                  isEditingName = true;
-                });
-              },
-            ),
+              // Editable Name Field
+              buildEditableField(
+                label: 'Name',
+                isEditing: isEditingName,
+                controller: nameController,
+                onToggle: () {
+                  setState(() {
+                    isEditingName = true;
+                  });
+                },
+              ),
 
-            // Non-editable Starting Weight
-            buildEditableField(
-              label: 'Starting Weight',
-              isEditing: false,
-              controller: TextEditingController(text: startingWeight),
-              onToggle: () {},
-              enabled: false,
-            ),
+              // Non-editable Starting Weight
+              buildEditableField(
+                label: 'Starting Weight',
+                isEditing: false,
+                controller: TextEditingController(text: startingWeight),
+                onToggle: () {},
+                enabled: false,
+              ),
 
-            // Editable Goal Field
-            buildEditableField(
-              label: 'Weigh Goal',
-              isEditing: isEditingGoal,
-              controller: goalController,
-              onToggle: () {
-                setState(() {
-                  isEditingGoal = true;
-                });
-              },
-            ),
-          ],
+              // Editable Goal Field
+              buildEditableField(
+                label: 'Weigh Goal',
+                isEditing: isEditingGoal,
+                controller: goalController,
+                onToggle: () {
+                  setState(() {
+                    isEditingGoal = true;
+                  });
+                },
+              ),
+
+              // We no longer need the Save Button here
+            ],
+          ),
         ),
-      ),),
+      ),
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'login.dart';
+import 'homepage.dart';
 
 class FinishSettingUp extends StatelessWidget {
   const FinishSettingUp({Key? key}) : super(key: key);
@@ -56,7 +56,7 @@ class FinishSettingUp extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => const LoginPage()),
+                              builder: (context) => const HomePage()),
                         );
                       },
                       child: Container(

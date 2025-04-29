@@ -148,8 +148,9 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
     final totalDays = daysFromPreviousMonth + daysInMonth;
     final rowCount = (totalDays / 7).ceil();
 
-    // Workout yang hanya muncul di 23 April 2025
-    final Map<DateTime, String> workoutData = {};
+    // Ubah dari Map<DateTime, String> menjadi Map<DateTime, List<Map<String, dynamic>>>
+    // untuk menyimpan semua workout pada tanggal yang sama
+    final Map<DateTime, List<Map<String, dynamic>>> workoutData = {};
 
     for (var workout in completedWorkouts) {
       try {
@@ -177,7 +178,16 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
           date = DateTime.parse(dateStr);
         }
 
-        workoutData[date] = workout['workoutName'];
+        // Normalize the date to remove time component
+        date = DateTime(date.year, date.month, date.day);
+
+        // Initialize list if it doesn't exist
+        if (!workoutData.containsKey(date)) {
+          workoutData[date] = [];
+        }
+        
+        // Add workout to the list for this date
+        workoutData[date]!.add(workout);
       } catch (e) {
         print('Error parsing date for workout: ${workout['workoutName']}');
         print('Date string: ${workout['date']}');
@@ -245,7 +255,8 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
                   _selectedMonth.year, _selectedMonth.month, displayDay);
               bool hasWorkout =
                   isCurrentMonth && workoutData.containsKey(thisDay);
-              String workoutTitle = hasWorkout ? workoutData[thisDay]! : '';
+              List<Map<String, dynamic>> workouts = 
+                  hasWorkout ? workoutData[thisDay]! : [];
 
               return Expanded(
                 child: Container(
@@ -277,7 +288,7 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
                               showDialog(
                                 context: context,
                                 builder: (BuildContext context) {
-                                  return _buildWorkoutDialog(workoutTitle);
+                                  return _buildWorkoutDialog(workouts);
                                 },
                               );
                             },
@@ -298,113 +309,117 @@ class _WorkoutHistoryPageState extends State<WorkoutHistoryPage> {
     );
   }
 
-// Replace the _buildWorkoutDialog method in WorkoutHistoryPage class
-
-  Widget _buildWorkoutDialog(String workoutTitle) {
-  // Find the workout data for this date
-  Map<String, dynamic>? workoutData;
-
-  for (var workout in completedWorkouts) {
-    if (workout['workoutName'] == workoutTitle) {
-      workoutData = workout;
-      break;
+  Widget _buildWorkoutDialog(List<Map<String, dynamic>> workouts) {
+    if (workouts.isEmpty) {
+      return Dialog(
+        backgroundColor: const Color(0xFFFFE0A3),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+          side: const BorderSide(color: Colors.brown, width: 3),
+        ),
+        child: const Padding(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Workout Details",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  shadows: [
+                    Shadow(
+                        offset: Offset(1.5, 1.5),
+                        blurRadius: 1,
+                        color: Colors.black38)
+                  ],
+                ),
+              ),
+              SizedBox(height: 16),
+              Text("No details available for this workout"),
+              SizedBox(height: 16),
+            ],
+          ),
+        ),
+      );
     }
-  }
 
-  // If no workout data found, show a basic dialog
-  if (workoutData == null) {
     return Dialog(
       backgroundColor: const Color(0xFFFFE0A3),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
         side: const BorderSide(color: Colors.brown, width: 3),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              workoutTitle,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                shadows: [
-                  Shadow(
-                      offset: Offset(1.5, 1.5),
-                      blurRadius: 1,
-                      color: Colors.black38)
-                ],
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: const Text(
+                  "Completed Workouts",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    shadows: [
+                      Shadow(
+                          offset: Offset(1.5, 1.5),
+                          blurRadius: 1,
+                          color: Colors.black38)
+                    ],
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(height: 16),
-            const Text("No details available for this workout"),
-            const SizedBox(height: 16),
-          ],
+              const SizedBox(height: 16),
+              
+              // Loop through all workouts for this date
+              for (int i = 0; i < workouts.length; i++) ...[
+                if (i > 0) const Divider(thickness: 2, color: Colors.brown),
+                
+                Text(
+                  workouts[i]['workoutName'] ?? 'Unnamed Workout',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  'Exercises:',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                
+                // Display exercises for this workout
+                if (workouts[i].containsKey('exercises') && 
+                    workouts[i]['exercises'] is List && 
+                    (workouts[i]['exercises'] as List).isNotEmpty)
+                  ...List<Map<String, dynamic>>.from(workouts[i]['exercises'])
+                      .map((exercise) => Padding(
+                            padding: const EdgeInsets.only(bottom: 6),
+                            child: Text(
+                              '• ${exercise['exerciseName'] ?? 'Unnamed Exercise'}\n'
+                              '  Sets ${exercise['sets'] ?? 'N/A'} | Reps ${exercise['reps'] ?? 'N/A'}\n'
+                              '  Active Time: ${exercise['activityTime'] ?? 'N/A'} | Rest Time: ${exercise['restTime'] ?? 'N/A'}',
+                            ),
+                          ))
+                      .toList()
+                else
+                  const Text('No exercises available for this workout'),
+                
+                const SizedBox(height: 12),
+              ],
+              
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  // Get exercises from the workout data
-  List<Map<String, dynamic>> exercises =
-      List<Map<String, dynamic>>.from(workoutData['exercises'] ?? []);
-
-  return Dialog(
-    backgroundColor: const Color(0xFFFFE0A3),
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.circular(12),
-      side: const BorderSide(color: Colors.brown, width: 3),
-    ),
-    child: Padding(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              workoutTitle,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-                shadows: [
-                  Shadow(
-                      offset: Offset(1.5, 1.5),
-                      blurRadius: 1,
-                      color: Colors.black38)
-                ],
-              ),
-            ),
-          ),
-          const SizedBox(height: 16),
-          const Text(
-            'Exercises:',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 8),
-
-          // Display actual exercises from the workout
-          if (exercises.isNotEmpty)
-            ...exercises
-                .map((exercise) => Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Text(
-                        '• ${exercise['exerciseName']}\n'
-                        '  Sets ${exercise['sets']} | Reps ${exercise['reps']}\n'
-                        '  Active Time: ${exercise['activityTime']} | Rest Time: ${exercise['restTime']}',
-                      ),
-                    ))
-                .toList()
-          else
-            const Text('No exercises available'),
-
-          const SizedBox(height: 16),
-        ],
-      ),
-    ),
-  );
-}}
+}

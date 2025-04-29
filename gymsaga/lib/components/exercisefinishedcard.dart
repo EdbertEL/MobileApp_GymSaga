@@ -1,10 +1,18 @@
 import 'package:flutter/material.dart';
 import '../navbar.dart';
+import '../workout_data.dart'; // Add this import for completedWorkouts
 
 class ExerciseFinishedCard extends StatefulWidget {
   final VoidCallback onComplete;
+  final String workoutName; // Add workout name parameter
+  final List<Map<String, dynamic>> exercises; // Add exercises parameter
 
-  const ExerciseFinishedCard({super.key, required this.onComplete});
+  const ExerciseFinishedCard({
+    super.key, 
+    required this.onComplete,
+    this.workoutName = "Daily Workout", // Default name if not provided
+    this.exercises = const [], // Default empty list if not provided
+  });
 
   @override
   State<ExerciseFinishedCard> createState() => _ExerciseFinishedCardState();
@@ -12,6 +20,52 @@ class ExerciseFinishedCard extends StatefulWidget {
 
 class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
   bool isExpanded = false;
+  final int totalXP = 120; // You can make this dynamic if needed
+  final int totalKCAL = 200; // You can make this dynamic if needed
+  
+  // List to store exercise data from the exercise boxes
+  late List<Map<String, dynamic>> exercisesList;
+  
+  @override
+  void initState() {
+    super.initState();
+    
+    // If no exercises are provided, create them from the exercise boxes
+    if (widget.exercises.isEmpty) {
+      exercisesList = [
+        {
+          'exerciseName': 'Pushups',
+          'sets': '3',
+          'reps': '10-20',
+          'activityTime': '45s',
+          'restTime': '30s',
+        },
+        {
+          'exerciseName': 'Pike Pushups',
+          'sets': '3',
+          'reps': '10-12',
+          'activityTime': '30s',
+          'restTime': '30s',
+        },
+        {
+          'exerciseName': 'Pike Pushups',
+          'sets': '3',
+          'reps': '10-12',
+          'activityTime': '30s',
+          'restTime': '30s',
+        },
+        {
+          'exerciseName': 'Dips',
+          'sets': '3',
+          'reps': '10-15',
+          'activityTime': '40s',
+          'restTime': '30s',
+        },
+      ];
+    } else {
+      exercisesList = widget.exercises;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -87,13 +141,14 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
               right: 20,
               child: Column(
                 children: [
-                  buildFinishedExerciseBox("Pushups – 3 x 10–20 Reps"),
-                  const SizedBox(height: 12),
-                  buildFinishedExerciseBox("Pike Pushups – 3 x 10–12 Reps"),
-                  const SizedBox(height: 12),
-                  buildFinishedExerciseBox("Pike Pushups – 3 x 10–12 Reps"),
-                  const SizedBox(height: 12),
-                  buildFinishedExerciseBox("Dips – 3 x 10–15 Reps"),
+                  ...exercisesList.map((exercise) => 
+                    Column(
+                      children: [
+                        buildFinishedExerciseBox("${exercise['exerciseName']} – ${exercise['sets']} x ${exercise['reps']} Reps"),
+                        const SizedBox(height: 12),
+                      ],
+                    )
+                  ).toList(),
                 ],
               ),
             ),
@@ -135,19 +190,19 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: const [
+                                children: [
                                   Text(
-                                    '+120 XP',
-                                    style: TextStyle(
+                                    '+$totalXP XP',
+                                    style: const TextStyle(
                                       fontFamily: 'Jersey25',
                                       fontSize: 20,
                                       color: Color(0xFF38B6FF),
                                     ),
                                   ),
-                                  SizedBox(width: 12),
+                                  const SizedBox(width: 12),
                                   Text(
-                                    '🔥 200 KCAL',
-                                    style: TextStyle(
+                                    '🔥 $totalKCAL KCAL',
+                                    style: const TextStyle(
                                       fontFamily: 'Jersey25',
                                       fontSize: 20,
                                       color: Colors.red,
@@ -207,7 +262,13 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
                   const SizedBox(height: 40),
                   Center(
                     child: GestureDetector(
-                      onTap: widget.onComplete,
+                      onTap: () {
+                        // Save workout data to completedWorkouts list
+                        saveWorkoutToHistory();
+                        
+                        // Call the onComplete callback
+                        widget.onComplete();
+                      },
                       child: Container(
                         width: 200,
                         height: 60,
@@ -240,6 +301,21 @@ class _ExerciseFinishedCardState extends State<ExerciseFinishedCard> {
       ),
       bottomNavigationBar: const CustomNavBar(currentIndex: 2),
     );
+  }
+
+  // Function to save workout data to history
+  void saveWorkoutToHistory() {
+    // Use helper function for consistent date formatting
+    final formattedDate = getCurrentFormattedDate();
+    
+    // Add the workout to completedWorkouts with all details
+    completedWorkouts.add({
+      'workoutName': widget.workoutName,
+      'date': formattedDate,
+      'totalXP': totalXP,
+      'totalKCAL': totalKCAL,
+      'exercises': exercisesList, // Store exercises list
+    });
   }
 
   Widget buildFinishedExerciseBox(String text) {

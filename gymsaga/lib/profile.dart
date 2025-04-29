@@ -5,6 +5,7 @@ import 'workout_history.dart';
 import 'myweight.dart';
 import 'stat_calories.dart';
 import 'settings.dart';
+import 'achievement.dart'; // Added this import
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -12,6 +13,7 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFFF7E4C3),
       body: SafeArea(
         child: Stack(
           children: [
@@ -25,7 +27,7 @@ class ProfilePage extends StatelessWidget {
 
             // Decor overlay right under header
             Positioned(
-              top: 80,
+              top: 80, // adjust based on height of header.png
               left: 0,
               right: 0,
               child: Image.asset(
@@ -48,7 +50,7 @@ class ProfilePage extends StatelessWidget {
 
             // Centered "PROFILE" Text
             Positioned(
-              top: 24,
+              top: 24, // adjust vertically as needed
               left: 0,
               right: 0,
               child: Center(
@@ -87,9 +89,9 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-            // Gear Icon on the right
+// Gear Icon on the right
             Positioned(
-              top: 32,
+              top: 32, // same vertical as text for alignment
               right: 16,
               child: GestureDetector(
                 onTap: () {
@@ -112,10 +114,9 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
-
             // Actual page content
             Positioned(
-              top: 120,
+              top: 120, // <-- start below the header and gear
               left: 0,
               right: 0,
               bottom: 0,
@@ -216,9 +217,19 @@ class ProfilePage extends StatelessWidget {
                         );
                       },
                     ),
-                    const ProfileButton(
-                        label: 'Achievements', icon: Icons.emoji_events),
-                    const SizedBox(height: 80),
+                    ProfileButton(
+                      label: 'Achievements',
+                      icon: Icons.emoji_events,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AchievementScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    const SizedBox(height: 80), // Extra space for navbar
                   ],
                 ),
               ),

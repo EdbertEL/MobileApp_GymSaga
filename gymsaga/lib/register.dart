@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'login.dart';
 import 'completeyourprofile.dart'; // Make sure this matches the filename
-//
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  _RegisterPageState createState() => _RegisterPageState();
+  State<RegisterPage> createState() => _RegisterPageState();
 }
 
 class _RegisterPageState extends State<RegisterPage> {
@@ -31,40 +29,12 @@ class _RegisterPageState extends State<RegisterPage> {
     final password = _passwordController.text.trim();
 
     if (email.isNotEmpty && password.isNotEmpty && _isValidEmail(email)) {
-      final url = Uri.parse('http://10.10.169.150:8000/auth/users/');
-
-      final Map<String, dynamic> requestBody = {
-        'email': email,
-        'password': password,
-      };
-
-      try {
-        final response = await http.post(
-          url,
-          headers: {'Content-Type': 'application/json'},
-          body: jsonEncode(requestBody),
-        );
-
-        if (response.statusCode == 201) {
-          // Extract the token from the response
-          final Map<String, dynamic> responseBody = jsonDecode(response.body);
-          final String token = responseBody['token'] ??
-              ''; // Adjust based on actual response structure
-
-          // Proceed to Complete Your Profile screen
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) =>
-                  CompleteYourProfile(token: token), // Pass the token
-            ),
-          );
-        } else {
-          final Map<String, dynamic> responseBody = jsonDecode(response.body);
-          _showErrorDialog(responseBody.toString());
-        }
-      } catch (e) {
-        _showErrorDialog('Failed to connect to server.');
-      }
+      // Langsung navigasi ke CompleteYourProfile tanpa request API
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => CompleteYourProfile(token: "dummy_token"), 
+        ),
+      );
     } else {
       _showErrorDialog('Please enter a valid email and password.');
     }

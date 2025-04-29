@@ -34,10 +34,8 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
         setState(() {
           showComplete = true;
         });
-
         // Cancel the dot timer
         _dotTimer?.cancel();
-
         // Navigate to FinishSettingUp
         Navigator.pushReplacement(
           context,
@@ -94,7 +92,6 @@ class _SettingUpScreenState extends State<SettingUpScreen> {
                   pathBackgroundColor: Colors.transparent,
                 ),
               ),
-            //  "Loading Complete"
             const SizedBox(height: 20),
             AnimatedOpacity(
               opacity: showComplete ? 1.0 : 0.0,

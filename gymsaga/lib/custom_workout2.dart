@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymsaga/workout_data.dart';
+import 'package:gymsaga/homepage.dart'; // Import homepage
 
 class CustomWorkout2Page extends StatefulWidget {
   final String workoutName;
@@ -220,7 +221,11 @@ class _CustomWorkout2PageState extends State<CustomWorkout2Page> {
                             'exercises': widget.exercises ?? [], // Store exercises list
                           });
 
-                          Navigator.of(context).popUntil((route) => route.isFirst);
+                          // Replace popUntil with a direct navigation to HomePage
+                          Navigator.of(context).pushAndRemoveUntil(
+                            MaterialPageRoute(builder: (context) => HomePage()),
+                            (route) => false, // This clears the entire navigation stack
+                          );
                         },
                         child: Image.asset(
                           'assets/widgets/buttons/complete.png',

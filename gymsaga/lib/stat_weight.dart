@@ -208,218 +208,248 @@ class _StatWeightPageState extends State<StatWeightPage> {
               ),
             ),
 
-            // Content area for weight statistics - keeping the existing content
+            // Content area for weight statistics - new implementation
             Expanded(
               child: SingleChildScrollView(
                 padding: const EdgeInsets.all(16.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Current weight and BMI card
+                    // Title with shadow for weight tracking
                     Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              _buildWeightDisplay('68.5', 'Current Weight', 'kg'),
-                              Container(
-                                height: 80.0,
-                                width: 1.0,
-                                color: Colors.grey.withOpacity(0.3),
-                              ),
-                              _buildWeightDisplay('22.4', 'BMI', ''),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0),
-                          Container(
-                            padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-                            decoration: BoxDecoration(
-                              color: Colors.green.withOpacity(0.1),
-                              borderRadius: BorderRadius.circular(20.0),
-                              border: Border.all(color: Colors.green),
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: Text(
+                        'Weight Gain/Loss',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          shadows: [
+                            Shadow(
+                              offset: Offset(1.0, 1.0),
+                              blurRadius: 2.0,
+                              color: Colors.white.withOpacity(0.7),
                             ),
-                            child: const Text(
-                              'Healthy Weight Range',
+                          ],
+                        ),
+                      ),
+                    ),
+                    
+                    // 7-Day Chart
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                            child: Text(
+                              '7-Days',
                               style: TextStyle(
-                                color: Colors.green,
+                                fontSize: 16.0,
                                 fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
                             ),
                           ),
-                        ],
-                      ),
-                    ),
-                    
-                    // Weight trend chart
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                'Weight Trend',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              // Time filter dropdown/selector
-                              Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const Text(
-                                      '3 Months',
-                                      style: TextStyle(
-                                        fontSize: 14.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 4.0),
-                                    Icon(
-                                      Icons.arrow_drop_down,
-                                      color: Colors.grey.shade700,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 20.0),
-                          // Placeholder for chart
                           Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('widgets/background/stat_frame.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(12.0),
                             height: 200.0,
-                            width: double.infinity,
-                            color: Colors.grey.withOpacity(0.2),
-                            child: const Center(
-                              child: Text('Weight Trend Line Chart'),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Y-axis label
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    'Kg',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                
+                                // Chart area
+                                Expanded(
+                                  child: CustomPaint(
+                                    size: Size(double.infinity, 150),
+                                    painter: SevenDayChartPainter(),
+                                  ),
+                                ),
+                                
+                                // X-axis labels
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildDateLabel('28\nJan'),
+                                      _buildDateLabel('29'),
+                                      _buildDateLabel('30'),
+                                      _buildDateLabel('31'),
+                                      _buildDateLabel('1\nFeb'),
+                                      _buildDateLabel('2'),
+                                      _buildDateLabel('3\nToday'),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
                       ),
                     ),
                     
-                    // Weight progress stats
+                    // Months Chart
                     Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
+                      margin: const EdgeInsets.only(bottom: 16.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'Progress Stats',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                            child: Text(
+                              'Months',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
+                              ),
                             ),
                           ),
-                          const SizedBox(height: 16.0),
-                          // Stats grid
-                          Row(
-                            children: [
-                              Expanded(child: _buildProgressStat('Starting Weight', '72.5 kg')),
-                              Expanded(child: _buildProgressStat('Goal Weight', '65.0 kg')),
-                            ],
-                          ),
-                          const SizedBox(height: 16.0),
-                          Row(
-                            children: [
-                              Expanded(child: _buildProgressStat('Weight Lost', '-4.0 kg')),
-                              Expanded(
-                                child: _buildProgressStat('Remaining', '-3.5 kg',
-                                    progressColor: Colors.blue),
+                          Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('widgets/background/stat_frame.png'),
+                                fit: BoxFit.fill,
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 20.0),
-                          // Progress bar
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: const [
-                                  Text(
-                                    'Progress to Goal',
+                            ),
+                            padding: const EdgeInsets.all(12.0),
+                            height: 200.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Y-axis label
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    'Kg',
                                     style: TextStyle(
+                                      fontSize: 12.0,
                                       fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  Text(
-                                    '53%',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8.0),
-                              Container(
-                                height: 12.0,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey.shade200,
-                                  borderRadius: BorderRadius.circular(6.0),
-                                ),
-                                child: FractionallySizedBox(
-                                  alignment: Alignment.centerLeft,
-                                  widthFactor: 0.53,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      gradient: LinearGradient(
-                                        colors: [Colors.blue.shade300, Colors.blue.shade700],
-                                        begin: Alignment.centerLeft,
-                                        end: Alignment.centerRight,
-                                      ),
-                                      borderRadius: BorderRadius.circular(6.0),
+                                      color: Colors.black,
                                     ),
                                   ),
                                 ),
+                                
+                                // Chart area
+                                Expanded(
+                                  child: CustomPaint(
+                                    size: Size(double.infinity, 150),
+                                    painter: MonthChartPainter(),
+                                  ),
+                                ),
+                                
+                                // X-axis labels with padding to prevent overflow
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      _buildMonthLabel('Oct'),
+                                      _buildMonthLabel('Nov'),
+                                      _buildMonthLabel('Dec'),
+                                      _buildMonthLabel('Jan'),
+                                      _buildMonthLabel('Feb'),
+                                      _buildMonthLabel('Mar'),
+                                      _buildMonthLabel('Apr'),
+                                      _buildMonthLabel('May'),
+                                      _buildMonthLabel('Jun'),
+                                      _buildMonthLabel('Jul'),
+                                      _buildMonthLabel('Aug'),
+                                      _buildMonthLabel('Sep'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    
+                    // Years Chart
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, bottom: 4.0),
+                            child: Text(
+                              'Years',
+                              style: TextStyle(
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black,
                               ),
-                            ],
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: AssetImage('widgets/background/stat_frame.png'),
+                                fit: BoxFit.fill,
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(12.0),
+                            height: 200.0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                // Y-axis label
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 4.0),
+                                  child: Text(
+                                    'Kg',
+                                    style: TextStyle(
+                                      fontSize: 12.0,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                                
+                                // Chart area
+                                Expanded(
+                                  child: CustomPaint(
+                                    size: Size(double.infinity, 150),
+                                    painter: YearChartPainter(),
+                                  ),
+                                ),
+                                
+                                // X-axis labels
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 4.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: [
+                                      _buildYearLabel('2023'),
+                                      _buildYearLabel('2024'),
+                                      _buildYearLabel('2025'),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -433,71 +463,227 @@ class _StatWeightPageState extends State<StatWeightPage> {
       ),
     );
   }
-  
-  Widget _buildWeightDisplay(String value, String label, String unit) {
-    return Column(
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.baseline,
-          textBaseline: TextBaseline.alphabetic,
-          children: [
-            Text(
-              value,
-              style: const TextStyle(
-                fontSize: 30.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(width: 4.0),
-            Text(
-              unit,
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey.shade700,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 4.0),
-        Text(
-          label,
-          style: TextStyle(
-            fontSize: 14.0,
-            color: Colors.grey.shade600,
-          ),
-        ),
-      ],
-    );
-  }
-  
-  Widget _buildProgressStat(String label, String value, {Color progressColor = Colors.green}) {
+
+  Widget _buildDateLabel(String text) {
     return Container(
-      padding: const EdgeInsets.all(12.0),
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(8.0),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 14.0,
-              color: Colors.grey.shade700,
-            ),
-          ),
-          const SizedBox(height: 4.0),
-          Text(
-            value,
-            style: TextStyle(
-              fontSize: 16.0,
-              fontWeight: FontWeight.bold,
-              color: progressColor,
-            ),
-          ),
-        ],
+      width: 30,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 10.0,
+          color: Colors.black87,
+        ),
       ),
     );
   }
+  
+  Widget _buildMonthLabel(String text) {
+    return Container(
+      width: 25,
+      child: Text(
+        text,
+        textAlign: TextAlign.center,
+        style: TextStyle(
+          fontSize: 10.0,
+          color: Colors.black87,
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildYearLabel(String text) {
+    return Text(
+      text,
+      textAlign: TextAlign.center,
+      style: TextStyle(
+        fontSize: 10.0,
+        color: Colors.black87,
+      ),
+    );
+  }
+}
+
+// Custom painter for 7-day weight chart
+class SevenDayChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xFFAAAAAA)
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // Draw horizontal grid lines
+    final double horizontalSpacing = size.height / 3;
+    for (int i = 0; i < 4; i++) {
+      final double y = i * horizontalSpacing;
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        paint..color = Colors.brown.withOpacity(0.3)..strokeCap = StrokeCap.round..strokeWidth = 1.0
+      );
+    }
+
+    // Draw data points and connecting line
+    final pointPaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.fill;
+    
+    final linePaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+    
+    // 7 days data points - all at 0 (bottom of chart)
+    final daySpacing = size.width / 6;
+    final pointsData = [
+      Offset(0, size.height), // 28 Jan
+      Offset(daySpacing, size.height), // 29 Jan
+      Offset(daySpacing * 2, size.height), // 30 Jan
+      Offset(daySpacing * 3, size.height), // 31 Jan
+      Offset(daySpacing * 4, size.height), // 1 Feb
+      Offset(daySpacing * 5, size.height), // 2 Feb
+      Offset(daySpacing * 6, size.height), // 3 Feb
+    ];
+    
+    // Draw connecting line
+    final path = Path();
+    path.moveTo(pointsData[0].dx, pointsData[0].dy);
+    for (int i = 1; i < pointsData.length; i++) {
+      path.lineTo(pointsData[i].dx, pointsData[i].dy);
+    }
+    canvas.drawPath(path, linePaint);
+    
+    // Draw points
+    for (var point in pointsData) {
+      canvas.drawCircle(point, 3.0, pointPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// Custom painter for month weight chart
+class MonthChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xFFAAAAAA)
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // Draw horizontal grid lines
+    final double horizontalSpacing = size.height / 3;
+    for (int i = 0; i < 4; i++) {
+      final double y = i * horizontalSpacing;
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        paint..color = Colors.brown.withOpacity(0.3)..strokeCap = StrokeCap.round..strokeWidth = 1.0
+      );
+    }
+
+    // Draw data points and connecting line
+    final pointPaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.fill;
+    
+    final linePaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+    
+    // Monthly data points - all at 0 (bottom of chart)
+    final monthSpacing = size.width / 11;
+    final pointsData = [
+      Offset(0, size.height), // Oct
+      Offset(monthSpacing, size.height), // Nov
+      Offset(monthSpacing * 2, size.height), // Dec
+      Offset(monthSpacing * 3, size.height), // Jan
+      Offset(monthSpacing * 4, size.height), // Feb
+      Offset(monthSpacing * 5, size.height), // Mar
+      Offset(monthSpacing * 6, size.height), // Apr
+      Offset(monthSpacing * 7, size.height), // May
+      Offset(monthSpacing * 8, size.height), // Jun
+      Offset(monthSpacing * 9, size.height), // Jul
+      Offset(monthSpacing * 10, size.height), // Aug
+      Offset(monthSpacing * 11, size.height), // Sep
+    ];
+    
+    // Draw connecting line
+    final path = Path();
+    path.moveTo(pointsData[0].dx, pointsData[0].dy);
+    for (int i = 1; i < pointsData.length; i++) {
+      path.lineTo(pointsData[i].dx, pointsData[i].dy);
+    }
+    canvas.drawPath(path, linePaint);
+    
+    // Draw points
+    for (var point in pointsData) {
+      canvas.drawCircle(point, 3.0, pointPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// Custom painter for year weight chart
+class YearChartPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = Color(0xFFAAAAAA)
+      ..strokeWidth = 1.0
+      ..style = PaintingStyle.stroke;
+
+    // Draw horizontal grid lines
+    final double horizontalSpacing = size.height / 3;
+    for (int i = 0; i < 4; i++) {
+      final double y = i * horizontalSpacing;
+      canvas.drawLine(
+        Offset(0, y),
+        Offset(size.width, y),
+        paint..color = Colors.brown.withOpacity(0.3)..strokeCap = StrokeCap.round..strokeWidth = 1.0
+      );
+    }
+
+    // Draw data points and connecting line
+    final pointPaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 6.0
+      ..style = PaintingStyle.fill;
+    
+    final linePaint = Paint()
+      ..color = Colors.blue.shade300
+      ..strokeWidth = 2.0
+      ..style = PaintingStyle.stroke;
+    
+    // Yearly data points - all at 0 (bottom of chart)
+    final yearSpacing = size.width / 2;
+    final pointsData = [
+      Offset(0, size.height), // 2023
+      Offset(yearSpacing, size.height), // 2024
+      Offset(yearSpacing * 2, size.height), // 2025
+    ];
+    
+    // Draw connecting line
+    final path = Path();
+    path.moveTo(pointsData[0].dx, pointsData[0].dy);
+    for (int i = 1; i < pointsData.length; i++) {
+      path.lineTo(pointsData[i].dx, pointsData[i].dy);
+    }
+    canvas.drawPath(path, linePaint);
+    
+    // Draw points
+    for (var point in pointsData) {
+      canvas.drawCircle(point, 3.0, pointPaint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

@@ -1,13 +1,11 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-class StatStepsPage extends StatefulWidget {
-  const StatStepsPage({Key? key}) : super(key: key);
+class StatStepsPage extends StatelessWidget {
+  const StatStepsPage({super.key});
 
-  @override
-  State<StatStepsPage> createState() => _StatStepsPageState();
-}
-
-class _StatStepsPageState extends State<StatStepsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -207,154 +205,19 @@ class _StatStepsPageState extends State<StatStepsPage> {
                 ],
               ),
             ),
-
-            // Content area for steps statistics - keeping the existing content
+            
+            // Content - Since we removed TabBarView, only showing steps content
             Expanded(
-              child: SingleChildScrollView(
+              child: Padding(
                 padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                child: ListView(
                   children: [
-                    // Daily Steps Chart
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Daily Steps',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 12.0),
-                          // Placeholder for chart
-                          Container(
-                            height: 180.0,
-                            width: double.infinity,
-                            color: Colors.grey.withOpacity(0.2),
-                            child: const Center(
-                              child: Text('Steps Bar Chart'),
-                            ),
-                          ),
-                          const SizedBox(height: 12.0),
-                          // Total steps counter
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Column(
-                                children: const [
-                                  Text(
-                                    '8,734',
-                                    style: TextStyle(
-                                      fontSize: 32.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  Text(
-                                    'steps today',
-                                    style: TextStyle(
-                                      fontSize: 14.0,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    // Weekly summary
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Weekly Summary',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          // Stats row
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceAround,
-                            children: [
-                              _buildStatItem('Avg. Daily', '7,245'),
-                              _buildStatItem('Total', '50,715'),
-                              _buildStatItem('Goal Reached', '4/7 days'),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                    
-                    // Activity levels
-                    Container(
-                      padding: const EdgeInsets.all(16.0),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(12.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withOpacity(0.1),
-                            blurRadius: 4.0,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Activity Levels',
-                            style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 16.0),
-                          // Activity progress bars
-                          _buildActivityBar('Sedentary', 0.2, Colors.red),
-                          const SizedBox(height: 12.0),
-                          _buildActivityBar('Lightly Active', 0.35, Colors.orange),
-                          const SizedBox(height: 12.0),
-                          _buildActivityBar('Moderately Active', 0.3, Colors.blue),
-                          const SizedBox(height: 12.0),
-                          _buildActivityBar('Very Active', 0.15, Colors.green),
-                        ],
-                      ),
-                    ),
+                    stepsTakenTitle(),
+                    daysSection(),
+                    const SizedBox(height: 20.0),
+                    monthsSection(),
+                    const SizedBox(height: 20.0),
+                    yearsSection(),
                   ],
                 ),
               ),
@@ -364,71 +227,456 @@ class _StatStepsPageState extends State<StatStepsPage> {
       ),
     );
   }
-  
-  Widget _buildStatItem(String label, String value) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 18.0,
+
+  Widget stepsTakenTitle() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 12.0),
+      child: Center(
+        child: Text(
+          'Steps Taken',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 24,
             fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
           ),
         ),
-        const SizedBox(height: 4.0),
+      ),
+    );
+  }
+
+  Widget daysSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
         Text(
-          label,
+          '7-Days',
           style: TextStyle(
-            fontSize: 12.0,
-            color: Colors.grey.shade600,
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'Steps',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 16000,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getDaysBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 4000,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0 || value == 16000 || value % 4000 != 0) return SizedBox();
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                value.toInt().toString(),
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontFamily: 'Jersey25',
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 30, // Increased to give more room
+                          getTitlesWidget: (value, meta) {
+                            final labels = ['28', '29', '30', '31', '1', '2', '3'];
+                            final months = ['Jan', 'Feb'];
+                            
+                            // Only show month for day 1
+                            String label = labels[value.toInt()];
+                            String? month = value.toInt() == 4 ? months[0] : null;
+                            
+                            return Column(
+                              mainAxisSize: MainAxisSize.min, // Use min size to avoid overflow
+                              children: [
+                                Text(
+                                  label,
+                                  style: TextStyle(
+                                    fontFamily: 'Jersey25', 
+                                    fontSize: 10,
+                                    color: Colors.brown[800],
+                                  ),
+                                ),
+                                if (month != null)
+                                  Text(
+                                    month,
+                                    style: TextStyle(
+                                      fontFamily: 'Jersey25', 
+                                      fontSize: 9,
+                                      color: Colors.brown[800],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
-  
-  Widget _buildActivityBar(String label, double progress, Color color) {
+
+  Widget monthsSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              label,
-              style: const TextStyle(
-                fontSize: 14.0,
-              ),
-            ),
-            Text(
-              '${(progress * 100).toInt()}%',
-              style: const TextStyle(
-                fontSize: 14.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 6.0),
-        Container(
-          height: 12.0,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(6.0),
+        Text(
+          'Months',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
           ),
-          child: FractionallySizedBox(
-            alignment: Alignment.centerLeft,
-            widthFactor: progress,
-            child: Container(
-              decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(6.0),
-              ),
+        ),
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
             ),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'Steps in thousands (\'000)',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 100,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getMonthsBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 25,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            // Show values 0, 25, 50, 75, 100 to ensure all values are displayed
+                            if (value % 25 == 0 && value <= 100) {
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Text(
+                                  value.toInt().toString(),
+                                  style: TextStyle(
+                                    color: Colors.brown,
+                                    fontFamily: 'Jersey25',
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              );
+                            }
+                            return SizedBox();
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 40, // Increased height for year labels
+                          getTitlesWidget: (value, meta) {
+                            final labels = ['Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
+                            final years = value.toInt() >= 3 && value.toInt() <= 5 ? '2025' : '2024';
+                            
+                            return Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  labels[value.toInt()],
+                                  style: TextStyle(
+                                    fontFamily: 'Jersey25', 
+                                    fontSize: 10,
+                                    color: Colors.brown[800],
+                                  ),
+                                ),
+                                if (value.toInt() == 0 || value.toInt() == 3)
+                                  Text(
+                                    years,
+                                    style: TextStyle(
+                                      fontFamily: 'Jersey25', 
+                                      fontSize: 9,
+                                      color: Colors.brown[800],
+                                    ),
+                                  ),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget yearsSection() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Years',
+          style: TextStyle(
+            fontFamily: 'Jersey25',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+            color: Colors.brown[800],
+          ),
+        ),
+        const SizedBox(height: 8.0),
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('widgets/background/stat_frame.png'),
+              fit: BoxFit.fill,
+            ),
+          ),
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'Steps in thousands (\'000)',
+                  style: TextStyle(
+                    fontFamily: 'Jersey25',
+                    fontSize: 11,
+                    color: Colors.brown[800],
+                  ),
+                ),
+              ),
+              AspectRatio(
+                aspectRatio: 1.5,
+                child: BarChart(
+                  BarChartData(
+                    backgroundColor: Colors.transparent, // Ensure background is transparent
+                    baselineY: 0, // Ensure bars start at 0
+                    minY: 0,
+                    maxY: 3000,
+                    alignment: BarChartAlignment.spaceEvenly,
+                    barGroups: _getYearsBarGroups(),
+                    gridData: FlGridData(
+                      show: true,
+                      drawVerticalLine: false,
+                      horizontalInterval: 500,
+                      getDrawingHorizontalLine: (value) => FlLine(
+                        color: Colors.brown.withOpacity(0.3),
+                        strokeWidth: 1,
+                        dashArray: [5, 5],
+                      ),
+                    ),
+                    titlesData: FlTitlesData(
+                      show: true,
+                      topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                      leftTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          getTitlesWidget: (value, meta) {
+                            if (value == 0 || value == 3000 || value % 500 != 0) return SizedBox();
+                            return Padding(
+                              padding: const EdgeInsets.only(right: 8.0),
+                              child: Text(
+                                value.toInt().toString(),
+                                style: TextStyle(
+                                  color: Colors.brown,
+                                  fontFamily: 'Jersey25',
+                                  fontSize: 10,
+                                ),
+                              ),
+                            );
+                          },
+                          reservedSize: 30,
+                        ),
+                      ),
+                      bottomTitles: AxisTitles(
+                        sideTitles: SideTitles(
+                          showTitles: true,
+                          reservedSize: 25, // Increased to give more room
+                          getTitlesWidget: (value, meta) {
+                            final years = ['2023', '2024', '2025'];
+                            return Text(
+                              years[value.toInt()],
+                              style: TextStyle(
+                                fontFamily: 'Jersey25', 
+                                fontSize: 10,
+                                color: Colors.brown[800],
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    borderData: FlBorderData(show: false),
+                    barTouchData: BarTouchData(enabled: false), // Disable touch to avoid UI issues
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  List<BarChartGroupData> _getDaysBarGroups() {
+    // Using the step data from original implementation
+    final values = [0, 0, 0, 0, 0, 0, 0];
+    return List.generate(7, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 22,
+            color: Color(0xFFFF7D45), // Orange color from original implementation
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  List<BarChartGroupData> _getMonthsBarGroups() {
+    // Using the step data from original implementation
+    final values = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+    return List.generate(12, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 16,
+            color: Color(0xFFFF7D45), // Orange color from original implementation
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
+    );
+  }
+
+  List<BarChartGroupData> _getYearsBarGroups() {
+    // Using the step data from original implementation
+    final values = [0, 0, 0];
+    return List.generate(3, (i) => 
+      BarChartGroupData(
+        x: i,
+        barRods: [
+          BarChartRodData(
+            toY: values[i].toDouble(),
+            fromY: 0, // Explicitly set fromY to 0
+            width: 50,
+            color: Color(0xFFFF7D45), // Orange color from original implementation
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(4),
+              topRight: Radius.circular(4),
+            ),
+          ),
+        ],
+      )
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gymsaga/achievement.dart';
 import 'navbar.dart';
 import 'editprofile.dart';
 import 'workout_history.dart';
@@ -241,8 +242,18 @@ class _ProfilePageState extends State<ProfilePage> {
                         );
                       },
                     ),
-                    const ProfileButton(
-                        label: 'Achievements', icon: Icons.emoji_events),
+                    ProfileButton(
+                      label: 'Achievements',
+                      icon: Icons.emoji_events,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const AchievementScreen(),
+                          ),
+                        );
+                      },
+                    ),
                     const SizedBox(height: 80), // Extra space for navbar
                   ],
                 ),

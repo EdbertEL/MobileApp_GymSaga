@@ -54,6 +54,25 @@ class _MyWeightPageState extends State<MyWeightPage> {
       initialDate: selectedDate,
       firstDate: DateTime(2020),
       lastDate: DateTime.now(),
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            fontFamily: "Jersey25",
+            colorScheme: ColorScheme.light(
+              primary: Color(0xFFFF9800), // <-- Your custom orange
+              onPrimary: Colors.white,     // Text on selected date
+              onSurface: Colors.black87,   // Default text
+            ),
+            dialogBackgroundColor: Color(0xFFFBEBD2), // Light background color
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: Color(0xFFFF9800), // <-- Orange OK/CANCEL text
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
     if (picked != null && picked != selectedDate) {
       setState(() {
@@ -65,8 +84,17 @@ class _MyWeightPageState extends State<MyWeightPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3),
-      body: Container(
+      backgroundColor: Colors.transparent,
+      body: Stack(
+        children: [
+      Positioned.fill(
+      child: Image.asset(
+        'assets/widgets/background/checkerboard.png',
+        fit: BoxFit.cover,
+        filterQuality: FilterQuality.low,
+      ),
+    ),
+    SafeArea(
         child: SafeArea(
           child: Column(
             children: [
@@ -335,6 +363,8 @@ class _MyWeightPageState extends State<MyWeightPage> {
             ],
           ),
         ),
+      ),
+    ],
       ),
     );
   }

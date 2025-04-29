@@ -15,8 +15,15 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF7E4C3),
-      body: SafeArea(
-        child: Column(
+    body: SafeArea(
+    child: Container(
+    decoration: const BoxDecoration(
+    image: DecorationImage(
+    image: AssetImage('assets/widgets/background/checkerboard.png'),
+    fit: BoxFit.cover,
+    ),
+    ),
+    child: Column(
           children: [
             // Header
             Container(
@@ -251,6 +258,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
       ),
+    ),
     );
   }
 }

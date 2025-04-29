@@ -12,13 +12,20 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3),
       body: SafeArea(
         child: Stack(
           children: [
+            // Background checkerboard
+            Positioned.fill(
+              child: Image.asset(
+                'assets/widgets/background/checkerboard.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+
             // Decor overlay right under header
             Positioned(
-              top: 80, // adjust based on height of header.png
+              top: 80,
               left: 0,
               right: 0,
               child: Image.asset(
@@ -41,7 +48,7 @@ class ProfilePage extends StatelessWidget {
 
             // Centered "PROFILE" Text
             Positioned(
-              top: 24, // adjust vertically as needed
+              top: 24,
               left: 0,
               right: 0,
               child: Center(
@@ -80,9 +87,9 @@ class ProfilePage extends StatelessWidget {
               ),
             ),
 
-// Gear Icon on the right
+            // Gear Icon on the right
             Positioned(
-              top: 32, // same vertical as text for alignment
+              top: 32,
               right: 16,
               child: GestureDetector(
                 onTap: () {
@@ -105,9 +112,10 @@ class ProfilePage extends StatelessWidget {
                 ),
               ),
             ),
+
             // Actual page content
             Positioned(
-              top: 120, // <-- start below the header and gear
+              top: 120,
               left: 0,
               right: 0,
               bottom: 0,
@@ -210,7 +218,7 @@ class ProfilePage extends StatelessWidget {
                     ),
                     const ProfileButton(
                         label: 'Achievements', icon: Icons.emoji_events),
-                    const SizedBox(height: 80), // Extra space for navbar
+                    const SizedBox(height: 80),
                   ],
                 ),
               ),

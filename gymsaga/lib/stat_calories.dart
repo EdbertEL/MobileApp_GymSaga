@@ -262,7 +262,7 @@ class StatCaloriesPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -392,7 +392,7 @@ class StatCaloriesPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -521,7 +521,7 @@ class StatCaloriesPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -616,7 +616,7 @@ class StatCaloriesPage extends StatelessWidget {
 
   List<BarChartGroupData> _getDaysBarGroups() {
     // Mengubah semua nilai menjadi 0 untuk semua batang
-    final values = [0, 0, 0, 0, 0, 0, 0]; // Semua nilai 0
+    final values = [210, 0, 0, 0, 0, 0, 0]; // Semua nilai 0
     return List.generate(7, (i) => 
       BarChartGroupData(
         x: i,

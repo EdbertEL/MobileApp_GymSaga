@@ -262,7 +262,7 @@ class StatStepsPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -392,7 +392,7 @@ class StatStepsPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),
@@ -521,7 +521,7 @@ class StatStepsPage extends StatelessWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage('widgets/background/stat_frame.png'),
+              image: AssetImage('assets/widgets/background/stat_frame.png'),
               fit: BoxFit.fill,
             ),
           ),

@@ -1,18 +1,132 @@
 import 'package:flutter/material.dart';
-import 'forgotpassword.dart'; // Import the ForgotPasswordPage
-import 'register.dart'; // Import the RegisterPage
+import 'package:gymsaga/loadingpage.dart';
+import 'forgotpassword.dart';
+import 'register.dart';
+import 'homepage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
   bool _rememberMe = false;
-  final TextEditingController _emailController =
-      TextEditingController(text: '');
+  bool _obscurePassword = true;
+  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // Validasi Email
+  bool _isValidEmail(String email) {
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+$');
+    return emailRegex.hasMatch(email);
+  }
+
+  // Metode Login dengan Email dan Password
+  void _loginWithEmailPassword() {
+    String email = _emailController.text.trim();
+    String password = _passwordController.text.trim();
+
+    // Validasi input
+    if (email.isEmpty || password.isEmpty) {
+      _showErrorDialog('Harap isi email dan password');
+      return;
+    }
+
+    if (!_isValidEmail(email)) {
+      _showErrorDialog('Format email tidak valid');
+      return;
+    }
+
+    // Tampilkan loading dialog
+    _showLoadingDialog();
+
+    // Navigasi ke HomePage setelah login berhasil
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop(); // Tutup loading dialog
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoadingScreen()),
+      );
+    });
+  }
+
+  // Metode Login dengan Google
+  void _loginWithGoogle() {
+    // Tampilkan loading dialog
+    _showLoadingDialog();
+
+    // Navigasi ke HomePage setelah login Google
+    Future.delayed(const Duration(seconds: 2), () {
+      Navigator.of(context).pop(); // Tutup loading dialog
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => const LoadingScreen()),
+      );
+    });
+  }
+
+  // Tampilkan dialog loading
+  void _showLoadingDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Color(0xFFD4AF37)),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Logging in...",
+                    style: TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Tampilkan dialog error
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
   @override
   void dispose() {
@@ -128,7 +242,7 @@ class _LoginPageState extends State<LoginPage> {
                         height: 35,
                         child: TextField(
                           controller: _passwordController,
-                          obscureText: true,
+                          obscureText: _obscurePassword,
                           style: const TextStyle(fontSize: 13),
                           decoration: InputDecoration(
                             isDense: true,
@@ -146,9 +260,18 @@ class _LoginPageState extends State<LoginPage> {
                             focusedBorder: const UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.black54),
                             ),
-                            suffixIcon: const Icon(
-                              Icons.visibility_off,
-                              size: 18,
+                            suffixIcon: IconButton(
+                              icon: Icon(
+                                _obscurePassword
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                size: 18,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _obscurePassword = !_obscurePassword;
+                                });
+                              },
                             ),
                           ),
                         ),
@@ -212,11 +335,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Login Button (Pixelated)
                 Center(
                   child: InkWell(
-                    onTap: () {
-                      // Handle login
-                      print(
-                          'Login tapped with email: ${_emailController.text}');
-                    },
+                    onTap: _loginWithEmailPassword,
                     child: Container(
                       height: 50,
                       width: 240,
@@ -245,10 +364,7 @@ class _LoginPageState extends State<LoginPage> {
                 // Login with Google Button (Pixelated)
                 Center(
                   child: InkWell(
-                    onTap: () {
-                      // Handle login with Google
-                      print('Google login tapped');
-                    },
+                    onTap: _loginWithGoogle,
                     child: Container(
                       height: 50,
                       width: 240,

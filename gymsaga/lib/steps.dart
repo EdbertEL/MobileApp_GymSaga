@@ -44,6 +44,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   late SharedPreferences _prefs;
   final String _stepsKey = 'stepData';
   bool _showOverlay = false;
+  TextEditingController _friendCodeController = TextEditingController();
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
 
   @override
   void dispose() {
+    _friendCodeController.dispose();
     WidgetsBinding.instance.removeObserver(this);
     _stepTimer?.cancel();
     super.dispose();
@@ -369,8 +371,8 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
                             padding: const EdgeInsets.symmetric(horizontal: 40),
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Text(
+                              children: [
+                                const Text(
                                   'Your Friend Code: xrQT43',
                                   style: TextStyle(
                                     fontSize: 20,
@@ -379,8 +381,8 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                SizedBox(height: 10),
-                                Text(
+                                const SizedBox(height: 10),
+                                const Text(
                                   'Race with your friends',
                                   style: TextStyle(
                                     fontSize: 16,
@@ -389,14 +391,41 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
                                   ),
                                   textAlign: TextAlign.center,
                                 ),
-                                Text(
+                                const Text(
                                   'Add your friends by putting their\nfriend\'s code below',
                                   style: TextStyle(
                                     fontSize: 14,
                                     fontFamily: 'Jersey25',
                                     color: Colors.white,
                                   ),
-                                  textAlign: TextAlign.center,
+                                  textAlign: TextAlign.left,
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    const SizedBox(width: 8),
+                                    Container(
+                                      width: 120,
+                                      height: 30,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(4),
+                                      ),
+                                      child: TextField(
+                                        controller: _friendCodeController,
+                                        textAlign: TextAlign.center,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontFamily: 'Jersey25',
+                                          color: Colors.black,
+                                        ),
+                                        decoration: const InputDecoration(
+                                          border: InputBorder.none,
+                                          contentPadding: EdgeInsets.only(bottom: 12),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),

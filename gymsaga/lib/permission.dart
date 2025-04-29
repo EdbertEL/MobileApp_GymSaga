@@ -1,8 +1,60 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 import 'settingup.dart';
 
 class PermissionPage extends StatelessWidget {
   const PermissionPage({Key? key}) : super(key: key);
+
+  void _showLoadingAndNavigate(BuildContext context) {
+    // Show loading dialog
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: const [
+                  CircularProgressIndicator(
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(Color(0xFFD4AF37)),
+                  ),
+                  SizedBox(height: 20),
+                  Text(
+                    "Setting up permissions...",
+                    style: TextStyle(
+                      fontFamily: 'Jersey25',
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+
+    // Close dialog and navigate after 5.3 seconds
+    Timer(const Duration(milliseconds: 5300), () {
+      Navigator.of(context).pop(); // Close dialog
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SettingUpScreen(),
+        ),
+      );
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,9 +103,9 @@ class PermissionPage extends StatelessWidget {
                   child: Text(
                     'Please allow us to access your physical activity',
                     style: TextStyle(
-                      fontSize: 16, // Reduced from 18
+                      fontSize: 16,
                       color: Colors.black,
-                      fontFamily: 'Jersey25', // Changed from Inter
+                      fontFamily: 'Jersey25',
                       fontWeight: FontWeight.w500,
                     ),
                     textAlign: TextAlign.center,
@@ -63,13 +115,8 @@ class PermissionPage extends StatelessWidget {
                 Center(
                   child: InkWell(
                     onTap: () {
-                      // Navigate directly to SettingUpScreen
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SettingUpScreen(),
-                        ),
-                      );
+                      // Show loading and navigate
+                      _showLoadingAndNavigate(context);
                     },
                     child: Container(
                       height: 50,

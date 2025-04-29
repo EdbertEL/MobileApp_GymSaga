@@ -49,39 +49,18 @@ class _CustomNavBarState extends State<CustomNavBar> {
   ];
 
   void _navigateToPage(int index) {
-  if (_selectedIndex == index) return; // Skip if already on this page
-  
-  setState(() {
-    _selectedIndex = index;
-  });
+    if (_selectedIndex == index) return; // Skip if already on this page
+    
+    setState(() {
+      _selectedIndex = index;
+    });
 
-  // Gunakan PageRouteBuilder untuk navigasi tanpa animasi
-  final PageRouteBuilder noAnimationRoute = PageRouteBuilder(
-    pageBuilder: (context, animation, secondaryAnimation) {
-      // Return halaman berdasarkan index
-      switch (index) {
-        case 0:
-          return const HomePage();
-        case 1:
-          return const StepsPage();
-        case 2:
-          return const WorkoutPage();
-        case 3:
-          return const ProfilePage();
-        default:
-          return const HomePage();
-      }
-    },
-    transitionDuration: Duration.zero,
-    reverseTransitionDuration: Duration.zero,
-  );
-
-    // Cara yang lebih sederhana menggunakan pushReplacementNamed dengan transitionDuration kosong
+    // Use '/home' instead of '/' for the homepage navigation
     switch (index) {
       case 0:
         Navigator.pushReplacementNamed(
           context, 
-          '/',
+          '/home', // Changed from '/' to '/home'
           arguments: {'noAnimation': true}
         );
         break;

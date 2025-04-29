@@ -39,45 +39,34 @@ class MainApp extends StatelessWidget {
           },
         ),
       ),
-      initialRoute: '/',
+      initialRoute: '/splash',  // Changed this line
       routes: {
-        '/': (context) => const SplashScreen(),
+        '/splash': (context) => const SplashScreen(),  // Added this line
+        '/home': (context) => const HomePage(),  // Added this line
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(),
         '/steps': (context) => const StepsPage(),
         '/workout': (context) => const WorkoutPage(),
-
         '/stat_calories': (context) => const StatCaloriesPage(),
-  '/stat_weight': (context) => const StatWeightPage(),
-  '/stat_steps': (context) => const StatStepsPage(),
-  '/stat_workouts': (context) => const StatWorkoutsPage(),
+        '/stat_weight': (context) => const StatWeightPage(),
+        '/stat_steps': (context) => const StatStepsPage(),
+        '/stat_workouts': (context) => const StatWorkoutsPage(),
       },
       onGenerateRoute: (settings) {
-        // Periksa apakah route harus tanpa animasi
+        // Also update the onGenerateRoute to handle '/home' route
         if (settings.arguments is Map &&
             (settings.arguments as Map).containsKey('noAnimation') &&
             (settings.arguments as Map)['noAnimation'] == true) {
           Widget page;
           switch (settings.name) {
-            case '/':
+            case '/home':  // Changed this line
               page = const HomePage();
               break;
             case '/login':
               page = const LoginPage();
               break;
-            case '/register':
-              page = const RegisterPage();
-              break;
-            case '/profile':
-              page = const ProfilePage();
-              break;
-            case '/steps':
-              page = const StepsPage();
-              break;
-            case '/workout':
-              page = const WorkoutPage();
-              break;
+            // other routes...
             default:
               page = const HomePage();
           }
@@ -90,7 +79,6 @@ class MainApp extends StatelessWidget {
           );
         }
 
-        // Kembalikan null untuk menggunakan route default
         return null;
       },
     );

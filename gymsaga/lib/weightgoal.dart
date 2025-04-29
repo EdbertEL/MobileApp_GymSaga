@@ -27,21 +27,34 @@ class WeightGoalState extends State<WeightGoal> {
     return Scaffold(
       backgroundColor: const Color(0xFFF9DEAF),
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Center(
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
                 const Text(
-                  'What\'s your target weight?',
+                  'What\'s your target',
                   style: TextStyle(
-                    fontSize: 20,
+                    fontSize: 26,
                     fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontFamily: 'Jersey25',
                   ),
+                  textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
+                const Text(
+                  'weight?',
+                  style: TextStyle(
+                    fontSize: 26,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                    fontFamily: 'Jersey25',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 40),
                 _buildMeasurementField(
                   label: 'Your Weight',
                   hintText: 'Your Weight',
@@ -75,6 +88,8 @@ class WeightGoalState extends State<WeightGoal> {
                             style: TextStyle(
                               color: Colors.black,
                               fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Jersey25',
                             ),
                           ),
                         ),
@@ -82,7 +97,6 @@ class WeightGoalState extends State<WeightGoal> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
               ],
             ),
           ),
@@ -99,6 +113,7 @@ class WeightGoalState extends State<WeightGoal> {
     required TextEditingController controller,
   }) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Expanded(
           child: Container(
@@ -124,8 +139,7 @@ class WeightGoalState extends State<WeightGoal> {
                   Expanded(
                     child: TextField(
                       controller: controller,
-                      keyboardType: TextInputType
-                          .number, // Tambahkan ini untuk input numerik
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         setState(() {});
                       },
@@ -148,7 +162,14 @@ class WeightGoalState extends State<WeightGoal> {
           decoration: BoxDecoration(
             color: const Color(0xFFFF9800),
             borderRadius: BorderRadius.circular(10),
-            border: Border.all(color: Colors.grey.shade400, width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: Offset(0, 2),
+              ),
+            ],
           ),
           child: const Center(
             child: Text(

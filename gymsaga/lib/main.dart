@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gymsaga/achievement.dart';
+import 'package:gymsaga/activitypersonalization.dart';
 import 'package:gymsaga/login.dart';
 import 'package:gymsaga/profile.dart';
 import 'package:gymsaga/register.dart';
@@ -39,7 +40,7 @@ class MainApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const HomePage(),
+        '/': (context) => const ActivityPersonalization(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(),

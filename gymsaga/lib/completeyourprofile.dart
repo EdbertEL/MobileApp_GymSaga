@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'femaleprofile.dart';
 import 'maleprofile.dart';
+import 'package:intl/intl.dart';
 
 class CompleteYourProfile extends StatefulWidget {
   final String token;
@@ -17,6 +18,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
   final TextEditingController _heightController = TextEditingController();
+  final GlobalKey _genderFieldKey = GlobalKey();
 
   void _selectGender(String gender) {
     setState(() {
@@ -45,6 +47,20 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
           builder: (context) => FemaleProfile(),
         ),
       );
+    }
+  }
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _dobController.text = DateFormat('dd/MM/yyyy').format(picked);
+      });
     }
   }
 
@@ -106,7 +122,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
                 const SizedBox(height: 15),
                 _buildGenderSelector(),
                 const SizedBox(height: 15),
-                _buildInputField(
+                _buildDateField(
                   label: 'Date of Birth',
                   hintText: 'Date of Birth',
                   icon: Icons.calendar_today,
@@ -251,33 +267,104 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
   }
 
   Widget _buildGenderSelector() {
-    return InkWell(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          builder: (context) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
+    return Container(
+      key: _genderFieldKey,
+      child: InkWell(
+        onTap: () {
+          // Get the RenderBox of the gender field
+          final RenderBox renderBox =
+              _genderFieldKey.currentContext!.findRenderObject() as RenderBox;
+          final position = renderBox.localToGlobal(Offset.zero);
+          final size = renderBox.size;
+
+          // Show custom dropdown below the field
+          showDialog(
+            context: context,
+            barrierColor: Colors.transparent,
+            builder: (BuildContext context) {
+              return Stack(
+                children: [
+                  Positioned(
+                    left: position.dx,
+                    top: position.dy + size.height,
+                    width: size.width,
+                    child: Material(
+                      elevation: 4.0,
+                      borderRadius: BorderRadius.circular(10.0),
+                      color: Colors.white,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          ListTile(
+                            title: const Text('Male'),
+                            onTap: () {
+                              _selectGender('Male');
+                              Navigator.pop(context);
+                            },
+                          ),
+                          Divider(height: 1),
+                          ListTile(
+                            title: const Text('Female'),
+                            onTap: () {
+                              _selectGender('Female');
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+          );
+        },
+        child: Container(
+          height: 55,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(30),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.2),
+                spreadRadius: 1,
+                blurRadius: 3,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
               children: [
-                ListTile(
-                  title: const Text('Male'),
-                  onTap: () {
-                    _selectGender('Male');
-                    Navigator.pop(context);
-                  },
+                const Icon(Icons.people_outline, color: Colors.grey),
+                const SizedBox(width: 10),
+                Text(
+                  _selectedGender.isEmpty ? 'Choose Gender' : _selectedGender,
+                  style: TextStyle(
+                    color: _selectedGender.isEmpty
+                        ? Colors.grey.shade400
+                        : Colors.black,
+                  ),
                 ),
-                ListTile(
-                  title: const Text('Female'),
-                  onTap: () {
-                    _selectGender('Female');
-                    Navigator.pop(context);
-                  },
-                ),
+                const Spacer(),
+                const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
               ],
-            );
-          },
-        );
-      },
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateField({
+    required String label,
+    required String hintText,
+    required IconData icon,
+    required TextEditingController controller,
+  }) {
+    return InkWell(
+      onTap: () => _selectDate(context),
       child: Container(
         height: 55,
         decoration: BoxDecoration(
@@ -296,17 +383,20 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
           padding: const EdgeInsets.symmetric(horizontal: 15.0),
           child: Row(
             children: [
-              const Icon(Icons.people_outline, color: Colors.grey),
+              Icon(icon, color: Colors.grey),
               const SizedBox(width: 10),
-              Text(
-                _selectedGender.isEmpty ? 'Choose Gender' : _selectedGender,
-                style: TextStyle(
-                  color: _selectedGender.isEmpty
-                      ? Colors.grey.shade400
-                      : Colors.black,
+              Expanded(
+                child: TextField(
+                  controller: controller,
+                  enabled: false,
+                  decoration: InputDecoration(
+                    hintText: hintText,
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(color: Colors.grey.shade400),
+                    disabledBorder: InputBorder.none,
+                  ),
                 ),
               ),
-              const Spacer(),
               const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
             ],
           ),
@@ -348,6 +438,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
                   Expanded(
                     child: TextField(
                       controller: controller,
+                      keyboardType: TextInputType.number,
                       onChanged: (value) {
                         setState(() {});
                       },
@@ -368,9 +459,7 @@ class CompleteYourProfileState extends State<CompleteYourProfile> {
           width: 50,
           height: 50,
           decoration: BoxDecoration(
-            color: unit == 'KG'
-                ? const Color(0xFFFF9800)
-                : const Color(0xFFFF9800),
+            color: const Color(0xFFFF9800),
             borderRadius: BorderRadius.circular(10),
             border: Border.all(color: Colors.grey.shade400, width: 1),
           ),

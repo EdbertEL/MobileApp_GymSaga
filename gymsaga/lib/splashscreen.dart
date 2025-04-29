@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:gymsaga/register.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -40,6 +41,13 @@ class _SplashScreenState extends State<SplashScreen> {
         showTagline = true;
       });
     });
+
+    // Navigasi ke RegisterPage setelah 5 detik
+    Future.delayed(const Duration(seconds: 5), () {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const RegisterPage()),
+      );
+    });
   }
 
   @override
@@ -66,16 +74,19 @@ class _SplashScreenState extends State<SplashScreen> {
               children: [
                 // LOGO - Slide
                 AnimatedSlide(
-                  offset: showLogoAndTitle ? Offset.zero : const Offset(0, 0),
+                  offset: showLogoAndTitle ? Offset.zero : const Offset(0, 0.2),
                   duration: const Duration(milliseconds: 600),
                   curve: Curves.easeOut,
-                  child: Image.asset(
-                    'assets/widgets/images/logo.png',
-                    width: 500,
-                    height: 250,
+                  child: AnimatedOpacity(
+                    opacity: showLogoAndTitle ? 1.0 : 0.0,
+                    duration: const Duration(milliseconds: 600),
+                    child: Image.asset(
+                      'assets/widgets/images/logo.png',
+                      width: 500,
+                      height: 250,
+                    ),
                   ),
                 ),
-
                 const SizedBox(height: 20),
 
                 // GYM SAGA - Fade in
@@ -88,7 +99,6 @@ class _SplashScreenState extends State<SplashScreen> {
                     width: 300,
                   ),
                 ),
-
                 const SizedBox(height: 10),
 
                 // LEVEL UP - Fade in

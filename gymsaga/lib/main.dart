@@ -5,6 +5,7 @@ import 'package:gymsaga/login.dart';
 import 'package:gymsaga/profile.dart';
 import 'package:gymsaga/register.dart';
 import 'package:gymsaga/homepage.dart';
+import 'package:gymsaga/splashscreen.dart';
 import 'package:gymsaga/steps.dart';
 import 'package:gymsaga/workout.dart';
 import 'package:gymsaga/stat_calories.dart';
@@ -40,7 +41,7 @@ class MainApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: {
-        '/': (context) => const ActivityPersonalization(),
+        '/': (context) => const SplashScreen(),
         '/login': (context) => const LoginPage(),
         '/register': (context) => const RegisterPage(),
         '/profile': (context) => const ProfilePage(),

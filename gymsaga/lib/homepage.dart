@@ -8,6 +8,7 @@ import 'finishsettingup.dart';
 import 'create_workout.dart';
 import 'package:intl/intl.dart';
 import 'dart:math';
+import 'myweight.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -456,36 +457,45 @@ Padding(
                   ),
 
                   // Reminder box
-                  Container(
-                    margin: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image:
-                            AssetImage('assets/widgets/background/frame.png'),
-                        fit: BoxFit.fill,
+                  // Reminder box with GestureDetector for navigation
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => MyWeightPage()),
+                      );
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image:
+                              AssetImage('assets/widgets/background/frame.png'),
+                          fit: BoxFit.fill,
+                        ),
                       ),
-                    ),
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 10),
-                    child: Row(
-                      children: [
-                        Image.asset(
-                          'assets/widgets/icons/weight.png',
-                          width: 24,
-                          height: 24,
-                        ),
-                        const SizedBox(width: 10),
-                        const Text(
-                          "Don't forget to do your daily weigh in",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'Jersey25',
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20, vertical: 10),
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/widgets/icons/weight.png',
+                            width: 24,
+                            height: 24,
                           ),
-                        ),
-                        const Spacer(),
-                        const Icon(Icons.close, color: Colors.black),
-                      ],
+                          const SizedBox(width: 10),
+                          const Text(
+                            "Don't forget to do your daily weigh in",
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Jersey25',
+                            ),
+                          ),
+                          const Spacer(),
+                          const Icon(Icons.close, color: Colors.black),
+                        ],
+                      ),
                     ),
                   ),
 

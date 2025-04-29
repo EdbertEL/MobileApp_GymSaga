@@ -43,6 +43,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   Timer? _stepTimer;
   late SharedPreferences _prefs;
   final String _stepsKey = 'stepData';
+  bool _showOverlay = false;
 
   @override
   void initState() {
@@ -61,7 +62,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      _loadPreferences(); // Reload when returning to page
+      _loadPreferences();
     }
   }
 
@@ -76,7 +77,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
       });
 
       if (_stepData.isMoving) {
-        _startTimer(); // Restart timer if walking
+        _startTimer();
       }
     }
   }
@@ -84,7 +85,6 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   Future<void> _savePreferences() async {
     _prefs = await SharedPreferences.getInstance();
     await _prefs.setString(_stepsKey, jsonEncode(_stepData.toMap()));
-
   }
 
   void _toggleWalking() {
@@ -105,7 +105,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   }
 
   void _startTimer() {
-    _stepTimer?.cancel(); // Clear existing timer if any
+    _stepTimer?.cancel();
     _stepTimer = Timer.periodic(const Duration(seconds: 3), (timer) {
       if (_stepData.isMoving) {
         final randomSteps = Random().nextInt(4) + 2;
@@ -137,7 +137,6 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
   @override
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF7E4C3),
@@ -325,6 +324,89 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
                 ),
               ),
             ),
+
+            // Add Friend Button
+            Positioned(
+              top: screenHeight * 0.80,
+              left: 0,
+              right: 0,
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showOverlay = !_showOverlay;
+                    });
+                  },
+                  child: Image.asset(
+                    'assets/widgets/buttons/add_friend.png',
+                    width: 60,
+                    height: 60,
+                  ),
+                ),
+              ),
+            ),
+
+            // Overlay
+            if (_showOverlay)
+              Positioned.fill(
+                child: GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _showOverlay = false;
+                    });
+                  },
+                  child: Container(
+                    color: Colors.black54,
+                    child: Center(
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/widgets/background/steps_friend_frame.png',
+                            width: 300,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 40),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Text(
+                                  'Your Friend Code: xrQT43',
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    fontFamily: 'Jersey25',
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'Race with your friends',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontFamily: 'Jersey25',
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Text(
+                                  'Add your friends by putting their\nfriend\'s code below',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontFamily: 'Jersey25',
+                                    color: Colors.white,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),
@@ -332,8 +414,7 @@ class _StepsPageState extends State<StepsPage> with WidgetsBindingObserver {
       floatingActionButton: FloatingActionButton(
         onPressed: _toggleWalking,
         backgroundColor: const Color(0xFFFF7F11),
-        child:
-        Icon(_stepData.isMoving ? Icons.pause : Icons.play_arrow), // Toggle icon
+        child: Icon(_stepData.isMoving ? Icons.pause : Icons.play_arrow),
       ),
       bottomNavigationBar: const CustomNavBar(currentIndex: 1),
     );

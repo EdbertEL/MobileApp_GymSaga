@@ -48,11 +48,16 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3),
-      body: SafeArea(
-        child: Stack(
-          children: [
-            // Decor overlay right under header
+        body: SafeArea(
+        child: Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/widgets/background/checkerboard.png'),
+    fit: BoxFit.cover,
+    ),
+    ),
+    child: Stack(
+    children: [            // Decor overlay right under header
             Positioned(
               top: 80, // adjust based on height of header.png
               left: 0,
@@ -246,6 +251,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
       ),
+        ),
       bottomNavigationBar: const CustomNavBar(currentIndex: 3),
     );
   }

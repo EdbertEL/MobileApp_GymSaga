@@ -97,8 +97,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 setState(() {
                   avatarPath = 'assets/widgets/images/male_profile.png';
                   isEditingAvatar = false;
-                  // Save changes when selecting avatar
-                  saveChanges();
+                  // Just update state, don't return to previous page
+                  updateProfileData();
                 });
               },
               child: CircleAvatar(
@@ -118,8 +118,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 setState(() {
                   avatarPath = 'assets/widgets/images/female_profile.png';
                   isEditingAvatar = false;
-                  // Save changes when selecting avatar
-                  saveChanges();
+                  // Just update state, don't return to previous page
+                  updateProfileData();
                 });
               },
               child: CircleAvatar(
@@ -173,8 +173,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
       setState(() {
         avatarPath = image.path;
         isEditingAvatar = false; // Close after picking
-        // Save changes when selecting photo from gallery
-        saveChanges();
+        // Just update state, don't return to previous page
+        updateProfileData();
       });
     }
   }
@@ -218,14 +218,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           name = controller.text;
                           isEditingName = false;
                           isEditingAvatar = false;
-                          // Save changes automatically when confirming
-                          saveChanges();
+                          // Just update state, don't return to previous page
+                          updateProfileData();
                         } else if (label == 'Weigh Goal') {
                           goal = controller.text;
                           isEditingGoal = false;
                           isEditingAvatar = false;
-                          // Save changes automatically when confirming
-                          saveChanges();
+                          // Just update state, don't return to previous page
+                          updateProfileData();
                         }
                       });
                     } else {
@@ -282,8 +282,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
-  // Function to save changes and return to ProfilePage
-  void saveChanges() {
+  // Function to update profile data without returning to ProfilePage
+  void updateProfileData() {
+    setState(() {
+      // This just updates the internal state, doesn't return to previous page
+    });
+  }
+
+  // Function to save changes and return to ProfilePage - only used for back button
+  void saveChangesAndReturn() {
     // Return updated profile data to ProfilePage
     final updatedData = ProfileData(
       name: name,
@@ -296,6 +303,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // This ensures the content is properly scrollable and adjusts for the keyboard
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
         child: Container(
           decoration: const BoxDecoration(
@@ -329,12 +338,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         child: GestureDetector(
                           onTap: () {
                             // Return current data when using back button
-                            final updatedData = ProfileData(
-                              name: name,
-                              goal: goal,
-                              avatarPath: avatarPath,
-                            );
-                            Navigator.pop(context, updatedData);
+                            saveChangesAndReturn();
                           },
                           child: Image.asset(
                             'assets/widgets/buttons/back_button.png',
@@ -380,47 +384,60 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              // Make the content scrollable
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: EdgeInsets.only(
+                    bottom: MediaQuery.of(context).viewInsets.bottom,
+                  ),
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
 
-              // Avatar Area
-              buildAvatarArea(),
+                      // Avatar Area
+                      buildAvatarArea(),
 
-              const SizedBox(height: 24),
+                      const SizedBox(height: 24),
 
-              // Editable Name Field
-              buildEditableField(
-                label: 'Name',
-                isEditing: isEditingName,
-                controller: nameController,
-                onToggle: () {
-                  setState(() {
-                    isEditingName = true;
-                  });
-                },
+                      // Editable Name Field
+                      buildEditableField(
+                        label: 'Name',
+                        isEditing: isEditingName,
+                        controller: nameController,
+                        onToggle: () {
+                          setState(() {
+                            isEditingName = true;
+                          });
+                        },
+                      ),
+
+                      // Non-editable Starting Weight
+                      buildEditableField(
+                        label: 'Starting Weight',
+                        isEditing: false,
+                        controller: TextEditingController(text: startingWeight),
+                        onToggle: () {},
+                        enabled: false,
+                      ),
+
+                      // Editable Goal Field
+                      buildEditableField(
+                        label: 'Weigh Goal',
+                        isEditing: isEditingGoal,
+                        controller: goalController,
+                        onToggle: () {
+                          setState(() {
+                            isEditingGoal = true;
+                          });
+                        },
+                      ),
+
+                      // Add extra padding at the bottom to ensure all content is accessible
+                      const SizedBox(height: 20),
+                    ],
+                  ),
+                ),
               ),
-
-              // Non-editable Starting Weight
-              buildEditableField(
-                label: 'Starting Weight',
-                isEditing: false,
-                controller: TextEditingController(text: startingWeight),
-                onToggle: () {},
-                enabled: false,
-              ),
-
-              // Editable Goal Field
-              buildEditableField(
-                label: 'Weigh Goal',
-                isEditing: isEditingGoal,
-                controller: goalController,
-                onToggle: () {
-                  setState(() {
-                    isEditingGoal = true;
-                  });
-                },
-              ),
-
-              // We no longer need the Save Button here
             ],
           ),
         ),

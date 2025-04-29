@@ -245,11 +245,16 @@ class _EditProfilePageState extends State<EditProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF7E4C3),
-      body: SafeArea(
-        child: Column(
-          children: [
-            // Header
+        body: SafeArea(
+        child: Container(
+        decoration: const BoxDecoration(
+        image: DecorationImage(
+        image: AssetImage('assets/widgets/background/checkerboard.png'), // << Your checkerboard
+    fit: BoxFit.cover, // or BoxFit.fill, depending how you want it
+    ),
+    ),
+    child: Column(
+    children: [            // Header
             Container(
               height: 100,
               decoration: BoxDecoration(
@@ -356,7 +361,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             ),
           ],
         ),
-      ),
+      ),),
     );
   }
 }

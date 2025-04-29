@@ -17,6 +17,14 @@ class ProfilePage extends StatelessWidget {
       body: SafeArea(
         child: Stack(
           children: [
+            // Background checkerboard
+            Positioned.fill(
+              child: Image.asset(
+                'assets/widgets/background/checkerboard.png',
+                fit: BoxFit.cover,
+              ),
+            ),
+
             // Decor overlay right under header
             Positioned(
               top: 80, // adjust based on height of header.png
@@ -89,8 +97,7 @@ class ProfilePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => const SettingsPage()),
+                    MaterialPageRoute(builder: (context) => const SettingsPage()),
                   );
                 },
                 child: Icon(
@@ -131,8 +138,7 @@ class ProfilePage extends StatelessWidget {
                           ),
                           Flexible(
                             child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16.0),
+                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
                               child: Text(
                                 'Katie',
                                 style: const TextStyle(
@@ -170,8 +176,7 @@ class ProfilePage extends StatelessWidget {
                         children: const [
                           ProfileStat(label: 'Start Weight', value: '60.4 KG'),
                           ProfileStat(label: 'Goal', value: '50.0 KG'),
-                          ProfileStat(
-                              label: 'Daily Calories', value: '594 kcal'),
+                          ProfileStat(label: 'Daily Calories', value: '594 kcal'),
                         ],
                       ),
                     ),

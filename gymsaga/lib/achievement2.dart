@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'profile.dart';
 import 'achievement.dart';
 import 'achievement3.dart';
 
@@ -37,14 +38,19 @@ class Achievement2Screen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
+                      onTap: () {
+                        Navigator.pop(context); // This line goes back to the previous screen
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ProfilePage()),
+                        );
+                      },
                       child: Image.asset(
                         'assets/widgets/buttons/back_button.png',
                         width: 40,
                         height: 40,
                       ),
-                    ),
-                    const SizedBox(height: 8),
+                    ),                    const SizedBox(height: 8),
                     const FittedBox(
                       fit: BoxFit.scaleDown,
                       alignment: Alignment.centerLeft,
